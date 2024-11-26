@@ -38,38 +38,39 @@ static void sync_single(void)
          
         
          low_rc++;
-         if(low_rc > 50) low_rc = 0; //50*10us = 500us
+         if(low_rc > 200) low_rc = 0; //200*10us = 500us
 
 
     }
-    else if(RF_KEY_GetValue()==1 &&   low_rc < 50 && sync_start_flag ==0 &&  high_end_flag ==0){
+    else if(RF_KEY_GetValue()==1 && (  low_rc < 90 && low_rc >30) && sync_start_flag ==0 &&  high_end_flag ==0){
          low_start_flag =1;
-         low_rc=0;
+        
 
          high_rc++;
 
-         if(high_rc > 60)high_rc=0;
+         if(high_rc > 50)high_rc=0;
            
            
+    }
+    else if(RF_KEY_GetValue()==1 && low_start_flag==0){
+       low_rc=0;
     }
 
 
     
 
-    if(RF_KEY_GetValue()==0 && high_rc <  50  && sync_start_flag ==0 && low_start_flag ==1){
+    if(RF_KEY_GetValue()==0 && (high_rc <  90 && high_rc > 30)  && sync_start_flag ==0 && low_start_flag ==1){
            high_end_flag= 1;
-           high_rc = 0;
           low_rc++;
 
-          if(low_rc > 150) low_rc =0;
+          if(low_rc > 1500) low_rc =0;
 
      }
-
-
-    if(RF_KEY_GetValue()==1 &&   low_rc < 150 && sync_start_flag ==0 &&  high_end_flag== 1){
+     else if(RF_KEY_GetValue()==1 &&   (low_rc <= 1500 && low_rc >= 900) && sync_start_flag ==0 &&  high_end_flag== 1){
              high_end_flag=2;
+               
 
-           if(low_rc >= 90 && low_rc <=140){
+          
 
                 sync_flag =1;
                 sync_start_flag =1;
@@ -81,10 +82,22 @@ static void sync_single(void)
 
              
                low_level_rc = 0; 
+              high_rc=0;
 
 
-            }
-            else if((low_sync >150)){
+      }
+      else if(RF_KEY_GetValue()==1 &&   (low_rc > 1500 || low_rc  < 9000) && sync_start_flag ==0 &&  high_end_flag== 1){
+
+         low_rc =0;
+
+
+      }
+
+     
+     if(RF_KEY_GetValue()==1   && sync_start_flag ==1 && high_end_flag==2){
+
+                  high_rc++ ;
+                if(high_rc > 2000){
                 sync_start_flag=0;
                  sync_flag =0;
 
@@ -95,31 +108,11 @@ static void sync_single(void)
                low_sync=0;
                 start_rc_flag=0;
 
-
-            }
-
-     }
-     else if(RF_KEY_GetValue()==1 &&   high_end_flag== 2){
-
-                  high_rc ++;
-                  if(high_rc > 200){
-                   sync_start_flag=0;
-                        sync_flag =0;
-        
-                       low_rc=0,
-                       high_rc=0;
-                      low_start_flag=0;
-                      high_end_flag=0;
-                      low_sync=0;
-                       start_rc_flag=0;
+                    }
             
 
-                  }
-
-
-
      }
-
+  
  }
 
 
@@ -133,6 +126,7 @@ void rf_irqhandler(void)
 
         low_getvalue ++; 
         low_level_rc = 0; 
+        high_rc=0;
 
    }
    else if(sync_start_flag ==1){
