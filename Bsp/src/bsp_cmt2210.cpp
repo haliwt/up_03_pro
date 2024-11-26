@@ -20,10 +20,14 @@ uint16_t s ,s1;
 uint8_t bt_auto;     //自动设置遥控接收波特率标志
 uint8_t rf_data[4];
 
-uint8_t low_rc,high_rc,low_sync,start_rc_flag;
+uint16_t low_rc,high_rc,low_sync,start_rc_flag;
 
 
-
+/***************************************************
+*
+* TIM3 timer is 10us 
+**
+***************************************************/
 static void sync_single(void)
 {
     
@@ -34,7 +38,7 @@ static void sync_single(void)
          
         
          low_rc++;
-         if(low_rc > 50) low_rc = 0;
+         if(low_rc > 50) low_rc = 0; //50*10us = 500us
 
 
     }
@@ -68,13 +72,14 @@ static void sync_single(void)
            if(low_rc >= 90 && low_rc <=140){
 
                 sync_flag =1;
+                sync_start_flag =1;
                 receive_decoder_numbers= 0;
                 bma1=0;
                 bma2=0;
                 bma3=0;
                 bma4=0;
 
-               sync_start_flag =1;
+             
                low_level_rc = 0; 
 
 

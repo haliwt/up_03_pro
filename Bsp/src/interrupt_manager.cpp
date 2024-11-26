@@ -1,6 +1,6 @@
 #include "bsp.h"
 
-uint8_t test_flag;
+
 
 /*******************************************************************************
 	*
@@ -12,15 +12,11 @@ uint8_t test_flag;
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 
-  static uint16_t tm0,tm3;
+  static uint16_t tm0;
   static uint8_t tm1;
   
   if(htim->Instance==TIM3){
-     tm3++;
-     if(tm3 > 9999){
-      tm3=0;
-      test_flag++;
-     }
+  
      rf_irqhandler();
 
   }
