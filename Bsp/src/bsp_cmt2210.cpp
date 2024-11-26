@@ -36,7 +36,7 @@ static void sync_single(void)
   
    if(RF_KEY_GetValue()==0   && low_start_flag ==0 && sync_start_flag ==0){
          
-        
+          high_rc=0;
          low_rc++;
          if(low_rc > 200) low_rc = 0; //200*10us = 500us
 
@@ -62,11 +62,12 @@ static void sync_single(void)
     if(RF_KEY_GetValue()==0 && (high_rc <  90 && high_rc > 30)  && sync_start_flag ==0 && low_start_flag ==1){
            high_end_flag= 1;
           low_rc++;
+     
 
-          if(low_rc > 1500) low_rc =0;
+          if(low_rc > 1500) low_rc =0; //1500x 10us = 15000us =15ms
 
      }
-     else if(RF_KEY_GetValue()==1 &&   (low_rc <= 1500 && low_rc >= 900) && sync_start_flag ==0 &&  high_end_flag== 1){
+     else if(RF_KEY_GetValue()==1 &&   (low_rc <= 1500 && low_rc >700) && sync_start_flag ==0 &&  high_end_flag== 1){
              high_end_flag=2;
                
 
@@ -86,7 +87,7 @@ static void sync_single(void)
 
 
       }
-      else if(RF_KEY_GetValue()==1 &&   (low_rc > 1500 || low_rc  < 9000) && sync_start_flag ==0 &&  high_end_flag== 1){
+      else if(RF_KEY_GetValue()==1 &&   (low_rc > 1500 || low_rc  < 700) && sync_start_flag ==0 &&  high_end_flag== 1){
 
          low_rc =0;
 
