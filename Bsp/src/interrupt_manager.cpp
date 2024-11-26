@@ -23,11 +23,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   else if(htim->Instance==TIM17){
     
     tm0++;  //1ms
-	if(tm0 > 4){ //5s 
+	if(tm0 > 0){ //5s 
       tm0=0;
       tm1++;
 
-   
+      gpro_t.gTime_rf_rc_data++;
        gpro_t.gTimer_run_process++;
       
 

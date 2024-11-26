@@ -125,7 +125,7 @@ void MX_TIM3_Init(void)
   htim3.Instance = TIM3;
   htim3.Init.Prescaler = 63; //
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 9;//0.01ms //FMHZ = 1/(9+1)=0.1MHZ= 100KHZ,T = 1/FMHZ= 1/100ms= 0.01ms=10us
+  htim3.Init.Period = 9;//0.1ms //FMHZ = 1/(9+1)=0.1MHZ= 100KHZ,T = 1/FMHZ= 1/100ms= 0.01ms=10us
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
