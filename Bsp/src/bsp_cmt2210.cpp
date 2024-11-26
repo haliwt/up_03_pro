@@ -47,9 +47,9 @@ static void sync_single(void)
            gpro_t.g_sync_flag =1;
            receive_numbers= 0;
            receive_first_bit_flag =1;
-          high_rc=0;
+            high_rc=0;
            gpro_t.gTime_rf_rc_data =0 ;
-
+           low_rc=0;
       }
       else if(RF_KEY_GetValue()==1 &&   (low_rc  < 850 || low_rc > 1500)){
 
@@ -106,7 +106,7 @@ void rf_irqhandler(void)
             high_rc=0; 
              low_rc =0;
    
-         }
+      }
 
 
   // break;
@@ -125,7 +125,7 @@ void rf_irqhandler(void)
        receive_first_bit_flag =0;
        
 
-       if(low_getvalue >= 10){ //get numbers 0; 
+       if(low_getvalue < 10){ //get numbers 0; 
 
            if(receive_byte_flag==0){
                //get_bits(0x0,rf_data[0],receive_numbers);
