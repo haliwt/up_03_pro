@@ -22,7 +22,7 @@ void main_board_ctl_handler(uint8_t flag)
     if(flag == 0){ //works 2 hours times lable .
        
      
-        if(gpro_t.gTimer_run_process >6){
+        if(gpro_t.gTimer_run_process >50){
             gpro_t.gTimer_run_process=0;
            
             plasma_t.plasma_output_fun();

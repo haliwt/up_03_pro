@@ -97,36 +97,36 @@ static void vTaskMsgPro(void *pvParameters)
 
  
 		
-	  xResult = xTaskNotifyWait(0x00000000,      
-						          0xFFFFFFFF,      
-						          &ulValue,        /* 保存ulNotifiedValue到变量ulValue中 */
-						          xMaxBlockTime);  /* 最大允许延迟时间,等待时间 */
-		
-	  if( xResult == pdPASS )
-	  {
-			/* 接收到消息，检测那个位被按下 */
-             
-	   if((ulValue & POWER_KEY_0) != 0){
-
-         if(gpro_t.power_on == power_off){
-              gpro_t.power_on = power_on;
-              //cancel run 2 hours times 
-             gpro_t.works_2_hours_timeout_flag =0;
-             gpro_t.gTimer_works_total_times_minutes =0;
-
-         }
-         else{
-
-            gpro_t.power_on = power_off;
-            gpro_t.works_2_hours_timeout_flag =0;
-            gpro_t.gTimer_works_total_times_minutes =0;
-
-         }
-                 
-                
-        }
-      }
-      else{
+//	  xResult = xTaskNotifyWait(0x00000000,      
+//						          0xFFFFFFFF,      
+//						          &ulValue,        /* 保存ulNotifiedValue到变量ulValue中 */
+//						          xMaxBlockTime);  /* 最大允许延迟时间,等待时间 */
+//		
+//	  if( xResult == pdPASS )
+//	  {
+//			/* 接收到消息，检测那个位被按下 */
+//             
+//	   if((ulValue & POWER_KEY_0) != 0){
+//
+//         if(gpro_t.power_on == power_off){
+//              gpro_t.power_on = power_on;
+//              //cancel run 2 hours times 
+//             gpro_t.works_2_hours_timeout_flag =0;
+//             gpro_t.gTimer_works_total_times_minutes =0;
+//
+//         }
+//         else{
+//
+//            gpro_t.power_on = power_off;
+//            gpro_t.works_2_hours_timeout_flag =0;
+//            gpro_t.gTimer_works_total_times_minutes =0;
+//
+//         }
+//                 
+//                
+//        }
+//      }
+//      else{
      
        if(gpro_t.power_on == power_on ){
 
@@ -145,12 +145,13 @@ static void vTaskMsgPro(void *pvParameters)
               
              
          }
-
+        vTaskDelay(30) ;
+         
       }
              
-    }
+  }
       
- }
+ 
 /**********************************************************************************************************
 *	函 数 名: vTaskStart
 *	功能说明: 启动任务，也就是最高优先级任务，这里用作按键扫描。
@@ -176,7 +177,53 @@ static void vTaskStart(void *pvParameters)
 //
 //
 //    }
-   
+
+    if(gpro_t.receive_data_success == 1 && (gpro_t.rf_rec_data2 == 1 || gpro_t.rf_rec_data2 ==0x08 ||gpro_t.rf_rec_data2 ==0x02)){
+
+         gpro_t.receive_data_success++;
+         gpro_t.gTime_rf_rc_data =0;
+         gpro_t.rf_rec_data2=0;
+         gpro_t.rf_rec_data1=0;
+         gpro_t.rf_rec_data=0;
+         if(gpro_t.power_on == power_off){
+              gpro_t.power_on = power_on;
+              //cancel run 2 hours times 
+             gpro_t.works_2_hours_timeout_flag =0;
+             gpro_t.gTimer_works_total_times_minutes =0;
+            
+
+         }
+         else{
+
+            gpro_t.power_on = power_off;
+            gpro_t.works_2_hours_timeout_flag =0;
+            gpro_t.gTimer_works_total_times_minutes =0;
+
+         }
+
+        gpro_t.gTime_rf_rc_data=0;
+
+
+    }
+
+    if(gpro_t.gTime_rf_rc_data > 0 &&  gpro_t.receive_data_success==2){
+
+           gpro_t.receive_data_success++;
+           gpro_t.recieve_numbers=0;
+           gpro_t.stop_receive_data =0;
+
+           gpro_t.g_sync_flag=0;
+           gpro_t.low_level_getvalue =0;
+           gpro_t.high_level_getvalue = 0;
+                
+    }
+
+    if(gpro_t.g_sync_flag == 0){
+         gpro_t.low_level_getvalue =0;
+        gpro_t.high_level_getvalue = 0;
+
+
+    }
   
     vTaskDelay(20);
   }

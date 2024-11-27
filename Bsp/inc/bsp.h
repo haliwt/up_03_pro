@@ -63,9 +63,16 @@ typedef struct process_t{
    uint8_t receive_data_success;
    uint8_t stop_receive_data ;
    
+   
  
    uint8_t fan_warning_flag;
+   uint8_t rf_rec_data;
+   uint8_t rf_rec_data1;
+   uint8_t rf_rec_data2;
 
+   uint8_t  recieve_numbers;
+   uint8_t  low_level_getvalue;
+   uint8_t  high_level_getvalue;
    
 
 
