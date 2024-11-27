@@ -178,7 +178,8 @@ static void vTaskStart(void *pvParameters)
 //
 //    }
 
-    if(gpro_t.receive_data_success == 1 && (gpro_t.rf_rec_data2 == 1 || gpro_t.rf_rec_data2 ==0x08 ||gpro_t.rf_rec_data2 ==0x02)){
+    if(gpro_t.receive_data_success == 1 && (gpro_t.rf_rec_data2  > 0)){
+                                              
 
          gpro_t.receive_data_success++;
          gpro_t.gTime_rf_rc_data =0;
