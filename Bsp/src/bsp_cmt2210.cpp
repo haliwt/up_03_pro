@@ -246,6 +246,7 @@ void rf_irqhandler(void)
 						break;
 					 }//遥控编码第7位  ----> 1个字节 低4位
                 }
+                
                gpro_t.low_level_getvalue=0;//gpro_t.recieve_numbers ++;
                if(gpro_t.recieve_numbers ==8){
                 gpro_t.recieve_numbers =0;

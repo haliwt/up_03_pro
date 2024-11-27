@@ -73,6 +73,7 @@ typedef struct process_t{
    uint8_t  recieve_numbers;
    uint8_t  low_level_getvalue;
    uint8_t  high_level_getvalue;
+   uint8_t  rf_key_interrupt_numbers ;
    
 
 

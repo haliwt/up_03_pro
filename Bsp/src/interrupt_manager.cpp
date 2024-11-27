@@ -1,5 +1,33 @@
 #include "bsp.h"
 
+uint8_t  rf_auto_detected_num;
+
+void HAL_GPIO_EXTI_Falling_Callback(GPIO_Pin)
+{
+
+   if(GPIO_Pin == RF_KEY_Pin){
+
+       
+        if(gpro_t.g_sync_flag == 1){
+            
+
+          gpro_t.rf_key_interrupt_numbers++ ;
+          rf_auto_detected_num=0;
+        }
+        else{
+
+           rf_auto_detected_num++;
+           gpro_t.rf_key_interrupt_numbers=0;
+
+        }
+
+
+   }
+
+
+
+
+}
 
 
 /*******************************************************************************
