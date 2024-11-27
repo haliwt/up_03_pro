@@ -182,9 +182,7 @@ static void vTaskStart(void *pvParameters)
 
          gpro_t.receive_data_success++;
          gpro_t.gTime_rf_rc_data =0;
-         gpro_t.rf_rec_data2=0;
-         gpro_t.rf_rec_data1=0;
-         gpro_t.rf_rec_data=0;
+      
          if(gpro_t.power_on == power_off){
               gpro_t.power_on = power_on;
               //cancel run 2 hours times 
