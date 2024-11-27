@@ -205,7 +205,7 @@ static void vTaskStart(void *pvParameters)
 
     }
 
-    if(gpro_t.gTime_rf_rc_data > 0 &&  gpro_t.receive_data_success==2){
+    if(gpro_t.gTime_rf_rc_data > 1 &&  gpro_t.receive_data_success==2){
 
            gpro_t.receive_data_success++;
            gpro_t.recieve_numbers=0;

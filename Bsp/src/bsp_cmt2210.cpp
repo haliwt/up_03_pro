@@ -8,6 +8,7 @@ uint8_t byte_switch_falg,receive_byte_flag;
 
 uint16_t low_rc,high_rc,low_sync,start_rc_flag;
 
+uint8_t low_rc_times;
 
 /***************************************************
 *
@@ -24,27 +25,32 @@ static void sync_single(void)
          
           high_rc=0;
          low_rc++;
+         gpro_t.gTime_rf_Key_low_times++;
+         gpro_t.rf_auto_detected_num ++;
         // if(low_rc > 200) low_rc = 0; //200*10us = 500us 100usx 50
-         gpro_t.rf_auto_detected_num=0;
-          
-
-
     }
-    else if(RF_KEY_GetValue()==1 &&   (low_rc < 120 && low_rc >92) && gpro_t.g_sync_flag ==0){  //10ms 
+    else if(RF_KEY_GetValue()==1 &&   (low_rc < 300 && low_rc >96 && gpro_t.gTime_rf_Key_low_times >96 && gpro_t.gTime_rf_Key_low_times <300 ) && gpro_t.g_sync_flag ==0){  //10ms 
             gpro_t.high_level_getvalue++;
+            low_rc_times = gpro_t.gTime_rf_Key_low_times;
+
+
       
            gpro_t.g_sync_flag =1;
            gpro_t.recieve_numbers= 0;
            high_rc=0;
         
            low_rc=0;
+           receive_byte_flag=0;
            gpro_t.receive_data_success=0;
-           gpro_t.rf_key_interrupt_numbers=0;
+            gpro_t.rf_key_interrupt_numbers=0;
            
       }
       else if(RF_KEY_GetValue()==1 && gpro_t.g_sync_flag ==0){
 
-         low_rc =0;
+           low_rc =0;
+           gpro_t.gTime_rf_Key_low_times = 0;
+          gpro_t.rf_auto_detected_num=0;
+         
 
 
       }
@@ -78,6 +84,7 @@ void rf_irqhandler(void)
        
        gpro_t.high_level_getvalue=0;
        gpro_t.low_level_getvalue ++;
+   
        if(rc_l_num != rc_l){
            rc_l_num = rc_l;
            rc_h++;
@@ -91,17 +98,16 @@ void rf_irqhandler(void)
      gpro_t.high_level_getvalue++; //gpro_t.low_level_getvalue ++; 
      if(gpro_t.stop_receive_data ==0){
 
-          if( gpro_t.low_level_getvalue > 85){
+          if( gpro_t.low_level_getvalue > 80){
 
                 gpro_t.recieve_numbers=0;
-
+ 
                 gpro_t.low_level_getvalue=0;
                 gpro_t.high_level_getvalue=0;
+                receive_byte_flag=0;
 
                 rc_l++;
-                if(receive_byte_flag==0)receive_byte_flag=1;
-                else if(receive_byte_flag ==1)receive_byte_flag=2;
-                else if(receive_byte_flag ==2)receive_byte_flag=0;  
+               
 
                 return;
 
@@ -165,6 +171,8 @@ void rf_irqhandler(void)
                
                if(gpro_t.recieve_numbers ==8){
                   gpro_t.recieve_numbers =0;
+                  receive_byte_flag=1;
+               
                    
                 }
                gpro_t.low_level_getvalue=0;// gpro_t.high_level_getvalue=0;
@@ -218,7 +226,7 @@ void rf_irqhandler(void)
                gpro_t.low_level_getvalue=0;//gpro_t.recieve_numbers ++;
               if(gpro_t.recieve_numbers ==8){
                 gpro_t.recieve_numbers =0;
-                
+                 receive_byte_flag=2;
                }
               gpro_t.high_level_getvalue=0;
            }
@@ -293,8 +301,10 @@ void rf_irqhandler(void)
            if(receive_byte_flag==0){
               
                
-                if(gpro_t.recieve_numbers ==8){
+               if(gpro_t.recieve_numbers ==8){
                 gpro_t.recieve_numbers =0;
+
+                receive_byte_flag=1;
              
                 }
                 gpro_t.low_level_getvalue=0;// gpro_t.high_level_getvalue=0;
@@ -304,6 +314,7 @@ void rf_irqhandler(void)
                 
                   if(gpro_t.recieve_numbers ==8){
                    gpro_t.recieve_numbers =0;
+                    receive_byte_flag=2;
                   
                    }
                  gpro_t.low_level_getvalue=0;//  gpro_t.high_level_getvalue=0;

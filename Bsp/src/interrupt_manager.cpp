@@ -1,8 +1,9 @@
 #include "bsp.h"
 
-uint8_t  rf_auto_detected_num;
 
-void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
+
+//void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
+void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 {
 
    if(GPIO_Pin == RF_KEY_Pin){
@@ -12,14 +13,9 @@ void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
             
 
           gpro_t.rf_key_interrupt_numbers++ ;
-          gpro_t.rf_auto_detected_num=0;
+  
         }
-        else{
-
-          gpro_t.rf_auto_detected_num++;
-          
-
-        }
+     
 
 
    }
@@ -34,7 +30,7 @@ void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
 	*
 	*Function Name:void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	*Function : timing 1ms interrupt call back function call back function
-	*timer17 is  1s ,TIM3 is 0.01ms
+	*timer17 is  1s ,TIM3 is 0.1ms=100us
 	*
 *******************************************************************************/
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
@@ -44,6 +40,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   static uint8_t tm1;
   
   if(htim->Instance==TIM3){
+
+    
   
      rf_irqhandler();
 
