@@ -87,6 +87,7 @@ typedef struct process_t{
    uint8_t gTimer_works_total_times_minutes;
    uint8_t gTime_rf_rc_data;
    uint8_t gTime_rf_Key_low_times;
+  
     
          
   
