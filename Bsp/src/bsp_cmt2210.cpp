@@ -29,7 +29,7 @@ static void sync_single(void)
          gpro_t.rf_auto_detected_num ++;
         // if(low_rc > 200) low_rc = 0; //200*10us = 500us 100usx 50
     }
-    else if(RF_KEY_GetValue()==1 &&   (low_rc < 300 && low_rc >96 && gpro_t.gTime_rf_Key_low_times >96 && gpro_t.gTime_rf_Key_low_times <300 ) && gpro_t.g_sync_flag ==0){  //10ms 
+    else if(RF_KEY_GetValue()==1 &&   (low_rc < 300 && low_rc >100 && gpro_t.gTime_rf_Key_low_times >100 && gpro_t.gTime_rf_Key_low_times <300 ) && gpro_t.g_sync_flag ==0){  //10ms 
             gpro_t.high_level_getvalue++;
             low_rc_times = gpro_t.gTime_rf_Key_low_times;
 
