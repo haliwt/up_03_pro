@@ -10,7 +10,6 @@ static void get_bits(uint8_t value,uint8_t pbuf,uint8_t sbit);
 
 uint8_t rf_rec_data,rf_rec_data1,rf_rec_data2;
 
-uint8_t sync_start_flag ;
 uint8_t decode_ok;            //解码成功
 uint16_t  high_getvalue,low_getvalue;           //高,低电平宽度
 uint8_t  receive_numbers;//ma_x;                //接收到第几位编码了
@@ -43,13 +42,14 @@ static void sync_single(void)
     }
     if(RF_KEY_GetValue()==1 &&   (low_rc < 150 && low_rc >85) && gpro_t.g_sync_flag ==0){
             high_getvalue++;
-           sync_start_flag =1;
+      
            gpro_t.g_sync_flag =1;
            receive_numbers= 0;
   
             high_rc=0;
            gpro_t.gTime_rf_rc_data =0 ;
            low_rc=0;
+           gpro_t.receive_data_success=0;
       }
       else if(RF_KEY_GetValue()==1 &&   (low_rc  < 85 || low_rc > 150) && gpro_t.g_sync_flag ==0){
 
@@ -112,29 +112,22 @@ void rf_irqhandler(void)
 //  // break;
 
  //  case 5:
-    
+  
    if(RF_KEY_GetValue()==0){ //
         gpro_t.gTime_rf_rc_data=0;
         high_getvalue=0;
        low_getvalue ++;
 
    }
-   else if(RF_KEY_GetValue()==1 &&   sync_start_flag ==1){
-       gpro_t.gTime_rf_rc_data=0;
-       high_getvalue++; //low_getvalue ++; 
+   else if(RF_KEY_GetValue()==1){
+
+     gpro_t.gTime_rf_rc_data=0;
+     high_getvalue++; //low_getvalue ++; 
+     if(gpro_t.receive_data_success ==0){
+     
 
 
-       if(gpro_t.receive_data_success > 0){
-                sync_start_flag=0;
-                gpro_t.g_sync_flag=0;
-                low_rc=0;
-               low_getvalue=0;//high_getvalue=0;
-               gpro_t.receive_data_success =0;
-
-       }
-       else if(gpro_t.receive_data_success ==0){
-       
-          if(low_getvalue < 4){ //get numbers 0; 
+         if(low_getvalue < 4){ //get numbers 0; 
 
            if(receive_byte_flag==0){
                //get_bits(0x0,rf_data[0],receive_numbers);
@@ -289,13 +282,13 @@ void rf_irqhandler(void)
                if(receive_numbers ==8){
                 receive_numbers =0;
                 receive_byte_flag=0;
-               gpro_t.receive_data_success++;
-                if(gpro_t.receive_data_success >2){
-                    gpro_t.stop_receive_data = 1;
+                gpro_t.receive_data_success++;
+                gpro_t.stop_receive_data++;
+                    
                     gpro_t.gTime_rf_rc_data=0;
-                  }
-                sync_start_flag=0;
-                gpro_t.g_sync_flag=0;
+                 
+             
+                //gpro_t.g_sync_flag=0;
                 
                }
                low_getvalue=0;//high_getvalue=0;
@@ -329,25 +322,55 @@ void rf_irqhandler(void)
                 receive_numbers =0;
                 receive_byte_flag=0;
                 gpro_t.receive_data_success ++ ;
-                if(gpro_t.receive_data_success > 2){
-                    gpro_t.stop_receive_data = 1;
-                    gpro_t.gTime_rf_rc_data=0;
+                
+                gpro_t.stop_receive_data++;
+                gpro_t.gTime_rf_rc_data=0;
 
-                    }
-                sync_start_flag=0;
-                gpro_t.g_sync_flag=0;
+              
+           
+                //gpro_t.g_sync_flag=0;
                 
                }
                low_getvalue=0;//high_getvalue=0;
                low_rc=0;
-           }
+           
            
             }
 
         }
-    
+          }
+         else if(gpro_t.stop_receive_data   > 0 ){
+                   
+              if( low_getvalue > 1000 ){
+
+                 gpro_t.receive_data_success = 0 ; 
+
+                gpro_t.g_sync_flag=0;
+                low_rc=0;
+               low_getvalue=0;//high_getvalue=0;
+               gpro_t.stop_receive_data =0; 
+              receive_numbers=0;
+
+       
+              
+              }
+              else{
+                receive_numbers=0;
+                gpro_t.stop_receive_data =0;
+
+                low_getvalue=0;
+                 gpro_t.receive_data_success = 0 ; 
+
+                gpro_t.g_sync_flag=0;
+                low_rc=0;
+               low_getvalue=0;//high_getvalue=0;
+
+              }
       
         }
+       
+
+          }
      break;
    }
  }
