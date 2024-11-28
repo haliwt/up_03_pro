@@ -127,7 +127,7 @@ void rf_irqhandler(void)
           }
 
 
-       if((gpro_t.high_level_getvalue >6 && gpro_t.high_level_getvalue < 120)&& gpro_t.stop_receive_data  !=2){ //display "1"
+       if((gpro_t.high_level_getvalue >3 && gpro_t.high_level_getvalue < 800)&& gpro_t.stop_receive_data  !=2){ //display "1"
 
            if(gpro_t.stop_receive_data==0 ){
                 rf_recieve_first_data();
@@ -145,7 +145,7 @@ void rf_irqhandler(void)
 
             
           }
-          else if(gpro_t.high_level_getvalue > 600 ){
+          else if(gpro_t.high_level_getvalue > 900 ){
               
                 gpro_t.recieve_numbers=0;
  
