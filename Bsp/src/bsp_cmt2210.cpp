@@ -126,7 +126,7 @@ void rf_irqhandler(void)
           }
 
 
-       if((gpro_t.high_level_getvalue >7 && gpro_t.high_level_getvalue < 120)&& gpro_t.stop_receive_data  !=2){ //display "1"
+       if((gpro_t.high_level_getvalue >3 && gpro_t.high_level_getvalue < 120)&& gpro_t.stop_receive_data  !=2){ //display "1"
 
            if(gpro_t.stop_receive_data==0 ){
                 rf_recieve_first_data();
@@ -137,7 +137,7 @@ void rf_irqhandler(void)
                   rf_receive_second_data();
             }
           }
-          else if(gpro_t.high_level_getvalue > 1 && gpro_t.high_level_getvalue < 5 && gpro_t.stop_receive_data  !=2){ //get number "0 "
+          else if(gpro_t.high_level_getvalue < 4 && gpro_t.stop_receive_data  !=2){ //get number "0 "
          
            
               rf_receive_first_low_level_data();
@@ -150,8 +150,8 @@ void rf_irqhandler(void)
  
                 gpro_t.low_level_getvalue=0;
                 gpro_t.high_level_getvalue=0;
-                gpro_t.rf_rec_data2=0;
-                gpro_t.rf_rec_data2_2 =0;
+                gpro_t.rf_rec_data2=0xff;
+                gpro_t.rf_rec_data2_2 =0xff;
                 receive_byte_flag=0;
                  gpro_t.stop_receive_data  =0;
 
