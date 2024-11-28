@@ -35,7 +35,7 @@ static void sync_single(void)
          rec_low_times++;
         // if(low_rc > 200) low_rc = 0; //200*10us = 500us 100usx 50
     }
-    else if(RF_KEY_GetValue()==1 &&   (low_rc < 800 && low_rc >90) && gpro_t.g_sync_flag ==0){  //10ms 
+    else if(RF_KEY_GetValue()==1 &&   (low_rc < 800 && low_rc >85) && gpro_t.g_sync_flag ==0){  //10ms 
             gpro_t.high_level_getvalue++;
             low_rc_times = rec_low_times;
          
@@ -92,13 +92,14 @@ void rf_irqhandler(void)
        gpro_t.high_level_getvalue++;
       
        
-       if((gpro_t.low_level_getvalue >90 && gpro_t.low_level_getvalue < 200) && gpro_t.stop_receive_data==1){
+       if((gpro_t.low_level_getvalue >85 && gpro_t.low_level_getvalue < 800)){
 
                 gpro_t.recieve_numbers=0;
  
                  receive_byte_flag=0;
                 gpro_t.second_low_level_adjsut=1;
-
+                gpro_t.stop_receive_data ++;
+              
                 gpro_t.low_level_getvalue=0;
        }
        else 
@@ -126,7 +127,7 @@ void rf_irqhandler(void)
           }
 
 
-       if((gpro_t.high_level_getvalue >3 && gpro_t.high_level_getvalue < 120)&& gpro_t.stop_receive_data  !=2){ //display "1"
+       if((gpro_t.high_level_getvalue >6 && gpro_t.high_level_getvalue < 120)&& gpro_t.stop_receive_data  !=2){ //display "1"
 
            if(gpro_t.stop_receive_data==0 ){
                 rf_recieve_first_data();
@@ -137,7 +138,7 @@ void rf_irqhandler(void)
                   rf_receive_second_data();
             }
           }
-          else if(gpro_t.high_level_getvalue < 4 && gpro_t.stop_receive_data  !=2){ //get number "0 "
+          else if((gpro_t.high_level_getvalue < 4 &&  gpro_t.high_level_getvalue > 1) &&gpro_t.stop_receive_data  !=2){ //get number "0 "
          
            
               rf_receive_first_low_level_data();
@@ -345,7 +346,7 @@ static void rf_recieve_first_data(void)
                 gpro_t.recieve_numbers =0;
                 receive_byte_flag=0;
                
-                gpro_t.stop_receive_data++;
+              //  gpro_t.stop_receive_data++;
                 
                 gpro_t.gTime_rf_rc_data=0;
              
@@ -397,7 +398,7 @@ void rf_receive_first_low_level_data(void)
               gpro_t.recieve_numbers =0;
               receive_byte_flag=0;
            
-              gpro_t.stop_receive_data++;
+              //gpro_t.stop_receive_data++;
               }
              gpro_t.high_level_getvalue=0;
          
@@ -411,8 +412,8 @@ void rf_receive_first_low_level_data(void)
               gpro_t.recieve_numbers =0;
               receive_byte_flag=0;
            
-               gpro_t.stop_receive_data++;
-               if(gpro_t.stop_receive_data > 1){
+              // gpro_t.stop_receive_data++;
+               if(gpro_t.stop_receive_data > 0){
                     gpro_t.receive_data_success=1;
                     gpro_t.gTimer_stop_receive=0;
                   
@@ -600,8 +601,8 @@ static void rf_receive_second_data(void)
                 gpro_t.recieve_numbers =0;
                 receive_byte_flag=0;
                
-                gpro_t.stop_receive_data++;
-                if(gpro_t.stop_receive_data > 1){
+              //  gpro_t.stop_receive_data++;
+                if(gpro_t.stop_receive_data > 0){
                     gpro_t.receive_data_success=1;
                     gpro_t.gTimer_stop_receive=0;
                    
