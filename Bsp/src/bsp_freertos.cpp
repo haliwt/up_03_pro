@@ -177,24 +177,22 @@ static void vTaskStart(void *pvParameters)
 //                                             gpro_t.rf_rec_data == gpro_t.rf_rec_data2 && gpro_t.rf_rec_data1_2 == gpro_t.rf_rec_data1)){
                                               
 
-       if(gpro_t.receive_data_success == 1 && gpro_t.rf_rec_data2_2 > 0 && ( gpro_t.rf_key_interrupt_numbers >0x29  && gpro_t.rf_key_interrupt_numbers <0x3A)){
+//       if(gpro_t.receive_data_success == 1  && ( gpro_t.rf_key_interrupt_numbers >0x2F  && gpro_t.rf_key_interrupt_numbers <0x3A)
+//                                                && gpro_t.rf_rec_data2 == gpro_t.rf_rec_data2_2){
+
+
+        if(gpro_t.receive_data_success == 1 && (gpro_t.rf_rec_data2 > 0 && gpro_t.rf_rec_data2_2 >0)&& ( gpro_t.rf_key_interrupt_numbers >0x2F  && gpro_t.rf_key_interrupt_numbers <0x3A)){
+                                               
 
          gpro_t.receive_data_success++;
          gpro_t.gTime_rf_rc_data =0;
          gpro_t.g_sync_flag = 0xff;
+           rec_data_2=gpro_t.rf_rec_data2_2;
+            rec_data_1=gpro_t.rf_rec_data2;
+         gpro_t.rf_rec_data2=0;
+         gpro_t.rf_rec_data2_2 =0;
 
-         rec_data_1 = gpro_t.rf_rec_data;
-         rec_data_2 = gpro_t.rf_rec_data1;
-         rec_data_3 = gpro_t.rf_rec_data2;
-
-         gpro_t.rf_rec_data=0xff;
-         gpro_t.rf_rec_data1=0xff;
-         gpro_t.rf_rec_data2= 0xff;
-
-  
-         
-      
-         if(gpro_t.power_on == power_off){
+        if(gpro_t.power_on == power_off){
               gpro_t.power_on = power_on;
               //cancel run 2 hours times 
              gpro_t.works_2_hours_timeout_flag =0;
@@ -224,17 +222,20 @@ static void vTaskStart(void *pvParameters)
            gpro_t.g_sync_flag=0;
            gpro_t.low_level_getvalue =0;
            gpro_t.high_level_getvalue = 0;
+         
+           gpro_t.rf_rec_data2=0;
+           gpro_t.rf_rec_data2_2 =0;
                 
     }
 
-    if(gpro_t.g_sync_flag == 0){
-         gpro_t.low_level_getvalue =0;
-        gpro_t.high_level_getvalue = 0;
+//    if(gpro_t.g_sync_flag == 0){
+//         gpro_t.low_level_getvalue =0;
+//        gpro_t.high_level_getvalue = 0;
+//
+//
+//    }
 
-
-    }
-
-//     if((gpro_t.receive_data_success==2 || gpro_t.receive_data_success==1) && (gpro_t.rf_rec_data2 != gpro_t.rf_rec_data2_2  ||
+//     if((gpro_t.receive_data_success==2  ||gpro_t.stop_receive_data ==2) && (gpro_t.rf_rec_data2 != gpro_t.rf_rec_data2_2  ||
 //                             gpro_t.rf_rec_data != gpro_t.rf_rec_data2 || gpro_t.rf_rec_data1_2 != gpro_t.rf_rec_data1)){
 //                             
 //           gpro_t.receive_data_success=0;
@@ -244,6 +245,7 @@ static void vTaskStart(void *pvParameters)
 //           gpro_t.g_sync_flag=0;
 //           gpro_t.low_level_getvalue =0;
 //           gpro_t.high_level_getvalue = 0;
+//         
 //                 
 //        }
   
