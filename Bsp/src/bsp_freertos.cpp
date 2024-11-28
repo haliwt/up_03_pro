@@ -39,6 +39,9 @@ static TaskHandle_t xHandleTaskStart = NULL;
 
 uint8_t rec_data_3,rec_data_2,rec_data_1;
 
+uint8_t flag;
+
+
 /**********************************************************************************************************
 *	函 数 名: main
 *	功能说明: 标准c程序入口。
@@ -159,7 +162,7 @@ static void vTaskStart(void *pvParameters)
    //BaseType_t xResult;
    ///const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为500ms */
 
-   
+ 
     while(1)
     {
 		/* 按键扫描 */
@@ -181,7 +184,7 @@ static void vTaskStart(void *pvParameters)
 //                                                && gpro_t.rf_rec_data2 == gpro_t.rf_rec_data2_2){
 
 
-        if(gpro_t.receive_data_success == 1 && (gpro_t.rf_rec_data2 == gpro_t.rf_rec_data2_2 )&& ( gpro_t.rf_key_interrupt_numbers >0x2F  && gpro_t.rf_key_interrupt_numbers <0x3A)){
+        if(gpro_t.receive_data_success == 1 && (gpro_t.rf_rec_data2 == gpro_t.rf_rec_data2_2 )){
                                                
 
          gpro_t.receive_data_success++;
@@ -191,6 +194,8 @@ static void vTaskStart(void *pvParameters)
           rec_data_1=gpro_t.rf_rec_data2;
          gpro_t.rf_rec_data2=0;
          gpro_t.rf_rec_data2_2 =0;
+         gpro_t.rf_receive_data_flag=0;
+         flag = 1;
 
         if(gpro_t.power_on == power_off){
               gpro_t.power_on = power_on;
@@ -225,10 +230,12 @@ static void vTaskStart(void *pvParameters)
          
            gpro_t.rf_rec_data2=0;
            gpro_t.rf_rec_data2_2 =0;
+            gpro_t.rf_receive_data_flag=0;
+        
                 
     }
 
-    if(gpro_t.g_sync_flag == 1 && gpro_t.stop_receive_data ==2){
+    if((gpro_t.g_sync_flag == 1 &&  gpro_t.rf_receive_data_flag==1) && flag == 1){
          gpro_t.gTimer_stop_receive =0;
 
             gpro_t.receive_data_success=0;
@@ -238,10 +245,26 @@ static void vTaskStart(void *pvParameters)
            gpro_t.g_sync_flag=0;
            gpro_t.low_level_getvalue =0;
            gpro_t.high_level_getvalue = 0;
-        
-
+           gpro_t.rf_receive_data_flag=0;
+           flag =0;
 
     }
+    else if((gpro_t.g_sync_flag == 1 &&  gpro_t.rf_receive_data_flag==1) && flag == 0 && gpro_t.high_level_getvalue > 600){
+         gpro_t.gTimer_stop_receive =0;
+
+            gpro_t.receive_data_success=0;
+           gpro_t.recieve_numbers=0;
+           gpro_t.stop_receive_data =0;
+
+           gpro_t.g_sync_flag=0;
+           gpro_t.low_level_getvalue =0;
+           gpro_t.high_level_getvalue = 0;
+           gpro_t.rf_receive_data_flag=0;
+           flag =0;
+
+    }
+
+    
 
 //     if((gpro_t.receive_data_success==2  ||gpro_t.stop_receive_data ==2) && (gpro_t.rf_rec_data2 != gpro_t.rf_rec_data2_2  ||
 //                             gpro_t.rf_rec_data != gpro_t.rf_rec_data2 || gpro_t.rf_rec_data1_2 != gpro_t.rf_rec_data1)){

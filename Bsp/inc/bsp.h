@@ -80,6 +80,7 @@ typedef struct process_t{
    uint8_t  rf_key_interrupt_numbers ;
 
    uint8_t rf_auto_detected_num;
+   uint8_t rf_receive_data_flag;
            
    
    uint16_t  low_level_getvalue;
@@ -91,7 +92,7 @@ typedef struct process_t{
    uint8_t gTimer_run_process;
    uint8_t gTimer_works_total_times_minutes;
    uint8_t gTime_rf_rc_data;
-   uint8_t gTime_rf_Key_low_times;
+ 
    uint8_t gTimer_stop_receive;
   
     
