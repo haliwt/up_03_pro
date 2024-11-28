@@ -194,7 +194,7 @@ static void vTaskStart(void *pvParameters)
           rec_data_1=gpro_t.rf_rec_data2;
          gpro_t.rf_rec_data2=0;
          gpro_t.rf_rec_data2_2 =0;
-         gpro_t.rf_receive_data_flag=0;
+   
          flag = 1;
 
         if(gpro_t.power_on == power_off){
@@ -230,12 +230,12 @@ static void vTaskStart(void *pvParameters)
          
            gpro_t.rf_rec_data2=0;
            gpro_t.rf_rec_data2_2 =0;
-            gpro_t.rf_receive_data_flag=0;
+         
         
                 
     }
 
-    if((gpro_t.g_sync_flag == 1 &&  gpro_t.rf_receive_data_flag==1) && flag == 1){
+    if(gpro_t.g_sync_flag == 1 && flag == 1){
          gpro_t.gTimer_stop_receive =0;
 
             gpro_t.receive_data_success=0;
@@ -245,11 +245,11 @@ static void vTaskStart(void *pvParameters)
            gpro_t.g_sync_flag=0;
            gpro_t.low_level_getvalue =0;
            gpro_t.high_level_getvalue = 0;
-           gpro_t.rf_receive_data_flag=0;
+         
            flag =0;
 
     }
-    else if((gpro_t.g_sync_flag == 1 &&  gpro_t.rf_receive_data_flag==1) && flag == 0 && gpro_t.high_level_getvalue > 600){
+    else if(gpro_t.g_sync_flag == 1 && flag == 0 && gpro_t.high_level_getvalue > 600){
          gpro_t.gTimer_stop_receive =0;
 
             gpro_t.receive_data_success=0;
@@ -259,7 +259,7 @@ static void vTaskStart(void *pvParameters)
            gpro_t.g_sync_flag=0;
            gpro_t.low_level_getvalue =0;
            gpro_t.high_level_getvalue = 0;
-           gpro_t.rf_receive_data_flag=0;
+       
            flag =0;
 
     }

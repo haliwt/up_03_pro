@@ -31,16 +31,16 @@ static void sync_single(void)
          
           high_rc=0;
          low_rc++;
-       //  gpro_t.rf_receive_data_flag++;
+    
          rec_low_times++;
         // if(low_rc > 200) low_rc = 0; //200*10us = 500us 100usx 50
     }
     else if(RF_KEY_GetValue()==1 &&   (low_rc < 800 && low_rc >90) && gpro_t.g_sync_flag ==0){  //10ms 
             gpro_t.high_level_getvalue++;
             low_rc_times = rec_low_times;
-            gpro_t.rf_receive_data_flag = 1;
+         
 
-          // gpro_t.g_sync_flag =1;
+           gpro_t.g_sync_flag =1;
            gpro_t.recieve_numbers= 0;
            high_rc=0;
         
@@ -56,8 +56,7 @@ static void sync_single(void)
       else if(RF_KEY_GetValue()==1 && gpro_t.g_sync_flag ==0){
 
            low_rc =0;
-         //  gpro_t.rf_receive_data_flag = 0;
-      //    gpro_t.rf_auto_detected_num=0;
+   
          rec_low_times=0;
 
 
@@ -77,7 +76,7 @@ void rf_irqhandler(void)
 {
  //  RF_KEY_GetValue();
    static uint8_t rc_l_num= 0xff,rc_h_num=0xff,rc_l,rc_h;
-   switch(gpro_t.rf_receive_data_flag){
+   switch(gpro_t.g_sync_flag){
 
    case 0:
     
@@ -145,30 +144,23 @@ void rf_irqhandler(void)
 
             
           }
-//          else if(gpro_t.high_level_getvalue > 600 || gpro_t.stop_receive_data  ==2){
-//             gpro_t.g_sync_flag=0;
-//             gpro_t.rf_receive_data_flag=0;
-//             
-//             return ;
-//
-//          }
-//          else if(gpro_t.high_level_getvalue > 600 || gpro_t.stop_receive_data  ==2){
-//              
-//                gpro_t.recieve_numbers=0;
-// 
-//                gpro_t.low_level_getvalue=0;
-//                gpro_t.high_level_getvalue=0;
-//                gpro_t.rf_rec_data2=0;
-//                gpro_t.rf_rec_data2_2 =0;
-//                receive_byte_flag=0;
-//                 gpro_t.stop_receive_data  =0;
-//
-//                  gpro_t.g_sync_flag=0;
-//                  gpro_t.rf_receive_data_flag=0;
-//                  return ;
-//
-//         }
-//     
+          else if(gpro_t.high_level_getvalue > 600 ){
+              
+                gpro_t.recieve_numbers=0;
+ 
+                gpro_t.low_level_getvalue=0;
+                gpro_t.high_level_getvalue=0;
+                gpro_t.rf_rec_data2=0;
+                gpro_t.rf_rec_data2_2 =0;
+                receive_byte_flag=0;
+                 gpro_t.stop_receive_data  =0;
+
+                  gpro_t.g_sync_flag=0;
+            
+                  return ;
+
+         }
+     
         }
     }
      break;

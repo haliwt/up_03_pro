@@ -80,7 +80,7 @@ typedef struct process_t{
    uint8_t  rf_key_interrupt_numbers ;
 
    uint8_t rf_auto_detected_num;
-   uint8_t rf_receive_data_flag;
+ 
            
    
    uint16_t  low_level_getvalue;
