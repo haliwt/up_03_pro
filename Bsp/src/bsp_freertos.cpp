@@ -228,12 +228,20 @@ static void vTaskStart(void *pvParameters)
                 
     }
 
-//    if(gpro_t.g_sync_flag == 0){
-//         gpro_t.low_level_getvalue =0;
-//        gpro_t.high_level_getvalue = 0;
-//
-//
-//    }
+    if(gpro_t.g_sync_flag == 1 && gpro_t.stop_receive_data ==2 && gpro_t.gTimer_stop_receive > 3){
+         gpro_t.gTimer_stop_receive =0;
+
+            gpro_t.receive_data_success=0;
+           gpro_t.recieve_numbers=0;
+           gpro_t.stop_receive_data =0;
+
+           gpro_t.g_sync_flag=0;
+           gpro_t.low_level_getvalue =0;
+           gpro_t.high_level_getvalue = 0;
+        
+
+
+    }
 
 //     if((gpro_t.receive_data_success==2  ||gpro_t.stop_receive_data ==2) && (gpro_t.rf_rec_data2 != gpro_t.rf_rec_data2_2  ||
 //                             gpro_t.rf_rec_data != gpro_t.rf_rec_data2 || gpro_t.rf_rec_data1_2 != gpro_t.rf_rec_data1)){

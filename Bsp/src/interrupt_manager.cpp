@@ -57,6 +57,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
       gpro_t.gTime_rf_rc_data++;
        gpro_t.gTimer_run_process++;
+       gpro_t.gTimer_stop_receive++;
       
 
       if(tm1 > 11){ //1 minute.
