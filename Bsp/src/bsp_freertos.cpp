@@ -181,14 +181,14 @@ static void vTaskStart(void *pvParameters)
 //                                                && gpro_t.rf_rec_data2 == gpro_t.rf_rec_data2_2){
 
 
-        if(gpro_t.receive_data_success == 1 && (gpro_t.rf_rec_data2 > 0 && gpro_t.rf_rec_data2_2 >0)&& ( gpro_t.rf_key_interrupt_numbers >0x2F  && gpro_t.rf_key_interrupt_numbers <0x3A)){
+        if(gpro_t.receive_data_success == 1 && (gpro_t.rf_rec_data2 == gpro_t.rf_rec_data2_2 )&& ( gpro_t.rf_key_interrupt_numbers >0x2F  && gpro_t.rf_key_interrupt_numbers <0x3A)){
                                                
 
          gpro_t.receive_data_success++;
          gpro_t.gTime_rf_rc_data =0;
          gpro_t.g_sync_flag = 0xff;
-           rec_data_2=gpro_t.rf_rec_data2_2;
-            rec_data_1=gpro_t.rf_rec_data2;
+         rec_data_2=gpro_t.rf_rec_data2_2;
+          rec_data_1=gpro_t.rf_rec_data2;
          gpro_t.rf_rec_data2=0;
          gpro_t.rf_rec_data2_2 =0;
 
@@ -213,7 +213,7 @@ static void vTaskStart(void *pvParameters)
 
     }
 
-    if(gpro_t.gTime_rf_rc_data > 1 &&  gpro_t.receive_data_success==2){
+    if(gpro_t.gTime_rf_rc_data > 0 &&  gpro_t.receive_data_success==2){
 
            gpro_t.receive_data_success++;
            gpro_t.recieve_numbers=0;
