@@ -37,12 +37,7 @@ static TaskHandle_t xHandleTaskStart = NULL;
 //static TimerHandle_t           Timer1Timer_Handler;/* 定时器1句柄 */
 //static TimerHandle_t           Timer2Timer_Handler;/* 定时器2句柄 */
 
-
-
-
-
-
-
+uint8_t rec_data_3,rec_data_2,rec_data_1;
 
 /**********************************************************************************************************
 *	函 数 名: main
@@ -164,7 +159,7 @@ static void vTaskStart(void *pvParameters)
    //BaseType_t xResult;
    ///const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为500ms */
 
- 
+   
     while(1)
     {
 		/* 按键扫描 */
@@ -178,14 +173,26 @@ static void vTaskStart(void *pvParameters)
 //
 //    }
 
-    if(gpro_t.receive_data_success == 1 && (gpro_t.rf_rec_data2 == gpro_t.rf_rec_data2_2  && gpro_t.rf_rec_data2_2 > 0 &&
-                                             gpro_t.rf_rec_data == gpro_t.rf_rec_data2 && gpro_t.rf_rec_data1_2 == gpro_t.rf_rec_data1)){
+//    if(gpro_t.receive_data_success == 1 && (gpro_t.rf_rec_data2 == gpro_t.rf_rec_data2_2  && gpro_t.rf_rec_data2_2 > 0 &&
+//                                             gpro_t.rf_rec_data == gpro_t.rf_rec_data2 && gpro_t.rf_rec_data1_2 == gpro_t.rf_rec_data1)){
                                               
+
+       if(gpro_t.receive_data_success == 1 && gpro_t.rf_rec_data2_2 > 0 && ( gpro_t.rf_key_interrupt_numbers >0x29  && gpro_t.rf_key_interrupt_numbers <0x3A)){
 
          gpro_t.receive_data_success++;
          gpro_t.gTime_rf_rc_data =0;
          gpro_t.g_sync_flag = 0xff;
-         gpro_t.rf_rec_data2_2 =0;
+
+         rec_data_1 = gpro_t.rf_rec_data;
+         rec_data_2 = gpro_t.rf_rec_data1;
+         rec_data_3 = gpro_t.rf_rec_data2;
+
+         gpro_t.rf_rec_data=0xff;
+         gpro_t.rf_rec_data1=0xff;
+         gpro_t.rf_rec_data2= 0xff;
+
+  
+         
       
          if(gpro_t.power_on == power_off){
               gpro_t.power_on = power_on;
@@ -227,18 +234,18 @@ static void vTaskStart(void *pvParameters)
 
     }
 
-     if((gpro_t.receive_data_success==2 || gpro_t.receive_data_success==1) && (gpro_t.rf_rec_data2 != gpro_t.rf_rec_data2_2  ||
-                             gpro_t.rf_rec_data != gpro_t.rf_rec_data2 || gpro_t.rf_rec_data1_2 != gpro_t.rf_rec_data1)){
-                             
-           gpro_t.receive_data_success=0;
-           gpro_t.recieve_numbers=0;
-           gpro_t.stop_receive_data =0;
-
-           gpro_t.g_sync_flag=0;
-           gpro_t.low_level_getvalue =0;
-           gpro_t.high_level_getvalue = 0;
-                 
-        }
+//     if((gpro_t.receive_data_success==2 || gpro_t.receive_data_success==1) && (gpro_t.rf_rec_data2 != gpro_t.rf_rec_data2_2  ||
+//                             gpro_t.rf_rec_data != gpro_t.rf_rec_data2 || gpro_t.rf_rec_data1_2 != gpro_t.rf_rec_data1)){
+//                             
+//           gpro_t.receive_data_success=0;
+//           gpro_t.recieve_numbers=0;
+//           gpro_t.stop_receive_data =0;
+//
+//           gpro_t.g_sync_flag=0;
+//           gpro_t.low_level_getvalue =0;
+//           gpro_t.high_level_getvalue = 0;
+//                 
+//        }
   
     vTaskDelay(20);
   }
