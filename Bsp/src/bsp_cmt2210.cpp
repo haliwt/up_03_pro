@@ -121,7 +121,7 @@ void rf_irqhandler(void)
 
 
           }
-          else if(gpro_t.low_level_getvalue >2 && gpro_t.low_level_getvalue < 150){
+          else if((gpro_t.low_level_getvalue >2 && gpro_t.low_level_getvalue < 150)&& gpro_t.stop_receive_data  !=2){
           if(rc_h_num != rc_h){
            rc_h_num = rc_h;
            rc_l++;
@@ -149,7 +149,7 @@ void rf_irqhandler(void)
           }
           
         }
-        else if(gpro_t.low_level_getvalue > 600){
+        else if(gpro_t.low_level_getvalue > 600 || gpro_t.stop_receive_data  ==2){
               
                 gpro_t.recieve_numbers=0;
  
@@ -158,7 +158,7 @@ void rf_irqhandler(void)
                 gpro_t.rf_rec_data2=0;
                 gpro_t.rf_rec_data2_2 =0;
                 receive_byte_flag=0;
-              
+                 gpro_t.stop_receive_data  =0;
 
                   gpro_t.g_sync_flag=0;
                   return ;

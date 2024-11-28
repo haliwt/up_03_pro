@@ -228,7 +228,7 @@ static void vTaskStart(void *pvParameters)
                 
     }
 
-    if(gpro_t.g_sync_flag == 1 && gpro_t.stop_receive_data ==2 && gpro_t.gTimer_stop_receive > 3){
+    if(gpro_t.g_sync_flag == 1 && gpro_t.stop_receive_data ==2){
          gpro_t.gTimer_stop_receive =0;
 
             gpro_t.receive_data_success=0;

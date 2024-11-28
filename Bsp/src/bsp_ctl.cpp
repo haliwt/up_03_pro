@@ -35,7 +35,7 @@ void main_board_ctl_handler(uint8_t flag)
     }
     else{ //two 2 hours stop.
         
-         fan_t.fan_stop_fun();
+        fan_t.fan_output_fun(); //fan_t.fan_stop_fun();
          plasma_t.plasma_stop_fun();
          ultra_t.ultra_stop_fun();
 
