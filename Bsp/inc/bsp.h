@@ -70,6 +70,10 @@ typedef struct process_t{
    uint8_t rf_rec_data1;
    uint8_t rf_rec_data2;
 
+   uint8_t rf_rec_data_2;
+   uint8_t rf_rec_data1_2;
+   uint8_t rf_rec_data2_2;
+
    uint8_t  recieve_numbers;
  
    uint8_t  rf_key_interrupt_numbers ;

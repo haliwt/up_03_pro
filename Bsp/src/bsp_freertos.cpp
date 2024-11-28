@@ -178,12 +178,14 @@ static void vTaskStart(void *pvParameters)
 //
 //    }
 
-    if(gpro_t.receive_data_success == 1 && (gpro_t.rf_rec_data2  > 0)){
+    if(gpro_t.receive_data_success == 1 && (gpro_t.rf_rec_data2 == gpro_t.rf_rec_data2_2  && gpro_t.rf_rec_data2_2 > 0 &&
+                                             gpro_t.rf_rec_data == gpro_t.rf_rec_data2 && gpro_t.rf_rec_data1_2 == gpro_t.rf_rec_data1)){
                                               
 
          gpro_t.receive_data_success++;
          gpro_t.gTime_rf_rc_data =0;
          gpro_t.g_sync_flag = 0xff;
+         gpro_t.rf_rec_data2_2 =0;
       
          if(gpro_t.power_on == power_off){
               gpro_t.power_on = power_on;
@@ -224,6 +226,19 @@ static void vTaskStart(void *pvParameters)
 
 
     }
+
+     if((gpro_t.receive_data_success==2 || gpro_t.receive_data_success==1) && (gpro_t.rf_rec_data2 != gpro_t.rf_rec_data2_2  ||
+                             gpro_t.rf_rec_data != gpro_t.rf_rec_data2 || gpro_t.rf_rec_data1_2 != gpro_t.rf_rec_data1)){
+                             
+           gpro_t.receive_data_success=0;
+           gpro_t.recieve_numbers=0;
+           gpro_t.stop_receive_data =0;
+
+           gpro_t.g_sync_flag=0;
+           gpro_t.low_level_getvalue =0;
+           gpro_t.high_level_getvalue = 0;
+                 
+        }
   
     vTaskDelay(20);
   }
