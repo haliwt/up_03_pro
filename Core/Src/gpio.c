@@ -70,6 +70,8 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
+  #if 0
+
  /*Configure GPIO pin : PtPin */
   GPIO_InitStruct.Pin = RF_KEY_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;//RISING;//GPIO_MODE_IT_RISING_FALLING;//GPIO_MODE_IT_RISING;
@@ -79,6 +81,7 @@ void MX_GPIO_Init(void)
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI4_15_IRQn, 3, 0);
   HAL_NVIC_EnableIRQ(EXTI4_15_IRQn);
+  #endif 
 
 }
 

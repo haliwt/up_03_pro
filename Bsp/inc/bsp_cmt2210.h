@@ -22,7 +22,7 @@ void rf_irqhandler(void);
 
 extern uint8_t rf_data[4]; 
 
-
+uint8_t remote_scan(void);
 
 
 #ifdef __cplusplus
