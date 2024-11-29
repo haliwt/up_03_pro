@@ -127,7 +127,7 @@ void rf_irqhandler(void)
           }
 
 
-       if((gpro_t.high_level_getvalue >3 && gpro_t.high_level_getvalue < 800)&& gpro_t.stop_receive_data  !=2){ //display "1"
+       if((gpro_t.high_level_getvalue >4 && gpro_t.high_level_getvalue < 800)&& gpro_t.stop_receive_data  !=2){ //display "1"
 
            if(gpro_t.stop_receive_data==0 ){
                 rf_recieve_first_data();
@@ -138,7 +138,7 @@ void rf_irqhandler(void)
                   rf_receive_second_data();
             }
           }
-          else if((gpro_t.high_level_getvalue < 4 &&  gpro_t.high_level_getvalue > 1) &&gpro_t.stop_receive_data  !=2){ //get number "0 "
+          else if((gpro_t.high_level_getvalue < 5  && gpro_t.high_level_getvalue   > 1) &&gpro_t.stop_receive_data  !=2){ //get number "0 "
          
            
               rf_receive_first_low_level_data();
@@ -194,36 +194,50 @@ static void rf_recieve_first_data(void)
 					{   
                         
                         gpro_t.rf_rec_data= 0x80; //最高位 
+                         gpro_t.high_level_getvalue=0;
+                            return ;
 						break;
 					 }   //遥控编码第1位
 					case 2 : 
 					{ 
 						 gpro_t.rf_rec_data= 0x40;  //
+						    gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}
 					case 3 : 
 					{ 
 						 gpro_t.rf_rec_data=0x20; 
+                           gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第2位
 					case 4 : 
 					{ 
 						 gpro_t.rf_rec_data= 0x10; 
+                           gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第3位 --> 1个字节 高4位
 					case 5 :
 					 { 
 						 gpro_t.rf_rec_data=0x08; 
+                           gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第4位
 					case 6 : 
 					{ 
 						 gpro_t.rf_rec_data= 0x04; 
+                           gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第5位
 					case 7 : 
 					{ 
 						 gpro_t.rf_rec_data= 0x02;
+                           gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第6位
 					case 8 : 
@@ -248,36 +262,51 @@ static void rf_recieve_first_data(void)
 					{   
                         
                         gpro_t.rf_rec_data1= 0x80; //最高位 
+                          gpro_t.high_level_getvalue=0;
+                            return ;
 						break;
 					 }   //遥控编码第1位
 					case 2 : 
 					{ 
 						gpro_t.rf_rec_data1= 0x40;
+                          gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}
 					case 3 : 
 					{ 
 						gpro_t.rf_rec_data1= 0x20;
+                          gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第2位
 					case 4 : 
 					{ 
 						gpro_t.rf_rec_data1= 0x10;
+
+                          gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第3位 --> 1个字节 高4位
 					case 5 :
 					 { 
 						gpro_t.rf_rec_data1= 0x08;
+                          gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第4位
 					case 6 : 
 					{ 
 						gpro_t.rf_rec_data1= 0x04;
+                          gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第5位
 					case 7 : 
 					{ 
 						gpro_t.rf_rec_data1= 0x02;
+                          gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第6位
 					case 8 : 
@@ -300,6 +329,8 @@ static void rf_recieve_first_data(void)
 					{   
                        
                         gpro_t.rf_rec_data2 = 0x80; //最高位 
+                          gpro_t.high_level_getvalue=0;
+                            return ;
                         
                       
 						break;
@@ -307,36 +338,50 @@ static void rf_recieve_first_data(void)
 					case 2 : 
 					{ 
 						 gpro_t.rf_rec_data2 =0x40;
+                           gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}
 					case 3 : 
 					{ 
 						 gpro_t.rf_rec_data2 = 0x20;
+                           gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第2位
 					case 4 : 
 					{ 
 						 gpro_t.rf_rec_data2 = 0x10;
+                           gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第3位 --> 1个字节 高4位
 					case 5 :
 					 { 
 						 gpro_t.rf_rec_data2 = 0x08;
+                           gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第4位
 					case 6 : 
 					{ 
 						 gpro_t.rf_rec_data2 = 0x04;
+                           gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第5位
 					case 7 : 
 					{ 
 						 gpro_t.rf_rec_data2 = 0x02;
+                           gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第6位
 					case 8 : 
 					{
 					     gpro_t.rf_rec_data2 = 0x01; 
+                           gpro_t.high_level_getvalue=0;
+                          
 						break;
 					 }//遥控编码第7位  ----> 1个字节 低4位
                 }
@@ -449,36 +494,51 @@ static void rf_receive_second_data(void)
 					{   
                         
                         gpro_t.rf_rec_data_2= 0x80; //最高位 
+                          gpro_t.high_level_getvalue=0;
+                            return ;
 						break;
 					 }   //遥控编码第1位
 					case 2 : 
 					{ 
 						 gpro_t.rf_rec_data_2= 0x40;  //
+						   gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}
 					case 3 : 
 					{ 
 						 gpro_t.rf_rec_data_2=0x20; 
+                           gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第2位
 					case 4 : 
 					{ 
 						 gpro_t.rf_rec_data_2= 0x10; 
+                           gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第3位 --> 1个字节 高4位
 					case 5 :
 					 { 
 						 gpro_t.rf_rec_data_2= 0x08; 
+                           gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第4位
 					case 6 : 
 					{ 
 						gpro_t.rf_rec_data_2= 0x04; 
+
+                          gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第5位
 					case 7 : 
 					{ 
 						gpro_t.rf_rec_data_2= 0x02;
+                          gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第6位
 					case 8 : 
@@ -503,36 +563,52 @@ static void rf_receive_second_data(void)
 					{   
                         
                         gpro_t.rf_rec_data1_2= 0x80; //最高位 
+
+                          gpro_t.high_level_getvalue=0;
+                            return ;
 						break;
 					 }   //遥控编码第1位
 					case 2 : 
 					{ 
 						gpro_t.rf_rec_data1_2= 0x40;
+                          gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}
 					case 3 : 
 					{ 
 						gpro_t.rf_rec_data1_2= 0x20;
+                          gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第2位
 					case 4 : 
 					{ 
 						gpro_t.rf_rec_data1_2= 0x10;
+
+                          gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第3位 --> 1个字节 高4位
 					case 5 :
 					 { 
 						gpro_t.rf_rec_data1_2= 0x08;
+                          gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第4位
 					case 6 : 
 					{ 
 						gpro_t.rf_rec_data1_2= 0x04;
+                          gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第5位
 					case 7 : 
 					{ 
 						gpro_t.rf_rec_data1_2= 0x02;
+                          gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第6位
 					case 8 : 
@@ -555,6 +631,8 @@ static void rf_receive_second_data(void)
 					{   
                        
                         gpro_t.rf_rec_data2_2 = 0x80; //最高位 
+                          gpro_t.high_level_getvalue=0;
+                            return ;
                         
                       
 						break;
@@ -562,36 +640,50 @@ static void rf_receive_second_data(void)
 					case 2 : 
 					{ 
 						  gpro_t.rf_rec_data2_2 = 0x40;
+                            gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}
 					case 3 : 
 					{ 
 						  gpro_t.rf_rec_data2_2 = 0x20;
+                            gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第2位
 					case 4 : 
 					{ 
 						  gpro_t.rf_rec_data2_2 = 0x10;
+                            gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第3位 --> 1个字节 高4位
 					case 5 :
 					 { 
 						  gpro_t.rf_rec_data2_2 = 0x08;
+                            gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第4位
 					case 6 : 
 					{ 
 						  gpro_t.rf_rec_data2_2 = 0x04;
+                            gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第5位
 					case 7 : 
 					{ 
 						  gpro_t.rf_rec_data2_2 = 0x02;
+                            gpro_t.high_level_getvalue=0;
+                            return ;
 						break; 
 					}//遥控编码第6位
 					case 8 : 
 					{
 					      gpro_t.rf_rec_data2_2 = 0x01; 
+                            gpro_t.high_level_getvalue=0;
+                            
 						break;
 					 }//遥控编码第7位  ----> 1个字节 低4位
                 }
