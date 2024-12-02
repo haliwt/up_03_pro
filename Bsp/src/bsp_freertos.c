@@ -56,11 +56,8 @@ typedef struct Msg
 
  
     uint8_t  power_onoff_sound_flag;
-    uint8_t  timer_sound_flag ;
-    uint8_t  key_timer_timing_value;
-    uint8_t  key_long_timer_flag;
-  
-    uint8_t  interval_flag;
+    
+    uint8_t  power_key_flag ;
     
    
 }MSG_T;
@@ -156,7 +153,37 @@ static void vTaskMsgPro(void *pvParameters)
 
              }
 
-              if(g_tmsg.power_onoff_sound_flag ==1 && gpro_t.rf_receive_data_success==3){
+
+
+             if(g_tmsg.power_key_flag == 1 &&  KEY_POWER_GetValue()  == KEY_UP){
+
+                   g_tmsg.power_key_flag ++;
+                  if(gpro_t.power_on == power_off){
+                    gpro_t.power_on = power_on;
+                   
+                    gpro_t.works_2_hours_timeout_flag=0;
+                    gpro_t.fan_warning_flag = 0;
+                    gpro_t.gTimer_normal_run_main_function_times =10;
+                    
+                  
+                    voice_power_on_sound();
+                   // gpro_t.gTimer_power_on_times=0;
+                 
+
+                 }
+                 else {
+               
+                   gpro_t.power_on = power_off;
+                   
+                   voice_power_off_sound();
+                  // gpro_t.gTimer_power_on_times=0;
+                    
+                 }
+
+
+
+             }
+             else if(g_tmsg.power_onoff_sound_flag ==1 && gpro_t.rf_receive_data_success==3){
                  g_tmsg.power_onoff_sound_flag++;
                  if(gpro_t.rf_receive_data_success==3){
                     gpro_t.rf_receive_data_success++;
@@ -255,8 +282,8 @@ static void vTaskStart(void *pvParameters)
 		//bsp_KeyScan();
     if(KEY_POWER_GetValue()  == KEY_DOWN){
       
-        
-         g_tmsg.power_onoff_sound_flag =1;
+         g_tmsg.power_key_flag = 1;
+         //g_tmsg.power_onoff_sound_flag =1;
         
      }
     else if(gpro_t.rf_receive_data_success == 1){
