@@ -48,6 +48,8 @@ uint32_t rf_data,original_data;
 
 uint8_t rf_rec_numbers;
 
+uint32_t rf_id;
+
 
 typedef struct Msg
 {
@@ -246,7 +248,7 @@ static void vTaskStart(void *pvParameters)
    //BaseType_t xResult;
    ///const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为500ms */
 
- 
+    static uint8_t power_on_id_flag;
     while(1)
     {
 		/* 按键扫描 */
@@ -260,13 +262,21 @@ static void vTaskStart(void *pvParameters)
     else if(gpro_t.rf_receive_data_success == 1){
 
                gpro_t.rf_receive_data_success++;
+               if(power_on_id_flag ==0){
+                   power_on_id_flag++;
+
+                   rf_id = g_remote_data;
+                   rf_id = g_remote_data & 0x07FFFFFF;
+                   
+
+               }
                original_data = g_remote_data;
                rf_rec_numbers =  gpro_t.rf_recieve_numbers;
                rf_data= g_remote_data;
 
                 rf_data = g_remote_data & 0x07FFFFFF;
             
-                if(rf_data == 0x0197E90){
+                if(rf_data == rf_id){
                   gpro_t.rf_receive_data_success++;
                   g_tmsg.power_onoff_sound_flag =1;
                   g_remote_data =0;
