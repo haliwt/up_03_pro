@@ -14,8 +14,9 @@ uint8_t  g_remote_cnt = 0;  /* 按键按下的次数 */
 
 uint16_t dval,up_dval;  /* 下降沿时计数器的值 */
 
+uint8_t  rf_syn_flag ;
 
-
+uint8_t rf_syn_signal_numbers;
 
 /**
  * @brief       定时器输入捕获中断回调函数
@@ -35,21 +36,32 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
             up_dval=HAL_TIM_ReadCapturedValue(&htim3, TIM_CHANNEL_1);        /* 读取CCR1也可以清CC1IF标志位 *//* 标记下降沿已经被捕获 */
             __HAL_TIM_SET_CAPTUREPOLARITY(&htim3,TIM_CHANNEL_1,TIM_INPUTCHANNELPOLARITY_FALLING);    /* 配置TIM3通道1下降沿捕获 */
           
-            g_remote_sta |= 0X10;   
-           
-             __HAL_TIM_SET_COUNTER(&htim3, 0);  /* 清空定时器值 */
-             if (up_dval > 9000  && up_dval < 10000  && gpro_t.rf_syn_signal_numbers  < 2)//if (up_dval > 9000  && up_dval < 10000 && up_flag > 0 && syn_flag  < 2) /*  315MHZ-低电平持续时间   9.76ms  *//* 4500为标准值4.5ms, */
+            __HAL_TIM_SET_COUNTER(&htim3, 0);  /* 清空定时器值 */
+
+             g_remote_sta |= 0X10; 
+             if (up_dval > 8000  && up_dval < 12000  &&  gpro_t.rf_receive_data_success ==0 && gpro_t.rf_decoder ==0)//if (up_dval > 9000  && up_dval < 10000 && up_flag > 0 && syn_flag  < 2) /*  315MHZ-低电平持续时间   9.76ms  *//* 4500为标准值4.5ms, */
              {
                     g_remote_sta |= 1 << 7; /* 标记成功接收到了引导码 */
-                    gpro_t.rf_sync_flag =1;
-                    g_remote_cnt = 0;       /* 清除按键次数计数器 */
-                    gpro_t.rf_syn_signal_numbers++ ;
-                    if(gpro_t.rf_syn_signal_numbers==1)gpro_t.rf_recieve_numbers=0;
-                    else{
-                      gpro_t.rf_receive_data_success=1;
+                   // g_remote_cnt = 0;       /* 清除按键次数计数器 */
+                    rf_syn_flag = 1;
+                    rf_syn_signal_numbers++;
+                    if( rf_syn_signal_numbers > 1){
+                          rf_syn_signal_numbers=0;
 
-                   }
-              }
+                          gpro_t.rf_receive_data_success=1;
+                           gpro_t.rf_decoder =1;
+                          rf_syn_flag = 0;
+
+                    }
+                  
+                      
+             }
+             else  if (up_dval > 8000  && up_dval < 12000  &&  gpro_t.rf_receive_data_success ==1){
+
+                        g_remote_cnt++;
+
+
+             }
 
         }
         else           /* 下降沿捕获 */
@@ -58,26 +70,26 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
             __HAL_TIM_SET_CAPTUREPOLARITY(&htim3, TIM_CHANNEL_1, TIM_INPUTCHANNELPOLARITY_RISING);     /* 配置TIM3通道1上升沿捕获 */
             __HAL_TIM_SET_COUNTER(&htim3, 0);  /* 清空定时器值 */
 
-            if (g_remote_sta & 0X10)        /* 完成一次低电平捕获 */
+            if(g_remote_sta & 0X10)      /* 完成一次低电平捕获 */
             {
-                if((g_remote_sta & 0X80) && gpro_t.rf_sync_flag ==1 && gpro_t.rf_receive_data_success == 0)   /* 接收到同步信号，低电平持续时间   9.76ms */
+                if((g_remote_sta & 0X80) &&  rf_syn_flag == 1 && gpro_t.rf_receive_data_success ==0)   /* 接收到同步信号，低电平持续时间   9.76ms */
                 {
 
-                    if (dval < 500)       /* 低电平大于 340us，小于max= 930us，低电平*/
+                    if (dval > 100 && dval < 500)       /* 低电平大于 340us，小于max= 930us，低电平*/
                     {
-                        //g_remote_data >>= 1;                /* 右移一位 */
+                        //g_remote_data >>= 1;                /* 左移一位 */
                         
                         g_remote_data <<= 1;
                         g_remote_data &= ~(0x000001);     /* 接收到0 */
                        gpro_t.rf_recieve_numbers++;
-                      //  if(gpro_t.recieve_numbers > 100)stop_receive_data_flag=1;
+                      
                     }
-                    else if (dval > 400 && dval < 1100)    /* 低电平小于   max= 340us ，是高电平  */
+                    else if (dval > 600  && dval < 1100)    /* 低电平小于   max= 340us ，是高电平  */
                     {
-                        g_remote_data  <<= 1;                /* 右移一位 */
+                        g_remote_data  <<= 1;                /* 左移一位 */
                         g_remote_data |= 0x000001;        /* 接收到1 */
                         gpro_t.rf_recieve_numbers++;
-                       // if(gpro_t.recieve_numbers > 100)stop_receive_data_flag=1;
+                       
                     }
 
                 }
@@ -86,6 +98,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
             }
 
             g_remote_sta&=~(1<<4); //清空下降沿标志位
+            
         }
     }
 }
@@ -111,10 +124,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
       tm0=0;
       tm1++;
 
-      gpro_t.gTimer_adc_detected_time++;
+    //  gpro_t.gTimer_adc_detected_time++;
    
       gpro_t.gTimer_normal_run_main_function_times++;
-      gpro_t.gTimer_timer_time_long_key ++;
+   //   gpro_t.gTimer_timer_time_long_key ++;
+      gpro_t.gTimer_power_on_times++;
 
       if(tm1 > 59){ //1 minute.
          tm1 =0;

@@ -44,7 +44,9 @@ static TaskHandle_t xHandleTaskStart = NULL;
 //static TimerHandle_t           Timer2Timer_Handler;/* 定时器2句柄 */
 
 
-uint32_t rf_data;
+uint32_t rf_data,original_data;
+
+uint8_t rf_rec_numbers;
 
 
 typedef struct Msg
@@ -152,25 +154,33 @@ static void vTaskMsgPro(void *pvParameters)
 
              }
 
-              if(g_tmsg.power_onoff_sound_flag ==1 && (KEY_POWER_GetValue()  == KEY_UP || gpro_t.rf_receive_data_success==2)){
+              if(g_tmsg.power_onoff_sound_flag ==1 && gpro_t.rf_receive_data_success==3){
                  g_tmsg.power_onoff_sound_flag++;
-                  gpro_t.rf_receive_data_success++;
+                 if(gpro_t.rf_receive_data_success==3){
+                    gpro_t.rf_receive_data_success++;
+                  
+               }
                  
                  if(gpro_t.power_on == power_off){
                     gpro_t.power_on = power_on;
+                   
                     gpro_t.works_2_hours_timeout_flag=0;
                     gpro_t.fan_warning_flag = 0;
                     gpro_t.gTimer_normal_run_main_function_times =10;
-                 
+                    
                   
                     voice_power_on_sound();
+                    gpro_t.gTimer_power_on_times=0;
+                 
 
                  }
-                 else{
-
+                 else {
+               
                    gpro_t.power_on = power_off;
-                   //led_off_fun();
+                   
                    voice_power_off_sound();
+                   gpro_t.gTimer_power_on_times=0;
+                    
                  }
                  
              }
@@ -185,12 +195,34 @@ static void vTaskMsgPro(void *pvParameters)
            
             device_works_time_counter_handler();
 
+            if(gpro_t.gTimer_power_on_times > 1 && gpro_t.rf_receive_data_success==4){
+                 gpro_t.gTimer_power_on_times=0;
+                 gpro_t.rf_decoder = 0;
+                 gpro_t.rf_receive_data_success=0;
+
+
+            }
+            
+  
+       
+            
+
           }
           else {
               gpro_t.works_2_hours_timeout_flag=0;
                gpro_t.fan_warning_flag = 0;
         
               power_off_handler();
+
+
+               if(gpro_t.gTimer_power_on_times > 1 && gpro_t.rf_receive_data_success==4){
+                 gpro_t.gTimer_power_on_times=0;
+                 gpro_t.rf_decoder = 0;
+                 gpro_t.rf_receive_data_success=0;
+
+
+            }
+            
               
              
           }
@@ -221,38 +253,32 @@ static void vTaskStart(void *pvParameters)
 		//bsp_KeyScan();
     if(KEY_POWER_GetValue()  == KEY_DOWN){
       
-        if(gpro_t.power_on == power_on){
-               
-                gpro_t.power_on = power_off;
-                 g_tmsg.power_onoff_sound_flag =1;
-          }
-         else if(gpro_t.power_on == power_off){
-             
-                   g_tmsg.power_onoff_sound_flag =1;
-                   gpro_t.power_on = power_on;
-         }
-
-
-    }
+        
+         g_tmsg.power_onoff_sound_flag =1;
+        
+     }
     else if(gpro_t.rf_receive_data_success == 1){
 
-        
-           if(gpro_t.power_on == power_on){
                gpro_t.rf_receive_data_success++;
-               gpro_t.rf_syn_signal_numbers=0;
-               gpro_t.rf_sync_flag =0;
+               original_data = g_remote_data;
+               rf_rec_numbers =  gpro_t.rf_recieve_numbers;
                rf_data= g_remote_data;
-                gpro_t.power_on = power_off;
-                g_tmsg.power_onoff_sound_flag =1;
-           }
-           else if(gpro_t.power_on == power_off){
-                 gpro_t.rf_receive_data_success++;
-                  gpro_t.rf_syn_signal_numbers=0;
-                  gpro_t.rf_sync_flag =0;
-                   rf_data= g_remote_data;
-                   g_tmsg.power_onoff_sound_flag =1;
-                   gpro_t.power_on = power_on;
-           }
+
+                rf_data = g_remote_data & 0x07FFFFFF;
+            
+                if(rf_data == 0x0197E90){
+                  gpro_t.rf_receive_data_success++;
+                  g_tmsg.power_onoff_sound_flag =1;
+                  g_remote_data =0;
+                  gpro_t.rf_recieve_numbers =0;
+
+                 }
+                 else{
+                    gpro_t.rf_recieve_numbers =0;
+                    gpro_t.rf_receive_data_success=0;
+                     gpro_t.rf_decoder = 0;
+
+                 }
 
      }
   

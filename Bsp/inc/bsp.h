@@ -63,9 +63,10 @@ typedef struct process_t{
    uint8_t set_timer_timing_value;
    uint8_t fan_warning_flag;
    uint8_t rf_recieve_numbers;
-   uint8_t rf_sync_flag;
+   uint8_t rf_decoder;
+ 
 
-   uint8_t rf_syn_signal_numbers;
+
    uint8_t rf_receive_data_success;
 
    
@@ -77,6 +78,7 @@ typedef struct process_t{
    uint8_t gTimer_timer_time_long_key ;
    uint8_t gTimer_works_total_times_minutes;
    uint8_t gTimer_adc_detected_time;
+   uint8_t gTimer_power_on_times;
 
     
 
