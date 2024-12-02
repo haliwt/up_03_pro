@@ -60,11 +60,8 @@ void Error_Handler(void);
 
 
 //KEY_GPIO
-#define KEY_TIMER_Pin               GPIO_PIN_11
-#define KEY_TIMER_GPIO_Port         GPIOA
-
-#define KEY_POWER_Pin GPIO_PIN_12
-#define KEY_POWER_GPIO_Port GPIOA
+//#define KEY_TIMER_Pin               GPIO_PIN_11
+//#define KEY_TIMER_GPIO_Port         GPIOA
 
 //ADC_FAN
 #define ADC_FAN_Pin GPIO_PIN_0
@@ -83,9 +80,16 @@ void Error_Handler(void);
 //VOICE_GPIO
 #define VOICE_MUTE_Pin GPIO_PIN_5
 #define VOICE_MUTE_GPIO_Port GPIOA
-//LED_GPIO
-#define GPIO_3_Pin GPIO_PIN_6
-#define GPIO_3_GPIO_Port GPIOA
+
+
+//KEY GPIO
+#define RF_KEY_Pin             GPIO_PIN_6
+#define RF_KEY_GPIO_Port       GPIOA
+
+#define KEY_POWER_Pin                       GPIO_PIN_12
+#define KEY_POWER_GPIO_Port                 GPIOA
+
+
 #define GPIO_2_Pin GPIO_PIN_7
 #define GPIO_2_GPIO_Port GPIOA
 #define GPIO_1_Pin GPIO_PIN_0

@@ -69,8 +69,7 @@ void voice_set_timer_timing_value(uint8_t set_hours)
 	   
 	   send_tx_set_timer_value(set_hours);
    
-       // gpro_t.setHours = set_hours ;
-      //  gpro_t.gTimer_set_minutes = 0;
+
       
 }
 

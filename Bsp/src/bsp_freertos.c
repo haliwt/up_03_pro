@@ -44,13 +44,13 @@ static TaskHandle_t xHandleTaskStart = NULL;
 //static TimerHandle_t           Timer2Timer_Handler;/* 定时器2句柄 */
 
 
-
+uint32_t rf_data;
 
 
 typedef struct Msg
 {
 
-    uint8_t  works_mode_flag;
+ 
     uint8_t  power_onoff_sound_flag;
     uint8_t  timer_sound_flag ;
     uint8_t  key_timer_timing_value;
@@ -116,7 +116,7 @@ static void vTaskMsgPro(void *pvParameters)
 		    注：ulNotifiedValue表示任务vTaskMsgPro的任务控制块里面的变量。		
 		*/
 
- 
+      #if 0
 		
 	  xResult = xTaskNotifyWait(0x00000000,      
 						          0xFFFFFFFF,      
@@ -132,12 +132,6 @@ static void vTaskMsgPro(void *pvParameters)
                  g_tmsg.power_onoff_sound_flag =1;
                 
             }
-            else if((ulValue & TIMER_KEY_1) != 0){
-
-                 if(gpro_t.power_on == power_on)
-                       g_tmsg.timer_sound_flag =1;
-                
-            }
             else if((ulValue & POWER_OFF_BIT_3) != 0){
 
                  gpro_t.power_on = power_off;
@@ -148,6 +142,8 @@ static void vTaskMsgPro(void *pvParameters)
       }
       else{
 
+      #endif 
+
 
              if(dc_power_on_first==0){
                  dc_power_on_first++;
@@ -156,91 +152,44 @@ static void vTaskMsgPro(void *pvParameters)
 
              }
 
-              if(g_tmsg.power_onoff_sound_flag ==1){
+              if(g_tmsg.power_onoff_sound_flag ==1 && (KEY_POWER_GetValue()  == KEY_UP || gpro_t.rf_receive_data_success==2)){
                  g_tmsg.power_onoff_sound_flag++;
-                 gpro_t.gTimer_set_minutes =0;
+                  gpro_t.rf_receive_data_success++;
                  
                  if(gpro_t.power_on == power_off){
                     gpro_t.power_on = power_on;
                     gpro_t.works_2_hours_timeout_flag=0;
                     gpro_t.fan_warning_flag = 0;
                     gpro_t.gTimer_normal_run_main_function_times =10;
-                    g_tmsg.works_mode_flag = ai_mode;
-                    led_on_fun();
+                 
+                  
                     voice_power_on_sound();
 
                  }
                  else{
 
                    gpro_t.power_on = power_off;
-                   led_off_fun();
+                   //led_off_fun();
                    voice_power_off_sound();
                  }
                  
              }
 
-          if(g_tmsg.timer_sound_flag  ==1  &&  g_tmsg.key_long_timer_flag !=1 && g_tmsg.key_long_timer_flag !=2 && gpro_t.power_on == power_on){
-                   g_tmsg.timer_sound_flag ++;
-                   gpro_t.key_long_timer_counter=0;
-                   set_timer_hold_flag=1;
-                        
-                       g_tmsg.works_mode_flag = timer_mode; //works mode two method. ai and timer .
-                       
-                       g_tmsg.key_timer_timing_value++ ;
-
-                      if(g_tmsg.key_timer_timing_value > 24){
-    
-                            g_tmsg.key_timer_timing_value=1;
-    
-                       }
-                      voice_set_timer_flag = 1;
-
-
-                  
-           }
-           else if( g_tmsg.key_long_timer_flag == 1 && gpro_t.power_on == power_on){ //timer long be pressed is cacel timer function is ai_mode
-                     g_tmsg.timer_sound_flag =0;
-                    g_tmsg.key_long_timer_flag++;
-                    gpro_t.gTimer_timer_time_long_key =0;
-                    g_tmsg.works_mode_flag = ai_mode; //取消定时。
-                
-                     g_tmsg.key_timer_timing_value=0;
-                      gpro_t.set_timer_timing_value=0;
-
-
-           }
 
          if(gpro_t.power_on == power_on ){
 
-           if(gpro_t.gTimer_timer_time_long_key > 1 &&  g_tmsg.key_long_timer_flag==2){
-                g_tmsg.key_long_timer_flag=0;
-                gpro_t.key_long_timer_counter=0;
-               
-           }
-           if(voice_set_timer_flag == 1){
-                 voice_set_timer_flag ++;
-                  voice_set_timer_timing_value(g_tmsg.key_timer_timing_value);
-                  gpro_t.set_timer_timing_value = g_tmsg.key_timer_timing_value;
-                  gpro_t.gTimer_set_minutes = 0;
-                   
-            }
           
-            main_board_ctl_handler(gpro_t.works_2_hours_timeout_flag,g_tmsg.works_mode_flag);
+
+          
+            main_board_ctl_handler(gpro_t.works_2_hours_timeout_flag);
            
             device_works_time_counter_handler();
-
-           // fan_adc_dma_fun();
-
-             
 
           }
           else {
               gpro_t.works_2_hours_timeout_flag=0;
-
-              g_tmsg.key_timer_timing_value=0;
-              gpro_t.set_timer_timing_value =0;
-              gpro_t.fan_warning_flag = 0;
-              g_tmsg.works_mode_flag = timer_mode;
+               gpro_t.fan_warning_flag = 0;
+        
               power_off_handler();
               
              
@@ -248,7 +197,7 @@ static void vTaskMsgPro(void *pvParameters)
 
          
          
-      }
+      vTaskDelay(30);
              
     }
       
@@ -272,43 +221,40 @@ static void vTaskStart(void *pvParameters)
 		//bsp_KeyScan();
     if(KEY_POWER_GetValue()  == KEY_DOWN){
       
-          xTaskNotify(xHandleTaskMsgPro, /* 目标任务 */
-					 POWER_KEY_0,            /* 设置目标任务事件标志位bit0  */
-					 eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
-
-
-    }
-    else if(KEY_TIMER_GetValue() ==    KEY_DOWN ){
-
-           gpro_t.key_long_timer_counter ++ ;
-           if(gpro_t.power_on == power_on){
-            led_on_fun();
-           }
-          if(gpro_t.key_long_timer_counter > 60 && gpro_t.power_on == power_on){
-                
-                gpro_t.key_long_timer_counter = 0;
-               g_tmsg.key_long_timer_flag =1;
-            
-               voice_cancel_timer_timing();
-               if(gpro_t.power_on == power_on){
-               led_on_fun();
-               }
+        if(gpro_t.power_on == power_on){
+               
+                gpro_t.power_on = power_off;
+                 g_tmsg.power_onoff_sound_flag =1;
+          }
+         else if(gpro_t.power_on == power_off){
              
-          }
-          else if(gpro_t.power_on == power_off){
-          
-          gpro_t.key_long_timer_counter=0;
-          }
-
-            if(g_tmsg.key_long_timer_flag ==0 &&  gpro_t.power_on == power_on){
-                xTaskNotify(xHandleTaskMsgPro, /* 目标任务 */
-                TIMER_KEY_1,            /* 设置目标任务事件标志位bit0  */
-                eSetBits);          /* 将目标任务的事件标志位与BIT_0进行或操作，  将结果赋值给事件标志位。*/
-        
-            }
+                   g_tmsg.power_onoff_sound_flag =1;
+                   gpro_t.power_on = power_on;
+         }
 
 
     }
+    else if(gpro_t.rf_receive_data_success == 1){
+
+        
+           if(gpro_t.power_on == power_on){
+               gpro_t.rf_receive_data_success++;
+               gpro_t.rf_syn_signal_numbers=0;
+               gpro_t.rf_sync_flag =0;
+               rf_data= g_remote_data;
+                gpro_t.power_on = power_off;
+                g_tmsg.power_onoff_sound_flag =1;
+           }
+           else if(gpro_t.power_on == power_off){
+                 gpro_t.rf_receive_data_success++;
+                  gpro_t.rf_syn_signal_numbers=0;
+                  gpro_t.rf_sync_flag =0;
+                   rf_data= g_remote_data;
+                   g_tmsg.power_onoff_sound_flag =1;
+                   gpro_t.power_on = power_on;
+           }
+
+     }
   
     vTaskDelay(20);
   }

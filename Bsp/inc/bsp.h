@@ -58,16 +58,21 @@ typedef struct process_t{
    uint8_t setMinutes;
    uint8_t works_2_hours_timeout_flag;
 
-   uint16_t key_long_timer_counter;
+  
 
    uint8_t set_timer_timing_value;
    uint8_t fan_warning_flag;
+   uint8_t rf_recieve_numbers;
+   uint8_t rf_sync_flag;
+
+   uint8_t rf_syn_signal_numbers;
+   uint8_t rf_receive_data_success;
 
    
 
 
   
-   uint8_t gTimer_set_minutes;
+
    uint8_t gTimer_normal_run_main_function_times;
    uint8_t gTimer_timer_time_long_key ;
    uint8_t gTimer_works_total_times_minutes;

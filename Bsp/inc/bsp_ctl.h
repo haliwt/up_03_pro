@@ -15,7 +15,7 @@ typedef enum _AI_STATE{
 
 
 
-void main_board_ctl_handler(uint8_t cmd,uint8_t mode);
+void main_board_ctl_handler(uint8_t cmd);
 
 
 
