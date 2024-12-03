@@ -148,8 +148,10 @@ static void vTaskMsgPro(void *pvParameters)
 
              if(dc_power_on_first==0){
                  dc_power_on_first++;
+                 led_on_fun();
                  HAL_Delay(1000);
                  VOICE_SOUND();
+                 led_off_fun();
 
              }
 
@@ -165,7 +167,7 @@ static void vTaskMsgPro(void *pvParameters)
                     gpro_t.fan_warning_flag = 0;
                     gpro_t.gTimer_normal_run_main_function_times =10;
                     
-                  
+                     led_on_fun();
                     voice_power_on_sound();
                    // gpro_t.gTimer_power_on_times=0;
                  
@@ -174,15 +176,12 @@ static void vTaskMsgPro(void *pvParameters)
                  else {
                
                    gpro_t.power_on = power_off;
-                   
+                   led_off_fun();
                    voice_power_off_sound();
                   // gpro_t.gTimer_power_on_times=0;
                     
                  }
-
-
-
-             }
+              }
              else if(g_tmsg.power_onoff_sound_flag ==1 && gpro_t.rf_receive_data_success==3){
                  g_tmsg.power_onoff_sound_flag++;
                  if(gpro_t.rf_receive_data_success==3){
@@ -197,7 +196,7 @@ static void vTaskMsgPro(void *pvParameters)
                     gpro_t.fan_warning_flag = 0;
                     gpro_t.gTimer_normal_run_main_function_times =10;
                     
-                  
+                    led_on_fun();
                     voice_power_on_sound();
                     gpro_t.gTimer_power_on_times=0;
                  
@@ -206,7 +205,7 @@ static void vTaskMsgPro(void *pvParameters)
                  else {
                
                    gpro_t.power_on = power_off;
-                   
+                   led_off_fun();
                    voice_power_off_sound();
                    gpro_t.gTimer_power_on_times=0;
                     
@@ -215,33 +214,25 @@ static void vTaskMsgPro(void *pvParameters)
              }
 
 
-         if(gpro_t.power_on == power_on ){
+       if(gpro_t.power_on == power_on ){
 
-          
+         main_board_ctl_handler(gpro_t.works_2_hours_timeout_flag);
+         device_works_time_counter_handler();
 
-          
-            main_board_ctl_handler(gpro_t.works_2_hours_timeout_flag);
-           
-            device_works_time_counter_handler();
-
-            if(gpro_t.gTimer_power_on_times > 1 && gpro_t.rf_receive_data_success==4){
+          if(gpro_t.gTimer_power_on_times > 1 && gpro_t.rf_receive_data_success==4){
                  gpro_t.gTimer_power_on_times=0;
                  gpro_t.rf_decoder = 0;
                  gpro_t.rf_receive_data_success=0;
 
 
             }
-            
-  
-       
-            
-
-          }
-          else {
+        }
+        else{
               gpro_t.works_2_hours_timeout_flag=0;
                gpro_t.fan_warning_flag = 0;
         
               power_off_handler();
+              led_off_fun();
 
 
                if(gpro_t.gTimer_power_on_times > 1 && gpro_t.rf_receive_data_success==4){
