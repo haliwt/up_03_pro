@@ -64,6 +64,7 @@ typedef struct process_t{
    uint8_t fan_warning_flag;
    uint8_t rf_recieve_numbers;
    uint8_t rf_decoder;
+   uint8_t powerOn_matchingId;
  
 
 
@@ -79,6 +80,7 @@ typedef struct process_t{
    uint8_t gTimer_works_total_times_minutes;
    uint8_t gTimer_adc_detected_time;
    uint8_t gTimer_power_on_times;
+   uint8_t gTimer_switch_onoff;
 
     
 

@@ -48,7 +48,9 @@ uint32_t rf_data,original_data;
 
 uint8_t rf_rec_numbers;
 
-uint32_t rf_id;
+uint32_t rf_id,rf_id_1,rf_id_2;
+
+
 
 
 typedef struct Msg
@@ -58,6 +60,8 @@ typedef struct Msg
     uint8_t  power_onoff_sound_flag;
     
     uint8_t  power_key_flag ;
+
+    uint8_t  power_on_off_numbers;
     
    
 }MSG_T;
@@ -97,6 +101,7 @@ static void vTaskMsgPro(void *pvParameters)
 	uint32_t ulValue;
     static uint8_t dc_power_sound_flag, set_timer_hold_flag,voice_set_timer_flag;
     static uint8_t dc_power_on_first;
+    static uint8_t switch_onoff ;
     while(1)
     {
 		/*
@@ -160,36 +165,48 @@ static void vTaskMsgPro(void *pvParameters)
              if(g_tmsg.power_key_flag == 1 &&  KEY_POWER_GetValue()  == KEY_UP){
 
                    g_tmsg.power_key_flag ++;
-                  if(gpro_t.power_on == power_off){
-                    gpro_t.power_on = power_on;
-                   
-                    gpro_t.works_2_hours_timeout_flag=0;
-                    gpro_t.fan_warning_flag = 0;
-                    gpro_t.gTimer_normal_run_main_function_times =10;
-                    
-                     led_on_fun();
-                    voice_power_on_sound();
-                   // gpro_t.gTimer_power_on_times=0;
-                 
+                   switch_onoff= switch_onoff ^ 0x01;
+                   if(switch_onoff == 1){
 
-                 }
-                 else {
-               
-                   gpro_t.power_on = power_off;
-                   led_off_fun();
-                   voice_power_off_sound();
-                  // gpro_t.gTimer_power_on_times=0;
-                    
-                 }
+                       g_tmsg.power_on_off_numbers = 1;
+
+                   }
+                   else{
+
+                       g_tmsg.power_on_off_numbers= 3;
+
+                    }
+                   gpro_t.gTimer_switch_onoff = 0;
+                    gpro_t.gTimer_power_on_times=0;
+                  
               }
              else if(g_tmsg.power_onoff_sound_flag ==1 && gpro_t.rf_receive_data_success==3){
                  g_tmsg.power_onoff_sound_flag++;
                  if(gpro_t.rf_receive_data_success==3){
                     gpro_t.rf_receive_data_success++;
+                    switch_onoff = switch_onoff  ^ 0x01;
+
+                    if(switch_onoff ==1){
+
+                          g_tmsg.power_on_off_numbers = 1;
+                         
+                    }
+                    else{
+                          g_tmsg.power_on_off_numbers= 3;
+
+                    }
+                    
+                     gpro_t.gTimer_switch_onoff = 0;
+                     gpro_t.gTimer_power_on_times=0;
                   
                }
+              }
                  
-                 if(gpro_t.power_on == power_off){
+              
+
+                 if(g_tmsg.power_on_off_numbers==1 && gpro_t.gTimer_switch_onoff > 2){
+                    g_tmsg.power_on_off_numbers++;
+                    gpro_t.gTimer_switch_onoff=0;
                     gpro_t.power_on = power_on;
                    
                     gpro_t.works_2_hours_timeout_flag=0;
@@ -202,16 +219,18 @@ static void vTaskMsgPro(void *pvParameters)
                  
 
                  }
-                 else {
-               
+                 else if(g_tmsg.power_on_off_numbers == 3 && gpro_t.gTimer_switch_onoff > 2){
+                     g_tmsg.power_on_off_numbers++;
+                     gpro_t.gTimer_switch_onoff=0;
                    gpro_t.power_on = power_off;
                    led_off_fun();
                    voice_power_off_sound();
                    gpro_t.gTimer_power_on_times=0;
                     
                  }
+
                  
-             }
+               
 
 
        if(gpro_t.power_on == power_on ){
@@ -219,7 +238,7 @@ static void vTaskMsgPro(void *pvParameters)
          main_board_ctl_handler(gpro_t.works_2_hours_timeout_flag);
          device_works_time_counter_handler();
 
-          if(gpro_t.gTimer_power_on_times > 1 && gpro_t.rf_receive_data_success==4){
+          if(gpro_t.gTimer_power_on_times > 2 && gpro_t.rf_receive_data_success==4){
                  gpro_t.gTimer_power_on_times=0;
                  gpro_t.rf_decoder = 0;
                  gpro_t.rf_receive_data_success=0;
@@ -235,7 +254,7 @@ static void vTaskMsgPro(void *pvParameters)
               led_off_fun();
 
 
-               if(gpro_t.gTimer_power_on_times > 1 && gpro_t.rf_receive_data_success==4){
+               if(gpro_t.gTimer_power_on_times > 2 && gpro_t.rf_receive_data_success==4){
                  gpro_t.gTimer_power_on_times=0;
                  gpro_t.rf_decoder = 0;
                  gpro_t.rf_receive_data_success=0;
@@ -266,7 +285,6 @@ static void vTaskStart(void *pvParameters)
    //BaseType_t xResult;
    ///const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为500ms */
 
-    static uint8_t power_on_id_flag;
     while(1)
     {
 		/* 按键扫描 */
@@ -279,12 +297,30 @@ static void vTaskStart(void *pvParameters)
      }
     else if(gpro_t.rf_receive_data_success == 1){
 
-               gpro_t.rf_receive_data_success++;
-               if(power_on_id_flag ==0){
-                   power_on_id_flag++;
+              gpro_t.rf_receive_data_success++;
+               if(gpro_t.powerOn_matchingId != 3){
+                   gpro_t.powerOn_matchingId++;
+                   if(gpro_t.powerOn_matchingId ==1){
+                      rf_id_1 = g_remote_data;
+                      rf_id_1 = g_remote_data & 0x07FFFFFF;
+                   }
+                   else{
 
-                   rf_id = g_remote_data;
-                   rf_id = g_remote_data & 0x07FFFFFF;
+                       rf_id_2 = g_remote_data & 0x07FFFFFF;
+
+                       if(rf_id_1 == rf_id_2){
+                           rf_id = rf_id_1;
+                           gpro_t.powerOn_matchingId =3;
+
+                       }
+                       else{
+                          gpro_t.powerOn_matchingId =0;
+
+
+                       }
+
+                   
+                  }
                    
 
                }

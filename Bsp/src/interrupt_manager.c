@@ -45,12 +45,27 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
                    // g_remote_cnt = 0;       /* 清除按键次数计数器 */
                     rf_syn_flag = 1;
                     rf_syn_signal_numbers++;
+                    
                     if( rf_syn_signal_numbers > 1){
-                          rf_syn_signal_numbers=0;
 
-                          gpro_t.rf_receive_data_success=1;
-                           gpro_t.rf_decoder =1;
-                          rf_syn_flag = 0;
+                          if(gpro_t.powerOn_matchingId !=3){
+
+                               rf_syn_signal_numbers=0;
+  
+                              gpro_t.rf_receive_data_success=1;
+                              gpro_t.rf_decoder =0;
+                             // rf_syn_flag = 0;
+
+
+                          }
+                          else{
+                            rf_syn_signal_numbers=0;
+
+                            gpro_t.rf_receive_data_success=1;
+                            gpro_t.rf_decoder =1;
+                            rf_syn_flag = 0;
+
+                         }
 
                     }
                   
@@ -129,6 +144,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
       gpro_t.gTimer_normal_run_main_function_times++;
    //   gpro_t.gTimer_timer_time_long_key ++;
       gpro_t.gTimer_power_on_times++;
+       gpro_t.gTimer_switch_onoff++;
 
       if(tm1 > 59){ //1 minute.
          tm1 =0;
