@@ -29,7 +29,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
     {
       //  uint16_t dval;  /* 下降沿时计数器的值 */
         
-        if(RF_KEY_GetValue()==1)      /* 上升沿捕获 */
+        if(RF_KEY_GetValue()==1)      /* 上升沿捕获    捕获的是低电平信号*/
         {
             up_dval=HAL_TIM_ReadCapturedValue(&htim3, TIM_CHANNEL_1);        /* 读取CCR1也可以清CC1IF标志位 *//* 标记下降沿已经被捕获 */
             __HAL_TIM_SET_CAPTUREPOLARITY(&htim3,TIM_CHANNEL_1,TIM_INPUTCHANNELPOLARITY_FALLING);    /* 配置TIM3通道1下降沿捕获 */
@@ -46,7 +46,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
                     
                     if(gpro_t.rf_syn_signal_numbers > 1 && gpro_t.rf_syn_signal_numbers < 7){
 
-                          if(gpro_t.powerOn_matchingId !=3){
+                          if(gpro_t.powerOn_matchingId !=10){
 
                                gpro_t.rf_syn_signal_numbers=0;
   
@@ -56,7 +56,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 
 
                           }
-                          else if(gpro_t.rf_syn_signal_numbers < 7){
+                          else{
                              gpro_t.rf_syn_signal_numbers=0;
 
                             gpro_t.rf_receive_data_success=1;
@@ -77,7 +77,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
              }
 
         }
-        else           /* 下降沿捕获   */
+        else           /* 下降沿捕获   ，捕获的是高电平信号*/
         {
             dval=HAL_TIM_ReadCapturedValue(&htim3, TIM_CHANNEL_1);                /* 读取CCR1也可以清CC1IF标志位 */
             __HAL_TIM_SET_CAPTUREPOLARITY(&htim3, TIM_CHANNEL_1, TIM_INPUTCHANNELPOLARITY_RISING);     /* 配置TIM3通道1上升沿捕获 */
@@ -94,8 +94,8 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
                         
                         //g_remote_data <<= 1;              /* 左移一位 */
                         //g_remote_data &= ~(0x000001);     /* 接收到0 */
-                       g_remote_data = (g_remote_data << 1) | 0x0;
-                       gpro_t.rf_recieve_numbers++;
+                      g_remote_data = (g_remote_data << 1) | 0x0;
+                      gpro_t.rf_recieve_numbers++;
                       
                     }
                     else if (dval > 700  && dval < 1100)    /* 低电平小于   max= 340us ，是高电平,接收到数据  “1”  */
