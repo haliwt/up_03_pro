@@ -44,12 +44,11 @@ static TaskHandle_t xHandleTaskStart = NULL;
 //static TimerHandle_t           Timer2Timer_Handler;/* 定时器2句柄 */
 
 
-uint32_t rf_data,original_data;
 
-uint8_t rf_rec_numbers;
 
-uint32_t rf_id,rf_id_1,rf_id_2;
 
+
+uint8_t dc_power_on_first;
 
 
 
@@ -57,7 +56,7 @@ typedef struct Msg
 {
 
  
-    uint8_t  power_onoff_sound_flag;
+    //uint8_t  power_onoff_sound_flag;
     
     uint8_t  power_key_flag ;
 
@@ -100,7 +99,7 @@ static void vTaskMsgPro(void *pvParameters)
 	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为50ms */
 	uint32_t ulValue;
     static uint8_t dc_power_sound_flag, set_timer_hold_flag,voice_set_timer_flag;
-    static uint8_t dc_power_on_first;
+
     static uint8_t switch_onoff ;
     while(1)
     {
@@ -180,8 +179,8 @@ static void vTaskMsgPro(void *pvParameters)
                     gpro_t.gTimer_power_on_times=0;
                   
               }
-             else if(g_tmsg.power_onoff_sound_flag ==1 && gpro_t.rf_receive_data_success==3){
-                 g_tmsg.power_onoff_sound_flag++;
+             else if(gpro_t.power_onoff_sound_flag ==1 && gpro_t.rf_receive_data_success==3){
+                 gpro_t.power_onoff_sound_flag++;
                  if(gpro_t.rf_receive_data_success==3){
                     gpro_t.rf_receive_data_success++;
                     switch_onoff = switch_onoff  ^ 0x01;
@@ -290,59 +289,18 @@ static void vTaskStart(void *pvParameters)
 		/* 按键扫描 */
 		//bsp_KeyScan();
     if(KEY_POWER_GetValue()  == KEY_DOWN){
-      
-         g_tmsg.power_key_flag = 1;
-         //g_tmsg.power_onoff_sound_flag =1;
+
+         if(dc_power_on_first==1){
+             g_tmsg.power_key_flag = 1;
+
+         }
         
-     }
+        
+    }
     else if(gpro_t.rf_receive_data_success == 1){
 
               gpro_t.rf_receive_data_success++;
-               if(gpro_t.powerOn_matchingId != 3){
-                   gpro_t.powerOn_matchingId++;
-                   if(gpro_t.powerOn_matchingId ==1){
-                      rf_id_1 = g_remote_data;
-                      rf_id_1 = g_remote_data & 0x07FFFFFF;
-                   }
-                   else{
-
-                       rf_id_2 = g_remote_data & 0x07FFFFFF;
-
-                       if(rf_id_1 == rf_id_2){
-                           rf_id = rf_id_1;
-                           gpro_t.powerOn_matchingId =3;
-
-                       }
-                       else{
-                          gpro_t.powerOn_matchingId =0;
-
-
-                       }
-
-                   
-                  }
-                   
-
-               }
-               original_data = g_remote_data;
-               rf_rec_numbers =  gpro_t.rf_recieve_numbers;
-               rf_data= g_remote_data;
-
-                rf_data = g_remote_data & 0x07FFFFFF;
-            
-                if(rf_data == rf_id){
-                  gpro_t.rf_receive_data_success++;
-                  g_tmsg.power_onoff_sound_flag =1;
-                  g_remote_data =0;
-                  gpro_t.rf_recieve_numbers =0;
-
-                 }
-                 else{
-                    gpro_t.rf_recieve_numbers =0;
-                    gpro_t.rf_receive_data_success=0;
-                     gpro_t.rf_decoder = 0;
-
-                 }
+              rfReceivedData_Handler();
 
      }
   
