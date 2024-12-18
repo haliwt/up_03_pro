@@ -2,7 +2,7 @@
 
 PROCESS_T  gpro_t;
 
-uint32_t rf_data,original_data;
+uint32_t rf_data;
 
 
 uint8_t rf_rec_numbers;
@@ -12,6 +12,14 @@ uint32_t rf_id,rf_id_1,rf_id_2;
 
 
 
+/*****************************************************************
+*
+*Function Name:void power_off_handler(void)
+*Function: 
+*Input Ref:
+*Return Ref:
+*
+*****************************************************************/
 void power_off_handler(void)
 {
     // Turn off the device
@@ -26,8 +34,14 @@ void power_off_handler(void)
     
     
 }
-
-
+/*****************************************************************
+*
+*Function Name:void device_works_time_counter_handler(void)
+*Function: 
+*Input Ref:
+*Return Ref:
+*
+*****************************************************************/
 void device_works_time_counter_handler(void)
 {
 
@@ -48,7 +62,14 @@ void device_works_time_counter_handler(void)
     }
 }
 
-
+/*****************************************************************
+*
+*Function Name:void rfReceivedData_Handler(void)
+*Function: 
+*Input Ref:
+*Return Ref:
+*
+*****************************************************************/
 void rfReceivedData_Handler(void)
 {
    if(gpro_t.powerOn_matchingId != 3){
@@ -77,13 +98,12 @@ void rfReceivedData_Handler(void)
 
 
     }
-   // original_data = g_remote_data;
-    rf_rec_numbers =  gpro_t.rf_recieve_numbers;
-    rf_data= g_remote_data;
 
+    rf_data= g_remote_data;
     rf_data = g_remote_data & 0x07FFFFFF;
 
     if(rf_data == rf_id){
+        rf_rec_numbers =  gpro_t.rf_recieve_numbers;
         gpro_t.rf_receive_data_success++;
         gpro_t.power_onoff_sound_flag =1;
         g_remote_data =0;
