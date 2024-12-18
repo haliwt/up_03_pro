@@ -72,7 +72,7 @@ void device_works_time_counter_handler(void)
 *****************************************************************/
 void rfReceivedData_Handler(void)
 {
-   if(gpro_t.powerOn_matchingId < 7){
+   if(gpro_t.powerOn_matchingId < 10){
         gpro_t.powerOn_matchingId++;
         if(gpro_t.powerOn_matchingId ==1){
           rf_id_1 = g_remote_data & 0x07FFFFFF;
@@ -83,7 +83,7 @@ void rfReceivedData_Handler(void)
 
           if(rf_id_1 == rf_id_2){
               rf_id = rf_id_1;
-              gpro_t.powerOn_matchingId =10;
+              gpro_t.powerOn_matchingId =11;
 
           }
           else{
@@ -99,7 +99,7 @@ void rfReceivedData_Handler(void)
     }
   
 
-    rf_data= g_remote_data;
+   // rf_data= g_remote_data;
     rf_data = g_remote_data & 0x07FFFFFF;
 
     if(rf_data == rf_id){

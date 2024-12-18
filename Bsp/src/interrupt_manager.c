@@ -44,7 +44,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
                     rf_syn_flag = 1;
                     gpro_t.rf_syn_signal_numbers++;
                     
-                    if(gpro_t.rf_syn_signal_numbers > 1 && gpro_t.rf_syn_signal_numbers < 7){
+                    if(gpro_t.rf_syn_signal_numbers > 1 && gpro_t.rf_syn_signal_numbers < 6){
 
                           if(gpro_t.powerOn_matchingId !=10){
 
@@ -60,7 +60,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
                              gpro_t.rf_syn_signal_numbers=0;
 
                             gpro_t.rf_receive_data_success=1;
-                            gpro_t.rf_decoder =1;
+                            gpro_t.rf_decoder =0; //WT.EDIT.2024.12.18//gpro_t.rf_decoder =1;
                             rf_syn_flag = 0;
 
                          }
