@@ -113,7 +113,7 @@ void rfReceivedData_Handler(void)
     else{
         gpro_t.rf_recieve_numbers =0;
         gpro_t.rf_receive_data_success=0;
-        gpro_t.rf_decoder = 0;
+    
 
 
     }

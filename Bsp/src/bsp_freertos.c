@@ -240,7 +240,7 @@ static void vTaskMsgPro(void *pvParameters)
 
           if(gpro_t.gTimer_power_on_times > 2 && gpro_t.rf_receive_data_success==4){
                  gpro_t.gTimer_power_on_times=0;
-                 gpro_t.rf_decoder = 0;
+                
                  gpro_t.rf_receive_data_success=0;
 
 
@@ -256,7 +256,7 @@ static void vTaskMsgPro(void *pvParameters)
 
                if(gpro_t.gTimer_power_on_times > 2 && gpro_t.rf_receive_data_success==4){
                  gpro_t.gTimer_power_on_times=0;
-                 gpro_t.rf_decoder = 0;
+                
                  gpro_t.rf_receive_data_success=0;
 
 

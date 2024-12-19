@@ -37,7 +37,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
             __HAL_TIM_SET_COUNTER(&htim3, 0);  /* 清空定时器值 */
 
              g_remote_sta |= 0X10; 
-             if (up_dval > 8000  && up_dval < 12000  &&  gpro_t.rf_receive_data_success ==0 && gpro_t.rf_decoder ==0)//if (up_dval > 9000  && up_dval < 10000 && up_flag > 0 && syn_flag  < 2) /*  315MHZ-低电平持续时间   9.76ms  *//* 4500为标准值4.5ms, */
+             if (up_dval > 8000  && up_dval < 12000  &&  gpro_t.rf_receive_data_success ==0)//if (up_dval > 9000  && up_dval < 10000 && up_flag > 0 && syn_flag  < 2) /*  315MHZ-低电平持续时间   9.76ms  *//* 4500为标准值4.5ms, */
              {
                     g_remote_sta |= 1 << 7; /* 标记成功接收到了引导码 ,synchronizing signal*/
                    // g_remote_cnt = 0;       /* 清除按键次数计数器 */
@@ -51,7 +51,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
                                gpro_t.rf_syn_signal_numbers=0;
   
                               gpro_t.rf_receive_data_success=1;
-                              gpro_t.rf_decoder =0;
+                             
                               rf_syn_flag = 0;
 
 
@@ -60,7 +60,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
                              gpro_t.rf_syn_signal_numbers=0;
 
                             gpro_t.rf_receive_data_success=1;
-                            gpro_t.rf_decoder =0; //WT.EDIT.2024.12.18//gpro_t.rf_decoder =1;
+                        
                             rf_syn_flag = 0;
 
                          }
