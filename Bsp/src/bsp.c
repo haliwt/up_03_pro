@@ -110,6 +110,8 @@ void rfReceivedData_Handler(void)
         gpro_t.rf_recieve_numbers =0;
         rf_syn_flag = 0;
         gpro_t.rf_syn_signal_numbers=0;
+        gpro_t.rf_recieve_numbers=0;
+       
        
 
     }
@@ -118,6 +120,8 @@ void rfReceivedData_Handler(void)
         gpro_t.rf_receive_data_success=0;
         rf_syn_flag = 0;
        gpro_t.rf_syn_signal_numbers=0;
+       g_remote_data =0;
+      
 
 
     }
@@ -151,6 +155,7 @@ void sound_power_on_off_handler(void)
         gpro_t.gTimer_power_on_times=0;
         rf_syn_flag = 0;
         gpro_t.rf_syn_signal_numbers=0;
+        g_remote_data =0;
 
 
   }
@@ -164,6 +169,7 @@ void sound_power_on_off_handler(void)
         gpro_t.gTimer_power_on_times=0;
         rf_syn_flag = 0;
         gpro_t.rf_syn_signal_numbers=0;
+        g_remote_data =0;
 
   }
    

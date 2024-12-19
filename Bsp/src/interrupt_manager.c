@@ -53,6 +53,8 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
                               gpro_t.rf_receive_data_success=1;
                              
                               rf_syn_flag = 0;
+                              
+                            
 
 
                           }
@@ -60,10 +62,21 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
                              gpro_t.rf_syn_signal_numbers=0;
 
                             gpro_t.rf_receive_data_success=1;
+                           
                         
                             rf_syn_flag = 0;
+                            g_remote_data =0;
 
                          }
+
+                    }
+                    else if(gpro_t.rf_recieve_numbers > 0x20){
+                        gpro_t.rf_recieve_numbers=0;
+                        gpro_t.rf_syn_signal_numbers=0;
+                        gpro_t.rf_receive_data_success=1;
+                        rf_syn_flag = 0;
+                        g_remote_data =0;
+                        g_remote_sta&=~(1<<4); //清空下降沿标志位
 
                     }
                   
@@ -96,6 +109,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
                         //g_remote_data &= ~(0x000001);     /* 接收到0 */
                       g_remote_data = (g_remote_data << 1) | 0x0;
                       gpro_t.rf_recieve_numbers++;
+                      
                       
                     }
                     else if (dval > 700  && dval < 1100)    /* 低电平小于   max= 340us ，是高电平,接收到数据  “1”  */
