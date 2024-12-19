@@ -3,6 +3,7 @@
 #include "main.h"
 
 
+extern uint8_t  rf_syn_flag ;
 
 extern uint8_t g_remote_sta ;
 extern uint32_t g_remote_data ; /* 红外接收到的数据 */
