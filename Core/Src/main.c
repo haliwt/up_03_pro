@@ -99,7 +99,9 @@ int main(void)
   MX_USART2_UART_Init();
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
+
   HAL_TIM_Base_Start_IT(&htim17);
+   gpro_t.rf_id = 0xffff;
   freertos_handler();
 
   /* USER CODE END 2 */

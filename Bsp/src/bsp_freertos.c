@@ -150,15 +150,16 @@ static void vTaskMsgPro(void *pvParameters)
       #endif 
 
 
-             if(dc_power_on_first==0){
-                 dc_power_on_first++;
-                 led_on_fun();
-                 HAL_Delay(1000);
-                 VOICE_SOUND();
-                 led_off_fun();
-
-             }
-
+             
+            if(dc_power_on_first==0){
+               dc_power_on_first++;
+              
+               led_on_fun();
+               HAL_Delay(1000);
+               VOICE_SOUND();
+               led_off_fun();
+            
+              }
 
 
              if(g_tmsg.power_key_flag == 1 &&  KEY_POWER_GetValue()  == KEY_UP){
@@ -267,7 +268,7 @@ static void vTaskMsgPro(void *pvParameters)
 
          
          
-      vTaskDelay(30);
+      vTaskDelay(20);
              
     }
       
@@ -297,13 +298,12 @@ static void vTaskStart(void *pvParameters)
         
         
     }
-    else if(gpro_t.rf_receive_data_success == 1){
+    else if(gpro_t.rf_receive_data_success == 1 && dc_power_on_first==1){
 
               gpro_t.rf_receive_data_success++;
               rfReceivedData_Handler();
 
      }
-  
     vTaskDelay(20);
   }
 }

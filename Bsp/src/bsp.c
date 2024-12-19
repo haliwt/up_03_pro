@@ -7,7 +7,7 @@ uint32_t rf_data;
 
 uint8_t rf_rec_numbers;
 
-uint32_t rf_id,rf_id_1,rf_id_2;
+uint32_t rf_id_1,rf_id_2;
 
 
 
@@ -82,7 +82,7 @@ void rfReceivedData_Handler(void)
            rf_id_2 = g_remote_data & 0x07FFFFFF;
 
           if(rf_id_1 == rf_id_2){
-              rf_id = rf_id_1;
+              gpro_t.rf_id = rf_id_1;
               gpro_t.powerOn_matchingId =11;
 
           }
@@ -102,7 +102,7 @@ void rfReceivedData_Handler(void)
    // rf_data= g_remote_data;
     rf_data = g_remote_data & 0x07FFFFFF;
 
-    if(rf_data == rf_id){
+    if(rf_data == gpro_t.rf_id){
         rf_rec_numbers =  gpro_t.rf_recieve_numbers;
         gpro_t.rf_receive_data_success++;
         gpro_t.power_onoff_sound_flag =1;
