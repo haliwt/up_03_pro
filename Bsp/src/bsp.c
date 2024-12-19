@@ -107,7 +107,6 @@ void rfReceivedData_Handler(void)
         gpro_t.rf_receive_data_success++; //gpro_t.rf_receive_data_success=3;
         gpro_t.rfPowerOnOff_soundFLag =1;
         g_remote_data =0;
-        gpro_t.rf_recieve_numbers =0;
         rf_syn_flag = 0;
         gpro_t.rf_syn_signal_numbers=0;
         gpro_t.rf_recieve_numbers=0;

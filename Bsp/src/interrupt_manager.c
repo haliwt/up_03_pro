@@ -10,7 +10,7 @@
  */
 uint8_t g_remote_sta = 0;
 uint32_t g_remote_data = 0; /* 红外接收到的数据 */
-uint8_t  g_remote_cnt = 0;  /* 按键按下的次数 */
+//uint8_t  g_remote_cnt = 0;  /* 按键按下的次数 */
 
 uint16_t dval,up_dval;  /* 下降沿时计数器的值 */
 
@@ -70,24 +70,19 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
                          }
 
                     }
-                    else if(gpro_t.rf_recieve_numbers > 0x20){
+                    else if(gpro_t.rf_recieve_numbers > 0x20 || g_remote_data > 0x2000000){
                         gpro_t.rf_recieve_numbers=0;
                         gpro_t.rf_syn_signal_numbers=0;
                         gpro_t.rf_receive_data_success=1;
                         rf_syn_flag = 0;
                         g_remote_data =0;
-                        g_remote_sta&=~(1<<4); //清空下降沿标志位
+                        g_remote_sta = 0 ; //清空下降沿标志位
 
                     }
                   
                       
              }
-             else  if (up_dval > 8000  && up_dval < 12000  &&  gpro_t.rf_receive_data_success ==1){
-
-                        g_remote_cnt++;
-
-
-             }
+            
 
         }
         else           /* 下降沿捕获   ，捕获的是高电平信号*/

@@ -243,9 +243,7 @@ static void vTaskMsgPro(void *pvParameters)
              
           }
 
-         
-         
-      vTaskDelay(20);
+    vTaskDelay(20);
              
     }
       
