@@ -104,8 +104,8 @@ void rfReceivedData_Handler(void)
 
     if(rf_data == gpro_t.rf_id){
         rf_rec_numbers =  gpro_t.rf_recieve_numbers;
-        gpro_t.rf_receive_data_success++;
-        gpro_t.power_onoff_sound_flag =1;
+        gpro_t.rf_receive_data_success++; //gpro_t.rf_receive_data_success=3;
+        gpro_t.rfPowerOnOff_soundFLag =1;
         g_remote_data =0;
         gpro_t.rf_recieve_numbers =0;
 
@@ -121,4 +121,45 @@ void rfReceivedData_Handler(void)
    
 }
 
+/*****************************************************************
+*
+*Function Name:void sound_power_on_off_handler(void)
+*Function: 
+*Input Ref:
+*Return Ref:
+*
+*****************************************************************/
+void sound_power_on_off_handler(void)
+{
+
+   if((gpro_t.power_on_off_numbers==1 && gpro_t.gTimer_switch_onoff > 2 && gpro_t.power_key_flag==2) 
+           ||(gpro_t.power_on_off_numbers==1 && gpro_t.gTimer_switch_onoff > 0 &&  gpro_t.rfPowerOnOff_soundFLag==2 )){
+        gpro_t.power_on_off_numbers++;
+        gpro_t.gTimer_switch_onoff=0;
+        gpro_t.power_on = power_on;
+
+        gpro_t.works_2_hours_timeout_flag=0;
+        gpro_t.fan_warning_flag = 0;
+        gpro_t.gTimer_normal_run_main_function_times =10;
+
+        led_on_fun();
+        voice_power_on_sound();
+        gpro_t.gTimer_power_on_times=0;
+
+
+  }
+  else if((gpro_t.power_on_off_numbers == 3 && gpro_t.gTimer_switch_onoff > 2 && gpro_t.power_key_flag==2  )
+            ||(gpro_t.power_on_off_numbers == 3 && gpro_t.gTimer_switch_onoff > 0  && gpro_t.rfPowerOnOff_soundFLag==2)){
+        gpro_t.power_on_off_numbers++;
+        gpro_t.gTimer_switch_onoff=0;
+        gpro_t.power_on = power_off;
+        led_off_fun();
+        voice_power_off_sound();
+        gpro_t.gTimer_power_on_times=0;
+
+  }
+   
+ 
+
+}
 

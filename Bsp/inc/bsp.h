@@ -67,8 +67,10 @@ typedef struct process_t{
  
    uint8_t powerOn_matchingId;
    uint8_t rf_syn_signal_numbers;
-   uint8_t  power_onoff_sound_flag;
-   
+   uint8_t  rfPowerOnOff_soundFLag;
+
+   uint8_t power_key_flag ;
+   uint8_t power_on_off_numbers;
  
 
 
@@ -98,6 +100,8 @@ void power_off_handler(void);
 void device_works_time_counter_handler(void);
 
 void rfReceivedData_Handler(void);
+
+void sound_power_on_off_handler(void);
 
 
 #endif 

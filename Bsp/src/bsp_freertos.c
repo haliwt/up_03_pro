@@ -52,20 +52,20 @@ uint8_t dc_power_on_first;
 
 
 
-typedef struct Msg
-{
+//typedef struct Msg
+//{
 
- 
-    //uint8_t  power_onoff_sound_flag;
-    
-    uint8_t  power_key_flag ;
+// 
+//    //uint8_t  rfPowerOnOff_soundFLag;
+//    
+// //   uint8_t  power_key_flag ;
 
-    uint8_t  power_on_off_numbers;
-    
-   
-}MSG_T;
+//  //  uint8_t  power_on_off_numbers;
+//    
+//   
+//}MSG_T;
 
-MSG_T   g_tmsg; /* 定义一个结构体用于消息队列 */
+//MSG_T   g_tmsg; /* 定义一个结构体用于消息队列 */
 
 
 /**********************************************************************************************************
@@ -134,7 +134,7 @@ static void vTaskMsgPro(void *pvParameters)
              
 			if((ulValue & POWER_KEY_0) != 0){
 
-                 g_tmsg.power_onoff_sound_flag =1;
+                 g_tmsg.rfPowerOnOff_soundFLag =1;
                 
             }
             else if((ulValue & POWER_OFF_BIT_3) != 0){
@@ -162,37 +162,37 @@ static void vTaskMsgPro(void *pvParameters)
               }
 
 
-             if(g_tmsg.power_key_flag == 1 &&  KEY_POWER_GetValue()  == KEY_UP){
+             if(gpro_t.power_key_flag == 1 &&  KEY_POWER_GetValue()  == KEY_UP){
 
-                   g_tmsg.power_key_flag ++;
+                   gpro_t.power_key_flag ++;
                    switch_onoff= switch_onoff ^ 0x01;
                    if(switch_onoff == 1){
 
-                       g_tmsg.power_on_off_numbers = 1;
+                       gpro_t.power_on_off_numbers = 1;
 
                    }
                    else{
 
-                       g_tmsg.power_on_off_numbers= 3;
+                       gpro_t.power_on_off_numbers= 3;
 
                     }
                    gpro_t.gTimer_switch_onoff = 0;
-                    gpro_t.gTimer_power_on_times=0;
+                   gpro_t.gTimer_power_on_times=0;
                   
-              }
-             else if(gpro_t.power_onoff_sound_flag ==1 && gpro_t.rf_receive_data_success==3){
-                 gpro_t.power_onoff_sound_flag++;
+             }
+             else if(gpro_t.rfPowerOnOff_soundFLag ==1 && gpro_t.rf_receive_data_success==3){
+                 gpro_t.rfPowerOnOff_soundFLag++;
                  if(gpro_t.rf_receive_data_success==3){
                     gpro_t.rf_receive_data_success++;
                     switch_onoff = switch_onoff  ^ 0x01;
 
                     if(switch_onoff ==1){
 
-                          g_tmsg.power_on_off_numbers = 1;
+                          gpro_t.power_on_off_numbers = 1;
                          
                     }
                     else{
-                          g_tmsg.power_on_off_numbers= 3;
+                          gpro_t.power_on_off_numbers= 3;
 
                     }
                     
@@ -202,32 +202,9 @@ static void vTaskMsgPro(void *pvParameters)
                }
               }
                  
-              
+               sound_power_on_off_handler();
 
-                 if(g_tmsg.power_on_off_numbers==1 && gpro_t.gTimer_switch_onoff > 2){
-                    g_tmsg.power_on_off_numbers++;
-                    gpro_t.gTimer_switch_onoff=0;
-                    gpro_t.power_on = power_on;
-                   
-                    gpro_t.works_2_hours_timeout_flag=0;
-                    gpro_t.fan_warning_flag = 0;
-                    gpro_t.gTimer_normal_run_main_function_times =10;
-                    
-                    led_on_fun();
-                    voice_power_on_sound();
-                    gpro_t.gTimer_power_on_times=0;
                  
-
-                 }
-                 else if(g_tmsg.power_on_off_numbers == 3 && gpro_t.gTimer_switch_onoff > 2){
-                     g_tmsg.power_on_off_numbers++;
-                     gpro_t.gTimer_switch_onoff=0;
-                   gpro_t.power_on = power_off;
-                   led_off_fun();
-                   voice_power_off_sound();
-                   gpro_t.gTimer_power_on_times=0;
-                    
-                 }
 
                  
                
@@ -292,7 +269,7 @@ static void vTaskStart(void *pvParameters)
     if(KEY_POWER_GetValue()  == KEY_DOWN){
 
          if(dc_power_on_first==1){
-             g_tmsg.power_key_flag = 1;
+             gpro_t.power_key_flag = 1;
 
          }
         
