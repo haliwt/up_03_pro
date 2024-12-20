@@ -9,7 +9,7 @@ uint8_t rf_rec_numbers;
 
 uint32_t rf_id_1,rf_id_2;
 
-
+uint8_t checkRFCode_flag;
 
 
 /*****************************************************************
@@ -72,7 +72,10 @@ void device_works_time_counter_handler(void)
 *****************************************************************/
 void rfReceivedData_Handler(void)
 {
-   if(gpro_t.powerOn_matchingId < 10){
+
+
+
+   if(checkRFCode_flag==0){
         gpro_t.powerOn_matchingId++;
         if(gpro_t.powerOn_matchingId ==1){
           rf_id_1 = g_remote_data & 0x07FFFFFF;
@@ -81,9 +84,10 @@ void rfReceivedData_Handler(void)
 
            rf_id_2 = g_remote_data & 0x07FFFFFF;
 
-          if(rf_id_1 == rf_id_2){
+          if(rf_id_1 == rf_id_2 && rf_id_1 > 0xffff){
               gpro_t.rf_id = rf_id_1;
-              gpro_t.powerOn_matchingId =11;
+              checkRFCode_flag=1;
+              gpro_t.powerOn_matchingId =0;
 
           }
           else{
@@ -102,7 +106,7 @@ void rfReceivedData_Handler(void)
    // rf_data= g_remote_data;
     rf_data = g_remote_data & 0x07FFFFFF;
 
-    if(rf_data == gpro_t.rf_id){
+    if(rf_data == gpro_t.rf_id && checkRFCode_flag ==1){
         rf_rec_numbers =  gpro_t.rf_recieve_numbers;
         gpro_t.rf_receive_data_success++; //gpro_t.rf_receive_data_success=3;
         gpro_t.rfPowerOnOff_soundFLag =1;
@@ -140,7 +144,9 @@ void sound_power_on_off_handler(void)
 {
 
    if((gpro_t.power_on_off_numbers==1 && gpro_t.gTimer_switch_onoff > 2 && gpro_t.power_key_flag==2) 
-           ||(gpro_t.power_on_off_numbers==1 && gpro_t.gTimer_switch_onoff > 0 &&  gpro_t.rfPowerOnOff_soundFLag==2 )){
+           ||(gpro_t.power_on_off_numbers==1 && gpro_t.gTimer_switch_onoff > 0 &&  gpro_t.rfPowerOnOff_soundFLag==2)){
+        gpro_t.power_key_flag=3;
+        gpro_t.rfPowerOnOff_soundFLag=3;
         gpro_t.power_on_off_numbers++;
         gpro_t.gTimer_switch_onoff=0;
         gpro_t.power_on = power_on;
@@ -160,6 +166,8 @@ void sound_power_on_off_handler(void)
   }
   else if((gpro_t.power_on_off_numbers == 3 && gpro_t.gTimer_switch_onoff > 2 && gpro_t.power_key_flag==2  )
             ||(gpro_t.power_on_off_numbers == 3 && gpro_t.gTimer_switch_onoff > 0  && gpro_t.rfPowerOnOff_soundFLag==2)){
+        gpro_t.power_key_flag=3;
+        gpro_t.rfPowerOnOff_soundFLag=3;
         gpro_t.power_on_off_numbers++;
         gpro_t.gTimer_switch_onoff=0;
         gpro_t.power_on = power_off;

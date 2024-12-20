@@ -46,7 +46,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
                     
                     if(gpro_t.rf_syn_signal_numbers > 1 && gpro_t.rf_syn_signal_numbers < 6){
 
-                          if(gpro_t.powerOn_matchingId !=10){
+                          if(checkRFCode_flag==0){
 
                                gpro_t.rf_syn_signal_numbers=0;
                               
@@ -54,10 +54,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
                              
                               rf_syn_flag = 0;
                               
-                            
-
-
-                          }
+                         }
                           else{
                              gpro_t.rf_syn_signal_numbers=0;
 
@@ -65,7 +62,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
                            
                         
                             rf_syn_flag = 0;
-                            g_remote_data =0;
+                            //g_remote_data =0;
 
                          }
 

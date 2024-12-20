@@ -95,6 +95,8 @@ typedef struct process_t{
 
 extern PROCESS_T  gpro_t;
 
+extern uint8_t checkRFCode_flag;
+
 void power_off_handler(void);
 
 void device_works_time_counter_handler(void);
