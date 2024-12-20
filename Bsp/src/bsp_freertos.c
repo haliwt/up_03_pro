@@ -202,15 +202,9 @@ static void vTaskMsgPro(void *pvParameters)
                }
               }
                  
-               sound_power_on_off_handler();
+       sound_power_on_off_handler();
 
-                 
-
-                 
-               
-
-
-       if(gpro_t.power_on == power_on ){
+      if(gpro_t.power_on == power_on ){
 
          main_board_ctl_handler(gpro_t.works_2_hours_timeout_flag);
          device_works_time_counter_handler();
