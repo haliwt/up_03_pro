@@ -20,7 +20,9 @@ static void voice_send_power_off_cmd(void);
 
 
 
-uint8_t transferSize,transOngoingFlag;
+uint8_t transferSize;
+static volatile uint8_t transOngoingFlag = 0;
+
 
 /***************************************************************************
  *  *
@@ -312,9 +314,9 @@ static void voice_send_power_on_cmd(void)
 	outputBuf[1]=0XFA; //41
 	outputBuf[2]=0X00;
 	outputBuf[3]=0X03; //44	// 'D' data
-	outputBuf[4]=0X02; //	// 'R' rotator motor for select filter
+	outputBuf[4]=0X00; //	// 'R' rotator motor for select filter
 	outputBuf[5]=0X00; // // one command parameter
-	outputBuf[6]=0XA4;
+	outputBuf[6]=0XA2;
 	outputBuf[7]=0XFB;
 	
 	//for(i=3;i<6;i++) crc ^= outputBuf[i];
@@ -339,15 +341,13 @@ static void voice_send_power_off_cmd(void)
 	outputBuf[1]=0XFA; //41
 	outputBuf[2]=0X00; //44	// 'D' data
 	outputBuf[3]=0X03; //	// 'R' rotator motor for select filter
-	outputBuf[4]=0X03; // // one command parameter
+	outputBuf[4]=0X01; // // one command parameter
 	outputBuf[5]=0X00;
-	outputBuf[6]=0XA5;
+	outputBuf[6]=0XA3;
 	outputBuf[7]=0XFB;
 	
-	//for(i=3;i<6;i++) crc ^= outputBuf[i];
-	//outputBuf[i]=crc;
 	transferSize=8;
-   // HAL_UART_Transmit(&huart2,outputBuf,transferSize,0xffff);
+  
     #if 1
 	if(transferSize)
 	{
@@ -355,6 +355,9 @@ static void voice_send_power_off_cmd(void)
 		transOngoingFlag=1;
 		HAL_UART_Transmit_IT(&huart2,outputBuf,transferSize);
 	}
+    #else 
+         HAL_UART_Transmit(&huart2,outputBuf,transferSize,0xffff);
+
     #endif 
 
 }
