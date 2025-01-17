@@ -54,6 +54,7 @@ void TIM3_IRQHandler(void);
 
 void TIM17_IRQHandler(void);
 /* USER CODE BEGIN EFP */
+void USART2_IRQHandler(void);
 
 /* USER CODE END EFP */
 

@@ -12,15 +12,15 @@ static void send_tx_set_timer_value(uint8_t set_hours);
 
 static void sendData_VoiceSound_Warning_Fan(void);
 
-static void voice_send_has_been_power_on_cmd(void);
+static void voice_send_power_on_cmd(void);
 
 
-static void voice_send_has_been_power_off_cmd(void);
+static void voice_send_power_off_cmd(void);
 
 
 
 
-uint8_t transferSize;
+uint8_t transferSize,transOngoingFlag;
 
 /***************************************************************************
  *  *
@@ -32,7 +32,7 @@ uint8_t transferSize;
 ****************************************************************************/
 void voice_power_on_sound(void)
 {
-   voice_send_has_been_power_on_cmd();
+   voice_send_power_on_cmd();
 
 }
 /***************************************************************************
@@ -45,7 +45,7 @@ void voice_power_on_sound(void)
 ****************************************************************************/
 void voice_power_off_sound(void)
 {
-  voice_send_has_been_power_off_cmd();
+  voice_send_power_off_cmd();
 
 }
 
@@ -299,64 +299,87 @@ static void send_tx_set_timer_value(uint8_t set_hours)
 
 /********************************************************************************
 	**
-	*Function Name:static void voice_send_has_been_power_on_cmd(void)
+	*Function Name:static void voice_send_power_on_cmd(void)
 	*Function :
 	*Input Ref: NO
 	*Return Ref:NO
 	*
 *******************************************************************************/
-static void voice_send_has_been_power_on_cmd(void)
+static void voice_send_power_on_cmd(void)
 {
 	
 	outputBuf[0]=0xA5; //master
 	outputBuf[1]=0XFA; //41
-	outputBuf[2]=0X00; //44	// 'D' data
-	outputBuf[3]=0X03; //	// 'R' rotator motor for select filter
-	outputBuf[4]=0X43; // // one command parameter
-	outputBuf[5]=0X00;
-	outputBuf[6]=0XE5;
+	outputBuf[2]=0X00;
+	outputBuf[3]=0X03; //44	// 'D' data
+	outputBuf[4]=0X02; //	// 'R' rotator motor for select filter
+	outputBuf[5]=0X00; // // one command parameter
+	outputBuf[6]=0XA4;
 	outputBuf[7]=0XFB;
 	
 	//for(i=3;i<6;i++) crc ^= outputBuf[i];
 	//outputBuf[i]=crc;
 	transferSize=8;
-    HAL_UART_Transmit(&huart2,outputBuf,transferSize,0xffff);
-    #if 0
+    //HAL_UART_Transmit(&huart2,outputBuf,transferSize,0xffff);
+   
 	if(transferSize)
 	{
-		while(v_t.transOngoingFlag); //UART interrupt transmit flag ,disable one more send data.
-		v_t.transOngoingFlag=1;
-		HAL_UART_Transmit_IT(&huart1,outputBuf,transferSize);
+		while(transOngoingFlag); //UART interrupt transmit flag ,disable one more send data.
+		transOngoingFlag=1;
+		HAL_UART_Transmit_IT(&huart2,outputBuf,transferSize);
 	}
-    #endif 
+   
 
 }
 
 
-static void voice_send_has_been_power_off_cmd(void)
+static void voice_send_power_off_cmd(void)
 {
 	outputBuf[0]=0xA5; //master
 	outputBuf[1]=0XFA; //41
 	outputBuf[2]=0X00; //44	// 'D' data
 	outputBuf[3]=0X03; //	// 'R' rotator motor for select filter
-	outputBuf[4]=0X44; // // one command parameter
+	outputBuf[4]=0X03; // // one command parameter
 	outputBuf[5]=0X00;
-	outputBuf[6]=0XE6;
+	outputBuf[6]=0XA5;
 	outputBuf[7]=0XFB;
 	
 	//for(i=3;i<6;i++) crc ^= outputBuf[i];
 	//outputBuf[i]=crc;
 	transferSize=8;
-    HAL_UART_Transmit(&huart2,outputBuf,transferSize,0xffff);
-    #if 0
+   // HAL_UART_Transmit(&huart2,outputBuf,transferSize,0xffff);
+    #if 1
 	if(transferSize)
 	{
-		while(v_t.transOngoingFlag); //UART interrupt transmit flag ,disable one more send data.
-		v_t.transOngoingFlag=1;
-		HAL_UART_Transmit_IT(&huart1,outputBuf,transferSize);
+		while(transOngoingFlag); //UART interrupt transmit flag ,disable one more send data.
+		transOngoingFlag=1;
+		HAL_UART_Transmit_IT(&huart2,outputBuf,transferSize);
 	}
     #endif 
 
 }
 
+/********************************************************************************
+**
+*Function Name:void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+*Function :UART callback function  for UART interrupt for transmit data
+*Input Ref: structure UART_HandleTypeDef pointer
+*Return Ref:NO
+*
+*******************************************************************************/
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+	if(huart==&huart2) //voice  sound send 
+	{
+       //DISABLE_INT();
+
+      // taskENTER_CRITICAL_FROM_ISR();
+       transOngoingFlag=0; 
+      // //ENABLE_INT();
+      // taskEXIT_CRITICAL_FROM_ISR(0);
+	}
+
+
+
+}
 

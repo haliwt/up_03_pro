@@ -188,7 +188,7 @@ static void vTaskMsgPro(void *pvParameters)
 
                     if(switch_onoff ==1){
 
-                          gpro_t.power_on_off_numbers = 1;
+                          gpro_t.power_on_off_numbers = power_on;
                          
                     }
                     else{
