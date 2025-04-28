@@ -95,11 +95,7 @@ void rfReceivedData_Handler(void)
 
 
           }
-
-
         }
-
-
     }
   
 

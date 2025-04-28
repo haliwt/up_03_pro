@@ -67,6 +67,7 @@ uint8_t dc_power_on_first;
 
 //MSG_T   g_tmsg; /* 定义一个结构体用于消息队列 */
 
+uint16_t power_on_run_number;
 
 /**********************************************************************************************************
 *	函 数 名: main
@@ -206,6 +207,8 @@ static void vTaskMsgPro(void *pvParameters)
 
       if(gpro_t.power_on == power_on ){
 
+        // voice_power_on_sound();
+
          main_board_ctl_handler(gpro_t.works_2_hours_timeout_flag);
          device_works_time_counter_handler();
 
@@ -216,10 +219,17 @@ static void vTaskMsgPro(void *pvParameters)
 
 
             }
+          power_on_run_number++;
         }
         else{
               gpro_t.works_2_hours_timeout_flag=0;
                gpro_t.fan_warning_flag = 0;
+               if(gpro_t.power_on_off_numbers==3){
+                gpro_t.power_on_off_numbers++;
+
+                voice_power_off_sound();
+
+                }
         
               power_off_handler();
               led_off_fun();
@@ -260,12 +270,12 @@ static void vTaskStart(void *pvParameters)
 		//bsp_KeyScan();
     if(KEY_POWER_GetValue()  == KEY_DOWN){
 
-         if(dc_power_on_first==1){
-             gpro_t.power_key_flag = 1;
-
-         }
+//         if(dc_power_on_first==1){
+//             gpro_t.power_key_flag = 1;
+//
+//         }
         
-        
+         gpro_t.power_key_flag = 1;
     }
     else if(gpro_t.rf_receive_data_success == 1 && dc_power_on_first==1){
 
