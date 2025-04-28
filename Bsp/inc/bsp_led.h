@@ -3,8 +3,10 @@
 #include "main.h"
 
 
-#define GPIO_1_SetLow()        do{GPIO_1_GPIO_Port ->BRR =GPIO_1_Pin;}while(0)
-#define GPIO_1_SetHigh()       do{GPIO_1_GPIO_Port ->BSRR |= GPIO_1_Pin;}while(0)
+//#define GPIO_1_SetLow()        do{GPIO_1_GPIO_Port ->BRR =GPIO_1_Pin;}while(0)
+#define GPIO_1_CLOSE()      do{GPIO_1_GPIO_Port ->BSRR |=(uint32_t)GPIO_1_Pin <<16;}while(0)
+
+#define GPIO_1_OPEN()       do{GPIO_1_GPIO_Port ->BSRR |= GPIO_1_Pin;}while(0)
 
 
 

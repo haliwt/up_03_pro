@@ -155,10 +155,10 @@ static void vTaskMsgPro(void *pvParameters)
             if(dc_power_on_first==0){
                dc_power_on_first++;
               
-               led_on_fun();
+               led_off_fun();
                HAL_Delay(1000);
                VOICE_SOUND();
-               led_off_fun();
+               led_on_fun();
             
               }
 
