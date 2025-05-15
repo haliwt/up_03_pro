@@ -44,7 +44,7 @@
 
 typedef enum _power_on_state{
 
-   power_off,
+   power_off=1,
    power_on,
 
 }power_on_state;

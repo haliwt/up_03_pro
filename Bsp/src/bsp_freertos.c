@@ -67,7 +67,7 @@ uint8_t dc_power_on_first;
 
 //MSG_T   g_tmsg; /* 定义一个结构体用于消息队列 */
 
-uint16_t power_on_run_number;
+
 
 /**********************************************************************************************************
 *	函 数 名: main
@@ -96,64 +96,21 @@ void freertos_handler(void)
 **********************************************************************************************************/
 static void vTaskMsgPro(void *pvParameters)
 {
-    BaseType_t xResult;
-	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为50ms */
-	uint32_t ulValue;
-    static uint8_t dc_power_sound_flag, set_timer_hold_flag,voice_set_timer_flag;
+//    BaseType_t xResult;
+//	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置最大等待时间为50ms */
+//	uint32_t ulValue;
 
-    static uint8_t switch_onoff ;
+
+    static uint8_t switch_onoff;
     while(1)
     {
-		/*
-			第一个参数 ulBitsToClearOnEntry的作用（函数执行前）：
-		          ulNotifiedValue &= ~ulBitsToClearOnEntry
-		          简单的说就是参数ulBitsToClearOnEntry那个位是1，那么notification value
-		          的那个位就会被清零。
-
-		          这里ulBitsToClearOnEntry = 0x00000000就是函数执行前保留所有位。
 		
-		    第二个参数 ulBitsToClearOnExit的作用（函数退出前）：			
-				  ulNotifiedValue &= ~ulBitsToClearOnExit
-		          简单的说就是参数ulBitsToClearOnEntry那个位是1，那么notification value
-		          的那个位就会被清零。
-
-				  这里ulBitsToClearOnExi = 0xFFFFFFFF就是函数退出前清楚所有位。
-		
-		    注：ulNotifiedValue表示任务vTaskMsgPro的任务控制块里面的变量。		
-		*/
-
-      #if 0
-		
-	  xResult = xTaskNotifyWait(0x00000000,      
-						          0xFFFFFFFF,      
-						          &ulValue,        /* 保存ulNotifiedValue到变量ulValue中 */
-						          xMaxBlockTime);  /* 最大允许延迟时间,等待时间 */
-		
-		if( xResult == pdPASS )
-		{
-			/* 接收到消息，检测那个位被按下 */
-             
-			if((ulValue & POWER_KEY_0) != 0){
-
-                 g_tmsg.rfPowerOnOff_soundFLag =1;
-                
-            }
-            else if((ulValue & POWER_OFF_BIT_3) != 0){
-
-                 gpro_t.power_on = power_off;
-                      
-                
-            }
-           
-      }
-      else{
-
-      #endif 
 
 
              
             if(dc_power_on_first==0){
                dc_power_on_first++;
+			   gpro_t.power_on = power_off;//WT.EDIT 2025.05.10
               
                led_on_fun();
                osDelay(400);
@@ -171,13 +128,13 @@ static void vTaskMsgPro(void *pvParameters)
             if(gpro_t.power_key_flag == 1 &&  KEY_POWER_GetValue()  == KEY_UP){
 
                    gpro_t.power_key_flag ++;
-                   switch_onoff= switch_onoff ^ 0x01;
-                   if(switch_onoff == 1){
+                   //switch_onoff= switch_onoff ^ 0x01;
+                   if(gpro_t.power_on == power_off){
 
                        gpro_t.power_on_off_numbers = 1;
 
                    }
-                   else{
+                   else if(gpro_t.power_on == power_on){
 
                        gpro_t.power_on_off_numbers= 3;
 
@@ -190,14 +147,15 @@ static void vTaskMsgPro(void *pvParameters)
                  gpro_t.rfPowerOnOff_soundFLag++;
                  if(gpro_t.rf_receive_data_success==3){
                     gpro_t.rf_receive_data_success++;
-                    switch_onoff = switch_onoff  ^ 0x01;
+                   // switch_onoff = switch_onoff ^ 0x01;
 
-                    if(switch_onoff ==1){
+                    if(gpro_t.power_on == power_off){
 
                           gpro_t.power_on_off_numbers = power_on;
                          
                     }
-                    else{
+                    else if(gpro_t.power_on == power_on){
+                    
                           gpro_t.power_on_off_numbers= 3;
 
                     }
@@ -224,9 +182,9 @@ static void vTaskMsgPro(void *pvParameters)
 
 
             }
-          power_on_run_number++;
+         
         }
-        else{
+        else if(gpro_t.power_on == power_off){
               gpro_t.works_2_hours_timeout_flag=0;
                gpro_t.fan_warning_flag = 0;
                if(gpro_t.power_on_off_numbers==3){
