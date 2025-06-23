@@ -29,7 +29,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
     {
       //  uint16_t dval;  /* 下降沿时计数器的值 */
         
-        if(RF_KEY_GetValue()==1)      /* 上升沿捕获    捕获的是低电平信号*/
+        if(RF_KEY_CMT2210LC_GetValue()==1)      /* 上升沿捕获    捕获的是低电平信号*/
         {
             up_dval=HAL_TIM_ReadCapturedValue(&htim3, TIM_CHANNEL_1);        /* 读取CCR1也可以清CC1IF标志位 *//* 标记下降沿已经被捕获 */
             __HAL_TIM_SET_CAPTUREPOLARITY(&htim3,TIM_CHANNEL_1,TIM_INPUTCHANNELPOLARITY_FALLING);    /* 配置TIM3通道1下降沿捕获 */

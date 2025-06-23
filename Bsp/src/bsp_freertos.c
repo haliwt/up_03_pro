@@ -101,7 +101,7 @@ static void vTaskMsgPro(void *pvParameters)
 //	uint32_t ulValue;
 
 
-    static uint8_t switch_onoff;
+  //  static uint8_t switch_onoff;
     while(1)
     {
 		
@@ -152,7 +152,7 @@ static void vTaskMsgPro(void *pvParameters)
                     if(gpro_t.power_on == power_off){
 
                           gpro_t.power_on_off_numbers = power_on;
-                         
+                        //  gpro_t.power_on = power_on;//WT.EDIT 2025.06.23
                     }
                     else if(gpro_t.power_on == power_on){
                     
@@ -171,6 +171,7 @@ static void vTaskMsgPro(void *pvParameters)
       if(gpro_t.power_on == power_on ){
 
         // voice_power_on_sound();
+		 led_on_fun(); //WT.EDIT 2025.05.14
 
          main_board_ctl_handler(gpro_t.works_2_hours_timeout_flag);
          device_works_time_counter_handler();
@@ -189,10 +190,10 @@ static void vTaskMsgPro(void *pvParameters)
                gpro_t.fan_warning_flag = 0;
                if(gpro_t.power_on_off_numbers==3){
                 gpro_t.power_on_off_numbers++;
-
+                gpro_t.rfPowerOnOff_soundFLag =0;
                 voice_power_off_sound();
 
-                }
+               }
         
               power_off_handler();
               led_off_fun();

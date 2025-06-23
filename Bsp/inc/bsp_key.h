@@ -3,9 +3,10 @@
 #include "main.h"
 
 
+#define KEY_POWER_GetValue()   sys_gpio_pin_get(KEY_POWER_GPIO_Port,KEY_POWER_Pin)  //HAL_GPIO_ReadPin(KEY_ID_GPIO_Port,KEY_ID_Pin)   //
 
-#define RF_KEY_GetValue()    HAL_GPIO_ReadPin(RF_KEY_GPIO_Port,RF_KEY_Pin)// sys_gpio_pin_get(RF_KEY_GPIO_Port,RF_KEY_Pin)  //  HAL_GPIO_ReadPin(RF_KEY_GPIO_Port,RF_KEY_Pin)   //
-#define KEY_POWER_GetValue()        sys_gpio_pin_get(KEY_POWER_GPIO_Port,KEY_POWER_Pin)  //HAL_GPIO_ReadPin(KEY_ID_GPIO_Port,KEY_ID_Pin)   //
+//#define KEY_POWER_GetValue()    (((KEY_POWER_GPIO_Port)->IDR , (1UL << (KEY_POWER_Pin))) ? 1U : 0U)
+
 
 typedef enum _key_state{
 

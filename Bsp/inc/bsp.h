@@ -18,6 +18,7 @@
 #include "bsp_ultrasonic.h"
 #include "bsp_plasma.h"
 #include "bsp_key.h"
+#include "bsp_cmt2210lc.h"
 #include "interrupt_manager.h"
 #include "bsp_freertos.h"
 
@@ -101,7 +102,7 @@ void power_off_handler(void);
 
 void device_works_time_counter_handler(void);
 
-void rfReceivedData_Handler(void);
+
 
 void sound_power_on_off_handler(void);
 
