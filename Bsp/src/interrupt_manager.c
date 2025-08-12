@@ -25,7 +25,8 @@ uint8_t  rf_syn_flag ;
  */
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 {
-    if (htim->Instance == TIM3)
+
+	if (htim->Instance == TIM3)
     {
       //  uint16_t dval;  /* 下降沿时计数器的值 */
         
@@ -137,8 +138,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   static uint16_t tm0;
   static uint8_t tm1;
   
-
-  if(htim->Instance==TIM17){
+  if (htim->Instance == TIM16)
+  {
+    HAL_IncTick();
+  }
+  else if(htim->Instance==TIM17){
     
     tm0++;  //1ms
 	if(tm0 > 99){ //10ms *100 =100;

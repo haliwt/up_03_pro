@@ -3,6 +3,10 @@
 #include "main.h"
 
 
+#define RF_KEY_Pin             GPIO_PIN_6
+#define RF_KEY_GPIO_Port       GPIOA
+
+
 #define RF_KEY_CMT2210LC_GetValue()    sys_gpio_pin_get(RF_KEY_GPIO_Port,RF_KEY_Pin)//HAL_GPIO_ReadPin(RF_KEY_GPIO_Port,RF_KEY_Pin)// sys_gpio_pin_get(RF_KEY_GPIO_Port,RF_KEY_Pin)  //  HAL_GPIO_ReadPin(RF_KEY_GPIO_Port,RF_KEY_Pin)   //
 
 

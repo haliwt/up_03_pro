@@ -52,29 +52,27 @@ void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOB, FAN_CTL_Pin|GPIO_1_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, PLASMA_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(PLASMA_GPIO_Port, PLASMA_Pin, GPIO_PIN_RESET);
 
-  HAL_GPIO_WritePin(GPIOA, VOICE_MUTE_Pin, GPIO_PIN_SET);
-
-  /*Configure GPIO pins : PBPin PBPin */
+  /*Configure GPIO pins : FAN_CTL_Pin GPIO_1_Pin */
   GPIO_InitStruct.Pin = FAN_CTL_Pin|GPIO_1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PAPin PAPin PAPin PAPin */
-  GPIO_InitStruct.Pin = PLASMA_Pin|VOICE_MUTE_Pin;
+  /*Configure GPIO pin : PLASMA_Pin */
+  GPIO_InitStruct.Pin = PLASMA_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  HAL_GPIO_Init(PLASMA_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PAPin PAPin */
-  GPIO_InitStruct.Pin = RF_KEY_Pin|KEY_POWER_Pin;
+  /*Configure GPIO pin : KEY_POWER_Pin */
+  GPIO_InitStruct.Pin = KEY_POWER_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;//GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(KEY_POWER_GPIO_Port, &GPIO_InitStruct);
 
 }
 
