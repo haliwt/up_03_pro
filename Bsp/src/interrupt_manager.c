@@ -9,7 +9,7 @@
 #define BIT1_MIN_US   400     // 1位最小时间(us)
 #define BIT1_MAX_US   700     // 1位最大时间(us)
 
-#define BITS_IN_PACKET 24    // 数据位数
+#define BITS_IN_PACKET 25    // 数据位数
 
 /* 遥控器接收状�????
  * [7]  : 收到了引导码标志
