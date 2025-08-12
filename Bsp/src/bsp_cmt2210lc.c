@@ -8,7 +8,7 @@ uint32_t rf_id_1,rf_id_2;
 
 uint8_t checkRFCode_flag;
 
-
+uint32_t rf_remote_data ;
 /*****************************************************************
 *
 *Function Name:void rfReceivedData_Handler(void)
@@ -25,7 +25,8 @@ void rfReceivedData_Handler(void)
         gpro_t.powerOn_matchingId++;
         if(gpro_t.powerOn_matchingId ==1){
            rf_id_1 = g_remote_data & 0xFFFFFF;
-           
+           rf_remote_data = g_remote_data;
+              g_remote_data=0;
 		   gpro_t.rf_recieve_numbers=0;
 		   gpro_t.rf_receive_data_success=0;
         }
@@ -38,14 +39,16 @@ void rfReceivedData_Handler(void)
               checkRFCode_flag=1;
 		      gpro_t.rf_recieve_numbers=0;
               gpro_t.powerOn_matchingId =0;
-               gpro_t.rf_receive_data_success=0;
+              rf_remote_data = g_remote_data;
+              g_remote_data=0;
+              gpro_t.rf_receive_data_success=0;
           }
           else{
               gpro_t.powerOn_matchingId =0;
               gpro_t.rf_recieve_numbers =0;
               gpro_t.rf_receive_data_success=0;
-       
-             g_remote_data =0;
+              rf_remote_data = g_remote_data;
+              g_remote_data =0;
 
           }
         }
@@ -59,11 +62,12 @@ void rfReceivedData_Handler(void)
 	        rf_rec_numbers =  gpro_t.rf_recieve_numbers;
 	        gpro_t.rf_receive_data_success=0; //gpro_t.rf_receive_data_success=3;
 	        gpro_t.rfPowerOnOff_soundFLag =1;
+            rf_remote_data = g_remote_data;
 	        g_remote_data =0;
 	        rf_syn_flag = 0;
 	        gpro_t.rf_syn_signal_numbers=0;
 	        gpro_t.rf_recieve_numbers=0;
-	       
+	        
 	       
 
 	    }
@@ -71,7 +75,7 @@ void rfReceivedData_Handler(void)
 		      gpro_t.rf_recieve_numbers =0;
 			   gpro_t.rf_receive_data_success=0;
 			   gpro_t.rf_syn_signal_numbers=0;
-			 
+			    rf_remote_data = g_remote_data;
 			   g_remote_data =0;
 
 		}
