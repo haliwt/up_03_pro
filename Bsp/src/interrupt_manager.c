@@ -45,9 +45,9 @@ volatile uint8_t bit_count = 0;
             LL_TIM_SetCounter(TIM3, 0);
             
         // 同步信号检测
-        if(up_dval > SYNC_MIN_US && up_dval < SYNC_MAX_US  && !gpro_t.rf_complete_receive_flag) {
+        if(up_dval > SYNC_MIN_US && up_dval < SYNC_MAX_US  && !gpro_t.rf_receive_data_success) {
                 rf_syn_flag = 1;
-                bit_count = 0;
+               // bit_count = 0;
                 g_remote_data = 0;
         }
       }
@@ -56,22 +56,26 @@ volatile uint8_t bit_count = 0;
             LL_TIM_IC_SetPolarity(TIM3, LL_TIM_CHANNEL_CH1, LL_TIM_IC_POLARITY_RISING);
             LL_TIM_SetCounter(TIM3, 0);
             
-            if(rf_syn_flag && !gpro_t.rf_complete_receive_flag) {
+            if(rf_syn_flag && !gpro_t.rf_receive_data_success) {
                 // 数据位解码
                 if(dval > BIT0_MIN_US && dval < BIT0_MAX_US) {        // 0位
                     g_remote_data = (g_remote_data << 1);
-                    bit_count++;
+                    //bit_count++;
+					gpro_t.rf_recieve_numbers++;
                 } 
                 else if(dval > BIT1_MIN_US && dval < BIT1_MAX_US) { // 1位
                     g_remote_data = (g_remote_data << 1) | 0x01;
-                    bit_count++;
+                   // bit_count++;
+					gpro_t.rf_recieve_numbers++;
                 }
                 
                 // 检查是否接收完整数据包
-                if(bit_count >= BITS_IN_PACKET) {
+                if(gpro_t.rf_recieve_numbers >= BITS_IN_PACKET) {
                     rf_receive_complete = 1;
                     rf_syn_flag = 0;
-                    bit_count=0;
+                    bit_count=gpro_t.rf_recieve_numbers;
+                    gpro_t.rf_recieve_numbers=0;
+                    gpro_t.rf_receive_data_success=1;
                     gpro_t.rf_complete_receive_flag = 1;
                 }
             }
@@ -158,7 +162,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
                          gpro_t.rf_receive_data_success=1;
                          rf_syn_flag = 0;//detected_rfSync_flag=1;
                          gpro_t.rf_complete_receive_flag = 1; /* 接收完成标志�? */
-					               gpro_t.rf_syn_signal_numbers=0;
+					      gpro_t.rf_syn_signal_numbers=0;
                          
                     }
 

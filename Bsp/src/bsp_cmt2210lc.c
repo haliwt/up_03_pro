@@ -25,7 +25,9 @@ void rfReceivedData_Handler(void)
         gpro_t.powerOn_matchingId++;
         if(gpro_t.powerOn_matchingId ==1){
            rf_id_1 = g_remote_data & 0xFFFFFF;
+           
 		   gpro_t.rf_recieve_numbers=0;
+		   gpro_t.rf_receive_data_success=0;
         }
         else{
 
@@ -36,7 +38,7 @@ void rfReceivedData_Handler(void)
               checkRFCode_flag=1;
 		      gpro_t.rf_recieve_numbers=0;
               gpro_t.powerOn_matchingId =0;
-
+               gpro_t.rf_receive_data_success=0;
           }
           else{
               gpro_t.powerOn_matchingId =0;
