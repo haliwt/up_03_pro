@@ -22,6 +22,7 @@
 #include "stm32g0xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "bsp.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -55,8 +56,6 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
-extern TIM_HandleTypeDef htim3;
-extern TIM_HandleTypeDef htim17;
 extern TIM_HandleTypeDef htim16;
 
 /* USER CODE BEGIN EV */
@@ -123,9 +122,16 @@ void DMA1_Channel1_IRQHandler(void)
 void TIM3_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM3_IRQn 0 */
+  // 过捕获：CC1OF（边沿太快导致丢事件）
+	 if(LL_TIM_IsActiveFlag_CC1(TIM3)) {
+        LL_TIM_ClearFlag_CC1(TIM3);
+	 
+		
+		 RF_ResetDecoder(); 				// 丢帧，重新同步
+	 }
+
 
   /* USER CODE END TIM3_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim3);
   /* USER CODE BEGIN TIM3_IRQn 1 */
 
   /* USER CODE END TIM3_IRQn 1 */
@@ -153,7 +159,6 @@ void TIM17_IRQHandler(void)
   /* USER CODE BEGIN TIM17_IRQn 0 */
 
   /* USER CODE END TIM17_IRQn 0 */
-  HAL_TIM_IRQHandler(&htim17);
   /* USER CODE BEGIN TIM17_IRQn 1 */
 
   /* USER CODE END TIM17_IRQn 1 */

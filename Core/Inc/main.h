@@ -38,6 +38,7 @@ extern "C" {
 #include "stm32g0xx_ll_cortex.h"
 #include "stm32g0xx_ll_utils.h"
 #include "stm32g0xx_ll_pwr.h"
+#include "stm32g0xx_ll_tim.h"
 #include "stm32g0xx_ll_usart.h"
 #include "stm32g0xx_ll_gpio.h"
 
@@ -77,11 +78,8 @@ void Error_Handler(void);
 #define PLASMA_GPIO_Port GPIOA
 #define GPIO_1_Pin LL_GPIO_PIN_0
 #define GPIO_1_GPIO_Port GPIOB
-
-#define KEY_POWER_Pin                       LL_GPIO_PIN_12
-#define KEY_POWER_GPIO_Port                 GPIOA
-
-
+#define KEY_POWER_Pin LL_GPIO_PIN_12
+#define KEY_POWER_GPIO_Port GPIOA
 #define ULTR_PWM_Pin LL_GPIO_PIN_3
 #define ULTR_PWM_GPIO_Port GPIOB
 
