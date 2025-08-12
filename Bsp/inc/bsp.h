@@ -53,12 +53,13 @@ typedef enum _power_on_state{
 
 typedef struct process_t{
 
-   uint32_t  rf_id;
+   uint32_t  rf_decod_id;
 
    uint8_t power_on;
    uint8_t setHours;
    uint8_t setMinutes;
    uint8_t works_2_hours_timeout_flag;
+   uint8_t rf_complete_receive_flag;
 
   
 
@@ -72,15 +73,7 @@ typedef struct process_t{
 
    uint8_t power_key_flag ;
    uint8_t power_on_off_numbers;
- 
-
-
    uint8_t rf_receive_data_success;
-
-   
-
-
-  
 
    uint8_t gTimer_normal_run_main_function_times;
    uint8_t gTimer_timer_time_long_key ;

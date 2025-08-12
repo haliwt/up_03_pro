@@ -6,7 +6,7 @@
 
 
 void freertos_handler(void);
-void App_PowerOff_Handler(void);
+
 
 
 #endif 

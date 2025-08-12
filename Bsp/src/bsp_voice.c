@@ -126,7 +126,7 @@ static void sendData_VoiceSound_Warning_Fan(void)
 	//for(i=3;i<6;i++) crc ^= outputBuf[i];
 	//outputBuf[i]=crc;
 	transferSize=8;
-    HAL_UART_Transmit(&huart2,outputBuf,transferSize,0xffff);
+    //HAL_UART_Transmit(&huart2,outputBuf,transferSize,0xffff);
     #if 0
 	if(transferSize)
 	{
@@ -162,7 +162,7 @@ static void voice_send_function_cmd(uint8_t cmd1,uint8_t cmd2)
 
    transferSize=8;
 
-   HAL_UART_Transmit(&huart2,outputBuf,transferSize,0xffff);
+   //HAL_UART_Transmit(&huart2,outputBuf,transferSize,0xffff);
    #if 0
    if(transferSize)
    {
@@ -328,7 +328,7 @@ static void voice_send_power_on_cmd(void)
 	{
 		while(transOngoingFlag); //UART interrupt transmit flag ,disable one more send data.
 		transOngoingFlag=1;
-		HAL_UART_Transmit_IT(&huart2,outputBuf,transferSize);
+		//HAL_UART_Transmit_IT(&huart2,outputBuf,transferSize);
 	}
    
 
@@ -353,7 +353,7 @@ static void voice_send_power_off_cmd(void)
 	{
 		while(transOngoingFlag); //UART interrupt transmit flag ,disable one more send data.
 		transOngoingFlag=1;
-		HAL_UART_Transmit_IT(&huart2,outputBuf,transferSize);
+		///HAL_UART_Transmit_IT(&huart2,outputBuf,transferSize);
 	}
     #else 
          HAL_UART_Transmit(&huart2,outputBuf,transferSize,0xffff);
@@ -370,19 +370,19 @@ static void voice_send_power_off_cmd(void)
 *Return Ref:NO
 *
 *******************************************************************************/
-void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
-{
-	if(huart==&huart2) //voice  sound send 
-	{
-       //DISABLE_INT();
+//void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+//{
+//	if(huart==USART2) //voice  sound send 
+//	{
+//       //DISABLE_INT();
 
-      // taskENTER_CRITICAL_FROM_ISR();
-       transOngoingFlag=0; 
-      // //ENABLE_INT();
-      // taskEXIT_CRITICAL_FROM_ISR(0);
-	}
+//      // taskENTER_CRITICAL_FROM_ISR();
+//       transOngoingFlag=0; 
+//      // //ENABLE_INT();
+//      // taskEXIT_CRITICAL_FROM_ISR(0);
+//	}
 
 
 
-}
+//}
 

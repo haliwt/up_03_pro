@@ -29,6 +29,18 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 #include "stm32g0xx_hal.h"
 
+#include "stm32g0xx_ll_adc.h"
+#include "stm32g0xx_ll_dma.h"
+#include "stm32g0xx_ll_rcc.h"
+#include "stm32g0xx_ll_bus.h"
+#include "stm32g0xx_ll_system.h"
+#include "stm32g0xx_ll_exti.h"
+#include "stm32g0xx_ll_cortex.h"
+#include "stm32g0xx_ll_utils.h"
+#include "stm32g0xx_ll_pwr.h"
+#include "stm32g0xx_ll_usart.h"
+#include "stm32g0xx_ll_gpio.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -57,17 +69,20 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define FAN_CTL_Pin GPIO_PIN_7
+#define FAN_CTL_Pin LL_GPIO_PIN_7
 #define FAN_CTL_GPIO_Port GPIOB
-#define ADC_FAN_Pin GPIO_PIN_0
+#define ADC_FAN_Pin LL_GPIO_PIN_0
 #define ADC_FAN_GPIO_Port GPIOA
-#define PLASMA_Pin GPIO_PIN_4
+#define PLASMA_Pin LL_GPIO_PIN_4
 #define PLASMA_GPIO_Port GPIOA
-#define GPIO_1_Pin GPIO_PIN_0
+#define GPIO_1_Pin LL_GPIO_PIN_0
 #define GPIO_1_GPIO_Port GPIOB
-#define KEY_POWER_Pin GPIO_PIN_12
-#define KEY_POWER_GPIO_Port GPIOA
-#define ULTR_PWM_Pin GPIO_PIN_3
+
+#define KEY_POWER_Pin                       LL_GPIO_PIN_12
+#define KEY_POWER_GPIO_Port                 GPIOA
+
+
+#define ULTR_PWM_Pin LL_GPIO_PIN_3
 #define ULTR_PWM_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */

@@ -14,7 +14,7 @@ void  fan_adc_dma_fun(void)
       gpro_t.gTimer_adc_detected_time=0;
 
      /* 启动AD转换并使能DMA传输和中断 */
-      HAL_ADC_Start_DMA(&hadc1,&ADC_ConvertedValue,1);  
+     // HAL_ADC_Start_DMA(&hadc1,&ADC_ConvertedValue,1);  
 
 
 

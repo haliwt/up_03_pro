@@ -90,9 +90,9 @@ void sound_power_on_off_handler(void)
         led_on_fun();
         voice_power_on_sound();
         gpro_t.gTimer_power_on_times=0;
-        rf_syn_flag = 0;
-        gpro_t.rf_syn_signal_numbers=0;
-        g_remote_data =0;
+       // rf_syn_flag = 0;
+      //  gpro_t.rf_syn_signal_numbers=0;
+       // g_remote_data =0;
 
 
   }
@@ -106,9 +106,9 @@ void sound_power_on_off_handler(void)
         led_off_fun();
         voice_power_off_sound();
         gpro_t.gTimer_power_on_times=0;
-        rf_syn_flag = 0;
-        gpro_t.rf_syn_signal_numbers=0;
-        g_remote_data =0;
+       // rf_syn_flag = 0;
+       // gpro_t.rf_syn_signal_numbers=0;
+       // g_remote_data =0;
 
   }
    
