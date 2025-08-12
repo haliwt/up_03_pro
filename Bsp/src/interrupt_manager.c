@@ -48,7 +48,8 @@ volatile uint8_t bit_count = 0;
         if(up_dval > SYNC_MIN_US && up_dval < SYNC_MAX_US  && !gpro_t.rf_receive_data_success && rf_syn_flag==0) {
                 rf_syn_flag = 1;
                // bit_count = 0;
-            
+               gpro_t.rf_syn_signal_numbers++;
+               
         }
       }
       else {  // 下降沿捕获 (当前是高电平)
@@ -61,24 +62,26 @@ volatile uint8_t bit_count = 0;
                 if(dval > BIT0_MIN_US && dval < BIT0_MAX_US) {        // 0位
                     g_remote_data = (g_remote_data << 1);
                     //bit_count++;
-					gpro_t.rf_recieve_numbers++;
+					          gpro_t.rf_recieve_numbers++;
+                    if(gpro_t.rf_recieve_numbers >= BITS_IN_PACKET)  gpro_t.rf_receive_data_success=1;
                 } 
                 else if(dval > BIT1_MIN_US && dval < BIT1_MAX_US) { // 1位
                     g_remote_data = (g_remote_data << 1) | 0x01;
                    // bit_count++;
-					gpro_t.rf_recieve_numbers++;
+					          gpro_t.rf_recieve_numbers++;
+                    if(gpro_t.rf_recieve_numbers >= BITS_IN_PACKET) gpro_t.rf_receive_data_success=1;
                 }
                 
                 // 检查是否接收完整数据包
-                if(gpro_t.rf_recieve_numbers >= BITS_IN_PACKET) {
-                 
-                    rf_syn_flag = 0;
-                    bit_count=gpro_t.rf_recieve_numbers;
+                 if(gpro_t.rf_receive_data_success==1){//if(gpro_t.rf_recieve_numbers >= BITS_IN_PACKET) {
+                //     gpro_t.rf_receive_data_success=1;
+                //     rf_syn_flag = 0;
+                     bit_count=gpro_t.rf_recieve_numbers;
                    
-                    gpro_t.rf_recieve_numbers=0;
-                    gpro_t.rf_receive_data_success=1;
-                    gpro_t.rf_complete_receive_flag = 1;
-                }
+                //     gpro_t.rf_recieve_numbers=0;
+                   
+                     gpro_t.rf_complete_receive_flag = 1;
+                 }
             }
         }
 }

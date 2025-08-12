@@ -6,7 +6,7 @@ uint8_t rf_rec_numbers;
 
 uint32_t rf_id_1,rf_id_2;
 
-uint8_t checkRFCode_flag;
+uint8_t checkRFCode_flag, rf_remote_syn_counter;
 
 uint32_t rf_remote_data ;
 /*****************************************************************
@@ -27,6 +27,8 @@ void rfReceivedData_Handler(void)
            rf_id_1 = g_remote_data & 0xFFFFFF;
            rf_remote_data = g_remote_data;
               g_remote_data=0;
+              rf_syn_flag=0;
+         
 		   gpro_t.rf_recieve_numbers=0;
 		   gpro_t.rf_receive_data_success=0;
         }
@@ -39,16 +41,22 @@ void rfReceivedData_Handler(void)
               checkRFCode_flag=1;
 		      gpro_t.rf_recieve_numbers=0;
               gpro_t.powerOn_matchingId =0;
+              rf_remote_syn_counter = gpro_t.rf_syn_signal_numbers;
               rf_remote_data = g_remote_data;
               g_remote_data=0;
+              rf_syn_flag=0;
               gpro_t.rf_receive_data_success=0;
+              gpro_t.rf_syn_signal_numbers=0;
           }
           else{
               gpro_t.powerOn_matchingId =0;
-              gpro_t.rf_recieve_numbers =0;
+             
+              rf_remote_syn_counter = gpro_t.rf_syn_signal_numbers;
               gpro_t.rf_receive_data_success=0;
               rf_remote_data = g_remote_data;
-              g_remote_data =0;
+              g_remote_data =0;  
+              rf_syn_flag = 0;
+               gpro_t.rf_recieve_numbers =0;
 
           }
         }
@@ -63,9 +71,11 @@ void rfReceivedData_Handler(void)
 	        gpro_t.rf_receive_data_success=0; //gpro_t.rf_receive_data_success=3;
 	        gpro_t.rfPowerOnOff_soundFLag =1;
             rf_remote_data = g_remote_data;
+            rf_remote_syn_counter = gpro_t.rf_syn_signal_numbers;
 	        g_remote_data =0;
 	        rf_syn_flag = 0;
 	        gpro_t.rf_syn_signal_numbers=0;
+           
 	        gpro_t.rf_recieve_numbers=0;
 	        
 	       
@@ -73,10 +83,12 @@ void rfReceivedData_Handler(void)
 	    }
 		else{
 		      gpro_t.rf_recieve_numbers =0;
+              rf_remote_syn_counter = gpro_t.rf_syn_signal_numbers;
 			   gpro_t.rf_receive_data_success=0;
 			   gpro_t.rf_syn_signal_numbers=0;
 			    rf_remote_data = g_remote_data;
 			   g_remote_data =0;
+               rf_syn_flag=0;
 
 		}
 	}
