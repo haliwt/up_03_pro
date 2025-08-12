@@ -22,10 +22,7 @@ typedef enum _key_state{
 }key_state;
 
 
-uint8_t sys_gpio_pin_get(GPIO_TypeDef *p_gpiox, uint16_t pinx);
 
-
-void sys_gpio_pin_set(GPIO_TypeDef *p_gpiox, uint16_t pinx, uint8_t status);
 
 
 
