@@ -4,10 +4,10 @@
 #define SYNC_MAX_US   7200     // 同步信号�?大时�?(us)
 
 #define BIT0_MIN_US   180     // 0位最大时�?(us)
-#define BIT0_MAX_US   350     //  0位最大时�?(us)
+#define BIT0_MAX_US   400//350     //  0位最大时�?(us)
 
-#define BIT1_MIN_US   550     // 1位最小时�?(us)
-#define BIT1_MAX_US   700     // 1位最大时�?(us)
+#define BIT1_MIN_US   500     // 1位最小时�?(us)
+#define BIT1_MAX_US   700//800     // 1位最大时�?(us)
 
 #define BITS_IN_PACKET 25    // 数据位数
 
@@ -60,7 +60,7 @@ volatile uint8_t bit_count = 0;
                
         }
       }
-      else {  // 下降沿捕�? (当前是高电平)
+      else if(RF_KEY_CMT2210LC_GetValue() == 0){  // 下降沿捕�? (当前是高电平)
             dval = LL_TIM_IC_GetCaptureCH1(TIM3);
             LL_TIM_IC_SetPolarity(TIM3, LL_TIM_CHANNEL_CH1, LL_TIM_IC_POLARITY_RISING);
             LL_TIM_SetCounter(TIM3, 0);
