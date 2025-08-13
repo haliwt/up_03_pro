@@ -83,16 +83,19 @@ void rfReceivedData_Handler(void)
 
 	    }
 		else{
-		      gpro_t.rf_recieve_numbers =0;
+			  printf("receive_num = %d\r\n",gpro_t.rf_recieve_numbers);
+              gpro_t.rf_receive_data_success=0;
+			  gpro_t.rf_recieve_numbers =0;
+			  rf_syn_flag=0;
               rf_remote_syn_counter = gpro_t.rf_syn_signal_numbers;
-			   gpro_t.rf_receive_data_success=0;
+			  printf("syn_conter = %d\r\n",rf_remote_syn_counter);
+			   rf_remote_data = g_remote_data;
 			   gpro_t.rf_syn_signal_numbers=0;
-			    rf_remote_data = g_remote_data;
-			   g_remote_data =0;
-               rf_syn_flag=0;
+			   g_remote_data=0;
+               
 			   gpro_t.rf_syn_signal_numbers=0;
-			   error_counter++;
-			   printf("error = %d\r\n",error_counter);
+			   //error_counter++;
+			   //printf("error = %d\r\n",error_counter);
 
 		}
 	}
