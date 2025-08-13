@@ -145,7 +145,7 @@ static void vTaskMsgPro(void *pvParameters)
              gpro_t.works_2_hours_timeout_flag=0;
              gpro_t.fan_warning_flag = 0;
               
-               voice_power_off_sound();
+              // voice_power_off_sound();
 
              
         

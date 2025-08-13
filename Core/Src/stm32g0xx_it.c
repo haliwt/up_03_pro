@@ -118,18 +118,31 @@ void DMA1_Channel1_IRQHandler(void)
 }
 
 /**
+  * @brief This function handles DMA1 channel 2 and channel 3 interrupts.
+  */
+void DMA1_Channel2_3_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Channel2_3_IRQn 0 */
+
+  /* USER CODE END DMA1_Channel2_3_IRQn 0 */
+  /* USER CODE BEGIN DMA1_Channel2_3_IRQn 1 */
+
+  /* USER CODE END DMA1_Channel2_3_IRQn 1 */
+}
+
+/**
   * @brief This function handles TIM3 global interrupt.
   */
 void TIM3_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM3_IRQn 0 */
-  // ¹ý²¶»ñ£ºCC1OF£¨±ßÑØÌ«¿ìµ¼ÖÂ¶ªÊÂ¼þ£©
+  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½CC1OFï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì«ï¿½ìµ¼ï¿½Â¶ï¿½ï¿½Â¼ï¿½ï¿½ï¿½
 	 if(LL_TIM_IsActiveFlag_CC1(TIM3)) {
         LL_TIM_ClearFlag_CC1(TIM3);
 	 
 		
 	 
-		 RF_ResetDecoder(); 				// ¶ªÖ¡£¬ÖØÐÂÍ¬²½
+		 RF_ResetDecoder(); 				// ï¿½ï¿½Ö¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¬ï¿½ï¿½
 	 }
 
 
@@ -158,7 +171,6 @@ void TIM16_IRQHandler(void)
   */
 void TIM17_IRQHandler(void)
 {
-  
   /* USER CODE BEGIN TIM17_IRQn 0 */
  
 
@@ -188,16 +200,16 @@ void USART2_IRQHandler(void)
   /* USER CODE BEGIN USART2_IRQn 0 */
    if(LL_USART_IsActiveFlag_RXNE(USART2)) {
        // uint8_t data = LL_USART_ReceiveData8(USART2);
-       // bsp_uart_rx_handler(data); // ´¦Àí½ÓÊÕµ½µÄÊý¾Ý
+       // bsp_uart_rx_handler(data); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     }
   /* USER CODE END USART2_IRQn 0 */
   
   /* USER CODE BEGIN USART2_IRQn 1 */
-    // ÆäËûÖÐ¶Ï´¦Àí£¨Èç´íÎó±êÖ¾¼ì²é£©
+    // ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½é£©
   if (LL_USART_IsActiveFlag_ORE(USART2) || LL_USART_IsActiveFlag_FE(USART2)) 
   {
-      LL_USART_ClearFlag_ORE(USART2);  // Çå³ýÒç³ö´íÎó±êÖ¾
-      LL_USART_ClearFlag_FE(USART2);   // Çå³ýÖ¡´íÎó±êÖ¾
+      LL_USART_ClearFlag_ORE(USART2);  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
+      LL_USART_ClearFlag_FE(USART2);   // ï¿½ï¿½ï¿½Ö¡ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
   }
   /* USER CODE END USART2_IRQn 1 */
 }
