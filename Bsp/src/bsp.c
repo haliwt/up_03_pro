@@ -86,14 +86,15 @@ void device_works_time_counter_handler(void)
 void sound_power_on_off_handler(void)
 {
 
-   if((gpro_t.power_on_off_numbers==1 && gpro_t.gTimer_switch_onoff > 2 && gpro_t.power_key_flag==2) 
-           ||(gpro_t.power_on_off_numbers==power_on && gpro_t.gTimer_switch_onoff > 0 &&  gpro_t.rfPowerOnOff_soundFLag==2)){
-        gpro_t.power_key_flag=3;
-        gpro_t.rfPowerOnOff_soundFLag=3;
-        gpro_t.power_on_off_numbers++;
-        gpro_t.gTimer_switch_onoff=0;
-        gpro_t.power_on = power_on;
+   if(gpro_t.gTimer_switch_onoff > 1 && gpro_t.rfPowerOnOff_soundFLag==1){
+          
+    
+		gpro_t.power_on = power_on;
+        
+		gpro_t.rfPowerOnOff_soundFLag=3;
+      
 
+       
         gpro_t.works_2_hours_timeout_flag=0;
         gpro_t.fan_warning_flag = 0;
         gpro_t.gTimer_normal_run_main_function_times =10;
@@ -101,29 +102,46 @@ void sound_power_on_off_handler(void)
         led_on_fun();
         voice_power_on_sound();
         gpro_t.gTimer_power_on_times=0;
-       // rf_syn_flag = 0;
-      //  gpro_t.rf_syn_signal_numbers=0;
-       // g_remote_data =0;
-
-
-  }
-  else if((gpro_t.power_on_off_numbers == 3 && gpro_t.gTimer_switch_onoff > 2 && gpro_t.power_key_flag==2  )
-            ||(gpro_t.power_on_off_numbers == 3 && gpro_t.gTimer_switch_onoff > 0  && gpro_t.rfPowerOnOff_soundFLag==2)){
-        gpro_t.power_key_flag=3;
-        gpro_t.rfPowerOnOff_soundFLag=3;
-        gpro_t.power_on_off_numbers++;
-        gpro_t.gTimer_switch_onoff=0;
+     
+   	}
+   else if(gpro_t.gTimer_switch_onoff > 1 &&  gpro_t.rfPowerOnOff_soundFLag==2){
+   
         gpro_t.power_on = power_off;
+		gpro_t.rfPowerOnOff_soundFLag=4;
+    
+        gpro_t.gTimer_switch_onoff=0;
+       
         led_off_fun();
         voice_power_off_sound();
         gpro_t.gTimer_power_on_times=0;
-       // rf_syn_flag = 0;
-       // gpro_t.rf_syn_signal_numbers=0;
-       // g_remote_data =0;
-
+     
   }
    
  
+
+}
+/*****************************************************************
+*
+*Function Name:void powerOnOff_handler(void)
+*Function: 
+*Input Ref:
+*Return Ref:
+*
+*****************************************************************/
+void powerOnOff_handler(void)
+{
+	if(gpro_t.power_on == power_off){
+
+	    gpro_t.rfPowerOnOff_soundFLag =1;
+
+	}
+	else if(gpro_t.power_on == power_on){
+
+	  gpro_t.rfPowerOnOff_soundFLag =2;
+
+	}
+	gpro_t.gTimer_switch_onoff = 0;
+	gpro_t.gTimer_power_on_times=0;
 
 }
 

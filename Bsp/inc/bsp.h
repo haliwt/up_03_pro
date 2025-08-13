@@ -38,6 +38,9 @@
 #define Enable_EventRecorder 1
 
 
+#define DEBUG     1
+
+
 	
 #if Enable_EventRecorder == 1
 	#include "EventRecorder.h"
@@ -67,7 +70,7 @@ typedef enum _power_on_state{
 
 typedef struct process_t{
 
-   uint32_t  rf_decod_id;
+volatile   uint32_t  rf_decod_id;
 
    uint8_t power_on;
    uint8_t setHours;
@@ -86,7 +89,7 @@ typedef struct process_t{
    uint8_t  rfPowerOnOff_soundFLag;
 
    uint8_t power_key_flag ;
-   uint8_t power_on_off_numbers;
+  
    uint8_t rf_receive_data_success;
 
    uint8_t gTimer_normal_run_main_function_times;
@@ -115,6 +118,9 @@ void device_works_time_counter_handler(void);
 
 
 void sound_power_on_off_handler(void);
+
+
+void powerOnOff_handler(void);
 
 
 #endif 

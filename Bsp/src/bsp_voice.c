@@ -64,15 +64,8 @@ void voice_power_off_sound(void)
 void voice_set_timer_timing_value(uint8_t set_hours)
 {
     
- 
-
-
-	  // set_hours = 4+ set_hours;
-	   
-	   send_tx_set_timer_value(set_hours);
+ send_tx_set_timer_value(set_hours);
    
-
-      
 }
 
 /***************************************************************************
@@ -135,7 +128,7 @@ static void sendData_VoiceSound_Warning_Fan(void)
 		HAL_UART_Transmit_IT(&huart1,outputBuf,transferSize);
 	}
     #endif 
-
+    USART2_DMA_Send(outputBuf, transferSize);
 
 }
 
@@ -324,13 +317,13 @@ static void voice_send_power_on_cmd(void)
 	transferSize=8;
     //HAL_UART_Transmit(&huart2,outputBuf,transferSize,0xffff);
    
-	if(transferSize)
-	{
-		while(transOngoingFlag); //UART interrupt transmit flag ,disable one more send data.
-		transOngoingFlag=1;
-		//HAL_UART_Transmit_IT(&huart2,outputBuf,transferSize);
-	}
-   
+	// if(transferSize)
+	// {
+	// 	while(transOngoingFlag); //UART interrupt transmit flag ,disable one more send data.
+	// 	transOngoingFlag=1;
+	// 	//HAL_UART_Transmit_IT(&huart2,outputBuf,transferSize);
+	// }
+     USART2_DMA_Send(outputBuf, transferSize);
 
 }
 
@@ -348,7 +341,7 @@ static void voice_send_power_off_cmd(void)
 	
 	transferSize=8;
   
-    #if 1
+    #if 0
 	if(transferSize)
 	{
 		while(transOngoingFlag); //UART interrupt transmit flag ,disable one more send data.
@@ -356,8 +349,8 @@ static void voice_send_power_off_cmd(void)
 		///HAL_UART_Transmit_IT(&huart2,outputBuf,transferSize);
 	}
     #else 
-         HAL_UART_Transmit(&huart2,outputBuf,transferSize,0xffff);
-
+         //HAL_UART_Transmit(&huart2,outputBuf,transferSize,0xffff);
+         USART2_DMA_Send(outputBuf, transferSize);
     #endif 
 
 }

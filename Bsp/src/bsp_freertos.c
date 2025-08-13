@@ -7,7 +7,7 @@
 
 
 /***********************************************************************************************************
-											宏定�??1�??7
+											宏定�????1�????7
 ***********************************************************************************************************/
 #define POWER_KEY_0	        (1 << 0)
 
@@ -40,8 +40,8 @@ static TaskHandle_t xHandleTaskMsgPro = NULL;
 static TaskHandle_t xHandleTaskStart = NULL;
 //static TimerHandle_t xTimers[2] = {NULL};
 
-//static TimerHandle_t           Timer1Timer_Handler;/* 定时�??1�??71句柄 */
-//static TimerHandle_t           Timer2Timer_Handler;/* 定时�??1�??72句柄 */
+//static TimerHandle_t           Timer1Timer_Handler;/* 定时�????1�????71句柄 */
+//static TimerHandle_t           Timer2Timer_Handler;/* 定时�????1�????72句柄 */
 
 
 
@@ -70,10 +70,10 @@ uint8_t dc_power_on_first;
 
 
 /**********************************************************************************************************
-*	�??1�??7 �??1�??7 �??1�??7: main
-*	功能说明: 标准c程序入口�??1�??7
-*	�??1�??7    参：�??1�??7
-*	�??1�??7 �??1�??7 �??1�??7: �??1�??7
+*	�????1�????7 �????1�????7 �????1�????7: main
+*	功能说明: 标准c程序入口�????1�????7
+*	�????1�????7    参：�????1�????7
+*	�????1�????7 �????1�????7 �????1�????7: �????1�????7
 **********************************************************************************************************/
 void freertos_handler(void)
 {
@@ -83,16 +83,16 @@ void freertos_handler(void)
 	/* 创建任务通信机制 */
 	//AppObjCreate();
 	
-    /* 启动调度，开始执行任�??1�??7 */
+    /* 启动调度，开始执行任�????1�????7 */
     vTaskStartScheduler();
 }
 
 /**********************************************************************************************************
-*	�??1�??7 �??1�??7 �??1�??7: vTaskMsgPro
-*	功能说明: 使用函数xTaskNotifyWait接收任务vTaskTaskUserIF发��的事件标志位设�??1�??7
-*	�??1�??7    �??1�??7: pvParameters 是在创建该任务时传��的形参
-*	�??1�??7 �??1�??7 �??1�??7: �??1�??7
-*   �??1�??7 �??1�??7 �??1�??7: 2  
+*	�????1�????7 �????1�????7 �????1�????7: vTaskMsgPro
+*	功能说明: 使用函数xTaskNotifyWait接收任务vTaskTaskUserIF发��的事件标志位设�????1�????7
+*	�????1�????7    �????1�????7: pvParameters 是在创建该任务时传��的形参
+*	�????1�????7 �????1�????7 �????1�????7: �????1�????7
+*   �????1�????7 �????1�????7 �????1�????7: 2  
 **********************************************************************************************************/
 static void vTaskMsgPro(void *pvParameters)
 {
@@ -121,64 +121,33 @@ static void vTaskMsgPro(void *pvParameters)
       }
 
 
-            if(gpro_t.power_key_flag == 1 &&  KEY_POWER_GetValue()  == KEY_UP){
+         if(gpro_t.power_key_flag == 1 &&  KEY_POWER_GetValue()  == KEY_UP){
 
-                   gpro_t.power_key_flag ++;
+                gpro_t.power_key_flag ++;
                
-                   if(gpro_t.power_on == power_off){
-
-                       gpro_t.power_on_off_numbers = 1;
-
-                   }
-                   else if(gpro_t.power_on == power_on){
-
-                       gpro_t.power_on_off_numbers= 3;
-
-                    }
-                   gpro_t.gTimer_switch_onoff = 0;
-                   gpro_t.gTimer_power_on_times=0;
+                powerOnOff_handler();
                   
-             }
-             else if(gpro_t.rfPowerOnOff_soundFLag ==1){
-                 gpro_t.rfPowerOnOff_soundFLag++;
-              
-                  if(gpro_t.power_on == power_off){
-
-                          gpro_t.power_on_off_numbers = power_on;
-                        
-                    }
-                    else if(gpro_t.power_on == power_on){
-                    
-                          gpro_t.power_on_off_numbers= 3;
-
-                    }
-                    
-                     gpro_t.gTimer_switch_onoff = 0;
-                     gpro_t.gTimer_power_on_times=0;
-                  
-               
-              }
+           }
+            
                  
        sound_power_on_off_handler();
 
       if(gpro_t.power_on == power_on ){
 
-        // voice_power_on_sound();
-		 led_on_fun(); //WT.EDIT 2025.05.14
+    
+		    led_on_fun(); //WT.EDIT 2025.05.14
 
          main_board_ctl_handler(gpro_t.works_2_hours_timeout_flag);
          device_works_time_counter_handler();
 
       	}
         else if(gpro_t.power_on == power_off){
-              gpro_t.works_2_hours_timeout_flag=0;
-               gpro_t.fan_warning_flag = 0;
-               if(gpro_t.power_on_off_numbers==3){
-                gpro_t.power_on_off_numbers++;
-                gpro_t.rfPowerOnOff_soundFLag =0;
-                voice_power_off_sound();
+             gpro_t.works_2_hours_timeout_flag=0;
+             gpro_t.fan_warning_flag = 0;
+              
+               voice_power_off_sound();
 
-               }
+             
         
               power_off_handler();
               led_off_fun();
@@ -193,11 +162,11 @@ static void vTaskMsgPro(void *pvParameters)
       
  }
 /**********************************************************************************************************
-*	�??1�??7 �??1�??7 �??1�??7: vTaskStart
-*	功能说明: 启动任务，也就是朢�高优先级任务，这里用作按键扫描��??1�??7
-*	�??1�??7    �??1�??7: pvParameters 是在创建该任务时传��的形参
-*	�??1�??7 �??1�??7 �??1�??7: �??1�??7
-*   �??1�??7 �??1�??7 �??1�??7: 3  
+*	�????1�????7 �????1�????7 �????1�????7: vTaskStart
+*	功能说明: 启动任务，也就是朢�高优先级任务，这里用作按键扫描��????1�????7
+*	�????1�????7    �????1�????7: pvParameters 是在创建该任务时传��的形参
+*	�????1�????7 �????1�????7 �????1�????7: �????1�????7
+*   �????1�????7 �????1�????7 �????1�????7: 3  
 **********************************************************************************************************/
 static void vTaskStart(void *pvParameters)
 {
@@ -218,34 +187,34 @@ static void vTaskStart(void *pvParameters)
     else if(gpro_t.rf_complete_receive_flag  == 1 && dc_power_on_first==1){ //wirleless remote
 
               gpro_t.rf_complete_receive_flag ++;
-              rfReceivedData_Handler();
+              rfReceivedData_theFirst433MHZ_Handler();
 
      }
     vTaskDelay(20);
   }
 }
 /**********************************************************************************************************
-*	�??1�??7 �??1�??7 �??1�??7: AppTaskCreate
+*	�????1�????7 �????1�????7 �????1�????7: AppTaskCreate
 *	功能说明: 创建应用任务
-*	�??1�??7    参：�??1�??7
-*	�??1�??7 �??1�??7 �??1�??7: �??1�??7
+*	�????1�????7    参：�????1�????7
+*	�????1�????7 �????1�????7 �????1�????7: �????1�????7
 **********************************************************************************************************/
 static void AppTaskCreate (void)
 {
 
   xTaskCreate( vTaskMsgPro,     		/* 任务函数  */
-                 "vTaskMsgPro",   		/* 任务�??1�??7    */
+                 "vTaskMsgPro",   		/* 任务�????1�????7    */
                  128,             		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
-                 1,               		/* 任务优先级次�??1�??7*/
+                 1,               		/* 任务优先级次�????1�????7*/
                  &xHandleTaskMsgPro );  /* 任务句柄  */
 	
 	
 	xTaskCreate( vTaskStart,     		/* 任务函数  */
-                 "vTaskStart",   		/* 任务�??1�??7    */
+                 "vTaskStart",   		/* 任务�????1�????7    */
                  128,            		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
-                 2,              		/* 任务优先级最�??1�??7*/
+                 2,              		/* 任务优先级最�????1�????7*/
                  &xHandleTaskStart );   /* 任务句柄  */
 }
 
