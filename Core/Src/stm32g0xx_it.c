@@ -27,6 +27,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN TD */
+uint16_t timer17_counter;
 
 /* USER CODE END TD */
 
@@ -127,6 +128,7 @@ void TIM3_IRQHandler(void)
         LL_TIM_ClearFlag_CC1(TIM3);
 	 
 		
+	 
 		 RF_ResetDecoder(); 				// 丢帧，重新同步
 	 }
 
@@ -158,14 +160,17 @@ void TIM17_IRQHandler(void)
 {
   
   /* USER CODE BEGIN TIM17_IRQn 0 */
-  static uint16_t timer17_counter;
+ 
 
    if(LL_TIM_IsActiveFlag_UPDATE(TIM17)) {
         LL_TIM_ClearFlag_UPDATE(TIM17);
-        if(timer17_counter++ >= 1000) { // 1s
-            timer17_counter = 0;
-            tim17_callback();
-        }
+	     timer17_counter++;
+         if(timer17_counter > 999){
+			 timer17_counter=0;
+         tim17_callback();
+
+         }
+       
         
     }
   /* USER CODE END TIM17_IRQn 0 */

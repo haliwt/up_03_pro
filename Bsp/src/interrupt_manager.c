@@ -110,11 +110,8 @@ volatile uint8_t bit_count = 0;
 **************************************************************************************************/
 void tim17_callback(void)
   {
-    static uint16_t tm0 = 0;
-    static uint8_t tm1 = 0;
-    if(tm0 > 999){ //10ms *100 =100;
-      tm0=0;
-      tm1++;
+    static uint8_t tm1;
+     tm1++;
      gpro_t.gTimer_normal_run_main_function_times++;
     
        gpro_t.gTimer_power_on_times++;
@@ -130,7 +127,7 @@ void tim17_callback(void)
 
     }
     
-}
+
 
 
   
