@@ -20,6 +20,7 @@
 #include "bsp_key.h"
 #include "bsp_cmt2210lc.h"
 #include "bsp_decoder.h"
+#include "bsp_usart.h"
 #include "interrupt_manager.h"
 #include "bsp_freertos.h"
 

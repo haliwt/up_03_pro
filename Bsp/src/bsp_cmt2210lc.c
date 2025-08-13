@@ -28,9 +28,10 @@ void rfReceivedData_Handler(void)
            rf_remote_data = g_remote_data;
               g_remote_data=0;
               rf_syn_flag=0;
-         
+            rf_remote_syn_counter = gpro_t.rf_syn_signal_numbers;
 		   gpro_t.rf_recieve_numbers=0;
 		   gpro_t.rf_receive_data_success=0;
+			gpro_t.rf_syn_signal_numbers=0;
         }
         else{
 
@@ -57,7 +58,7 @@ void rfReceivedData_Handler(void)
               g_remote_data =0;  
               rf_syn_flag = 0;
                gpro_t.rf_recieve_numbers =0;
-
+               gpro_t.rf_syn_signal_numbers=0;
           }
         }
     }
@@ -89,6 +90,7 @@ void rfReceivedData_Handler(void)
 			    rf_remote_data = g_remote_data;
 			   g_remote_data =0;
                rf_syn_flag=0;
+			 gpro_t.rf_syn_signal_numbers=0;
 
 		}
 	}

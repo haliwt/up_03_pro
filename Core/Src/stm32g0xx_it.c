@@ -156,8 +156,18 @@ void TIM16_IRQHandler(void)
   */
 void TIM17_IRQHandler(void)
 {
+  
   /* USER CODE BEGIN TIM17_IRQn 0 */
+  static uint16_t timer17_counter;
 
+   if(LL_TIM_IsActiveFlag_UPDATE(TIM17)) {
+        LL_TIM_ClearFlag_UPDATE(TIM17);
+        if(timer17_counter++ >= 1000) { // 1s
+            timer17_counter = 0;
+            tim17_callback();
+        }
+        
+    }
   /* USER CODE END TIM17_IRQn 0 */
   /* USER CODE BEGIN TIM17_IRQn 1 */
 
@@ -171,11 +181,19 @@ void TIM17_IRQHandler(void)
 void USART2_IRQHandler(void)
 {
   /* USER CODE BEGIN USART2_IRQn 0 */
-
+   if(LL_USART_IsActiveFlag_RXNE(USART2)) {
+       // uint8_t data = LL_USART_ReceiveData8(USART2);
+       // bsp_uart_rx_handler(data); // 处理接收到的数据
+    }
   /* USER CODE END USART2_IRQn 0 */
   
   /* USER CODE BEGIN USART2_IRQn 1 */
-
+    // 其他中断处理（如错误标志检查）
+  if (LL_USART_IsActiveFlag_ORE(USART2) || LL_USART_IsActiveFlag_FE(USART2)) 
+  {
+      LL_USART_ClearFlag_ORE(USART2);  // 清除溢出错误标志
+      LL_USART_ClearFlag_FE(USART2);   // 清除帧错误标志
+  }
   /* USER CODE END USART2_IRQn 1 */
 }
 

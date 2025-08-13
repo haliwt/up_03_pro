@@ -100,8 +100,9 @@ int main(void)
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
 
-  //HAL_TIM_Base_Start_IT(&htim17);
+   LL_TIM_EnableCounter(TIM17);//HAL_TIM_Base_Start_IT(&htim17);
    gpro_t.rf_decod_id = 0xffff;
+   LL_USART_EnableIT_RXNE(USART2);
   freertos_handler();
 
   /* USER CODE END 2 */
