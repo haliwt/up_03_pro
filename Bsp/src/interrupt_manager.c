@@ -54,8 +54,9 @@ volatile uint8_t bit_count = 0;
         // åŒæ­¥ä¿¡å·æ£?æµ?
         if(up_dval > SYNC_MIN_US && up_dval < SYNC_MAX_US  && !gpro_t.rf_receive_data_success && rf_syn_flag==0) {
                 rf_syn_flag = 1;
-       
+               #if DEBUG
                gpro_t.rf_syn_signal_numbers++;
+			   #endif 
 			  
                
         }
@@ -69,7 +70,7 @@ volatile uint8_t bit_count = 0;
                 // æ•°æ®ä½è§£ç ?
                 if(dval > BIT0_MIN_US && dval < BIT0_MAX_US) {        // 0ä½?
                     g_remote_data = (g_remote_data << 1);
-                    //bit_count++;
+                  
 					    gpro_t.rf_recieve_numbers++;
                     if(gpro_t.rf_recieve_numbers >= BITS_IN_PACKET){
 						gpro_t.rf_receive_data_success=1;
@@ -79,7 +80,7 @@ volatile uint8_t bit_count = 0;
                 } 
                 else if(dval > BIT1_MIN_US && dval < BIT1_MAX_US) { // 1ä½?
                     g_remote_data = (g_remote_data << 1) | 0x01;
-                   // bit_count++;
+                  
 					          gpro_t.rf_recieve_numbers++;
                     if(gpro_t.rf_recieve_numbers >= BITS_IN_PACKET){
 						gpro_t.rf_receive_data_success=1;

@@ -89,6 +89,7 @@ volatile   uint32_t  rf_decod_id;
    uint8_t  rfPowerOnOff_soundFLag;
 
    uint8_t power_key_flag ;
+   uint8_t rf_receive_prcess_flag;
   
    uint8_t rf_receive_data_success;
 
@@ -98,6 +99,7 @@ volatile   uint32_t  rf_decod_id;
    uint8_t gTimer_adc_detected_time;
    uint8_t gTimer_power_on_times;
    uint8_t gTimer_switch_onoff;
+
 
     
 

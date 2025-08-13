@@ -126,11 +126,12 @@ static void vTaskMsgPro(void *pvParameters)
                 gpro_t.power_key_flag ++;
                
                 powerOnOff_handler();
+		       
                   
            }
             
-                 
-       sound_power_on_off_handler();
+        sound_power_on_off_handler();        
+      
 
       if(gpro_t.power_on == power_on ){
 
@@ -145,16 +146,15 @@ static void vTaskMsgPro(void *pvParameters)
              gpro_t.works_2_hours_timeout_flag=0;
              gpro_t.fan_warning_flag = 0;
               
-              // voice_power_off_sound();
-
-             
-        
               power_off_handler();
               led_off_fun();
             
               
-             
-          }
+       }
+	  if(gpro_t.gTimer_switch_onoff > 0 && gpro_t.rf_receive_prcess_flag == 1){
+			
+			 gpro_t.rf_receive_prcess_flag = 0;
+	  	}
 
     vTaskDelay(20);
              
@@ -179,10 +179,9 @@ static void vTaskStart(void *pvParameters)
 		//bsp_KeyScan();
     if(KEY_POWER_GetValue()  == KEY_DOWN){
 
-         vTaskDelay(pdMS_TO_TICKS(10));//osDelay(10); //WT.EDIT 2025.05.07
-		 if(KEY_POWER_GetValue()  == KEY_DOWN){
+        
              gpro_t.power_key_flag = 1;
-		 }
+	
     }
     else if(gpro_t.rf_complete_receive_flag  == 1 && dc_power_on_first==1){ //wirleless remote
 
