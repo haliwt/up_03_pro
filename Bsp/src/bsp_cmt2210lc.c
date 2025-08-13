@@ -20,7 +20,7 @@ uint32_t rf_remote_data ;
 *****************************************************************/
 void rfReceivedData_Handler(void)
 {
-
+    static uint8_t error_counter;
     if(checkRFCode_flag==0){
         gpro_t.powerOn_matchingId++;
         if(gpro_t.powerOn_matchingId ==1){
@@ -90,7 +90,9 @@ void rfReceivedData_Handler(void)
 			    rf_remote_data = g_remote_data;
 			   g_remote_data =0;
                rf_syn_flag=0;
-			 gpro_t.rf_syn_signal_numbers=0;
+			   gpro_t.rf_syn_signal_numbers=0;
+			   error_counter++;
+			   printf("error = %d\r\n",error_counter);
 
 		}
 	}

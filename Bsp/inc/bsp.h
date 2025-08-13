@@ -1,6 +1,8 @@
 #ifndef __BSP_H
 #define __BSP_H
 #include "main.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 #include "main.h"
 #include "cmsis_os.h"
@@ -32,6 +34,16 @@
 
 
 #define  USE_FreeRTOS      1
+
+#define Enable_EventRecorder 1
+
+
+	
+#if Enable_EventRecorder == 1
+	#include "EventRecorder.h"
+#endif
+
+
 
 #if USE_FreeRTOS == 1
 	//#include "FreeRTOS.h"
@@ -92,6 +104,9 @@ typedef struct process_t{
 extern PROCESS_T  gpro_t;
 
 extern uint8_t checkRFCode_flag;
+
+void bsp_init(void);
+
 
 void power_off_handler(void);
 

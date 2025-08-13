@@ -14,7 +14,7 @@ volatile extern uint32_t g_remote_data ; /* 红外接收到的数据 */
 
 void RF_ResetDecoder(void);
 
-
+void tim17_callback(void);
 
 #endif 
 

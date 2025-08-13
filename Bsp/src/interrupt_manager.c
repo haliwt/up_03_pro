@@ -35,7 +35,14 @@ volatile uint8_t rf_receive_complete = 0;
 volatile uint8_t bit_count = 0;
 
 //volatile uint8_t detected_rfSync_flag = 0; /* �?????测到遥控器代码标志位 */
-
+/************************************************************************************************
+*
+*Function Name:void bsp_init(void)
+*Function: 
+*Input Ref:
+*Return Ref:
+*
+**************************************************************************************************/
  void RF_ResetDecoder(void)// 				// 丢帧，重�?
  {
 
@@ -49,6 +56,7 @@ volatile uint8_t bit_count = 0;
                 rf_syn_flag = 1;
        
                gpro_t.rf_syn_signal_numbers++;
+			  
                
         }
       }
@@ -62,7 +70,7 @@ volatile uint8_t bit_count = 0;
                 if(dval > BIT0_MIN_US && dval < BIT0_MAX_US) {        // 0�?
                     g_remote_data = (g_remote_data << 1);
                     //bit_count++;
-					          gpro_t.rf_recieve_numbers++;
+					    gpro_t.rf_recieve_numbers++;
                     if(gpro_t.rf_recieve_numbers >= BITS_IN_PACKET){
 						gpro_t.rf_receive_data_success=1;
 						gpro_t.rf_complete_receive_flag = 1;
@@ -92,8 +100,15 @@ volatile uint8_t bit_count = 0;
             }
         }
 }
-
-  void tim17_callback(void)
+/************************************************************************************************
+*
+*Function Name:void bsp_init(void)
+*Function: 
+*Input Ref:
+*Return Ref:
+*
+**************************************************************************************************/
+void tim17_callback(void)
   {
     static uint16_t tm0 = 0;
     static uint8_t tm1 = 0;

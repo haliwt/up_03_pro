@@ -1,15 +1,27 @@
 #include "bsp.h"
 
 PROCESS_T  gpro_t;
+/**********************************************************************************************************
+*
+*Function Name:void bsp_init(void)
+*Function: 
+*Input Ref:
+*Return Ref:
+*
 
-//uint32_t rf_data;
+*********************************************************************************************************/
+void bsp_init(void)
+{
+   
+#if Enable_EventRecorder == 1  
+	/* ³õÊ¼»¯EventRecorder²¢¿ªÆô */
+	EventRecorderInitialize(EventRecordAll, 1U);
+	EventRecorderStart();
+#endif
+	
 
+}
 
-//uint8_t rf_rec_numbers;
-
-//uint32_t rf_id_1,rf_id_2;
-
-//uint8_t checkRFCode_flag;
 
 
 /*****************************************************************
