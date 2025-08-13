@@ -1,12 +1,12 @@
 #include "bsp.h"
 
-#define SYNC_MIN_US   6000    // 同步信号�?小时�?(us)
-#define SYNC_MAX_US   7500     // 同步信号�?大时�?(us)
+#define SYNC_MIN_US   6200    // 同步信号�?小时�?(us)
+#define SYNC_MAX_US   7200     // 同步信号�?大时�?(us)
 
 #define BIT0_MIN_US   180     // 0位最大时�?(us)
 #define BIT0_MAX_US   350     //  0位最大时�?(us)
 
-#define BIT1_MIN_US   400     // 1位最小时�?(us)
+#define BIT1_MIN_US   550     // 1位最小时�?(us)
 #define BIT1_MAX_US   700     // 1位最大时�?(us)
 
 #define BITS_IN_PACKET 25    // 数据位数
