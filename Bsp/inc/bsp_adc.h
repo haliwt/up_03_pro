@@ -7,7 +7,7 @@
 
 void fan_adc_dma_fun(void);
 
-
+void ADC_DMA_Polling(void);
 
 
 #endif 

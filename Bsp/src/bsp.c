@@ -11,7 +11,7 @@ PROCESS_T  gpro_t;
 **************************************************************************************************/
 void bsp_init(void)
 {
-   
+   ADC_DMA_Polling();
 #if Enable_EventRecorder == 1  
 	/* ³õÊ¼»¯EventRecorder²¢¿ªÆô */
 	EventRecorderInitialize(EventRecordAll, 1U);
@@ -140,8 +140,7 @@ void powerOnOff_handler(void)
 	  gpro_t.rfPowerOnOff_soundFLag =2;
 
 	}
-	//gpro_t.gTimer_switch_onoff = 0;
-	//gpro_t.gTimer_power_on_times=0;
+	
 
 }
 

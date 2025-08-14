@@ -28,7 +28,7 @@ void main_board_ctl_handler(uint8_t flag)
          }
          
       }      
-
+    fan_adc_dma_fun();
 }
 
 
