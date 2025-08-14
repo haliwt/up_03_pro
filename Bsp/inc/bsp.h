@@ -16,6 +16,7 @@
 #include "bsp_adc.h"
 #include "bsp_voice.h"
 #include "bsp_led.h"
+#include "bsp_time.h"
 #include "bsp_fan.h"
 #include "bsp_ultrasonic.h"
 #include "bsp_plasma.h"

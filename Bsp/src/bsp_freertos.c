@@ -136,7 +136,7 @@ static void vTaskMsgPro(void *pvParameters)
       if(gpro_t.power_on == power_on ){
 
     
-		    led_on_fun(); //WT.EDIT 2025.05.14
+		  led_on_fun(); //WT.EDIT 2025.05.14
 
          main_board_ctl_handler(gpro_t.works_2_hours_timeout_flag);
          device_works_time_counter_handler();
