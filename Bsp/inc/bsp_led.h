@@ -8,7 +8,7 @@
 
 #define GPIO_1_OPEN()       do{GPIO_1_GPIO_Port ->BSRR |= GPIO_1_Pin;}while(0)
 
-
+#define GPIO_LED_TOGGLE()    LL_GPIO_TogglePin(GPIO_1_GPIO_Port, GPIO_1_Pin); // ·­×ªµçÆ½
 
 
 typedef enum _led_state{

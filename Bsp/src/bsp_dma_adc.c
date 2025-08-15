@@ -7,6 +7,7 @@ volatile uint16_t gdma_voltage[1];
 static uint16_t adc_to_mv(uint16_t raw_adc) ;
 //__attribute__((aligned(4))) uint16_t gdma_adc_buf[2];// ?????????
 uint16_t  fan_adc_counter;
+uint8_t fan_counter ;
 void DMA_ADC_Init(void)
 {
     // 1. ????
@@ -108,6 +109,28 @@ void read_adc_dma_voltage(void)
 	   
        
 	   ADC_Read_DMA_Polling();
+
+           
+      if(gdma_voltage[0]< 86){
+            
+             fan_counter ++ ;    
+      }else if(gdma_voltage[0] > 86){
+
+            fan_counter=0;
+
+      }
+
+        if(fan_counter > 4 && gpro_t.fan_warning_flag == 0){
+          fan_counter =0;
+
+          gpro_t.fan_warning_flag = 1;
+
+         }
+
+    
+  
+  
+ 
       
      }
       

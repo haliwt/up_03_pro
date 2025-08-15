@@ -15,6 +15,25 @@ void fan_stop_fun(void)
 
 }
 
+/**
+ * 
+ * @brief  风扇故障处理函数
+ * @note   该函数用于处理风扇故障情况，例如停止风扇或发出警告。
+ * @param  None
+ * @return None
+ * @details 该函数可以在风扇检测到异常时调用，例如风
+ * 扇转速异常或风扇无法启动时。可以在函数内部添加具体的处理逻辑，如停止风扇、发出警告等。
+ */
+
+void fan_fault_handler(void)
+{
+   // GPIO_LED_TOGGLE() ;
+    GPIO_1_CLOSE() ;
+    vTaskDelay(pdMS_TO_TICKS(300));//osDelay(400);
+	  GPIO_1_OPEN();
+    vTaskDelay(pdMS_TO_TICKS(300));//osDelay(400)
+}
+
 
 
 
