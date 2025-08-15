@@ -97,6 +97,8 @@ void ADC_Read_DMA_Polling(void)
  * @brief  读取ADC电压值
  * @note   该函数会读取ADC转换后的电压值，并存储在全局变量gdma_voltage中。
  * @param  None 
+ * @return None
+ * @details 检测到0.2欧姆电阻
  */
 void read_adc_dma_voltage(void)
 {
