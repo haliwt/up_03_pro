@@ -11,7 +11,7 @@ PROCESS_T  gpro_t;
 **************************************************************************************************/
 void bsp_init(void)
 {
-   ADC_DMA_Polling();
+   DMA_ADC_Init();
 #if Enable_EventRecorder == 1  
 	/* ³õÊ¼»¯EventRecorder²¢¿ªÆô */
 	EventRecorderInitialize(EventRecordAll, 1U);
@@ -96,7 +96,7 @@ void sound_power_on_off_handler(void)
 	    gpro_t.works_2_hours_timeout_flag=0;
         gpro_t.fan_warning_flag = 0;
         gpro_t.gTimer_normal_run_main_function_times =10;
-
+        gdma_voltage[0] = 0; //WT.EDIT 2025.05.14
         led_on_fun();
         voice_power_on_sound();
 		
@@ -107,15 +107,10 @@ void sound_power_on_off_handler(void)
    
         gpro_t.power_on = power_off;
 		gpro_t.rfPowerOnOff_soundFLag=4;
-  
-      
-       
         led_off_fun();
         voice_power_off_sound();
-		
-      
-     
-  }
+	
+    }
    
  
 

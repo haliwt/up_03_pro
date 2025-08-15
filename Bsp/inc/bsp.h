@@ -18,6 +18,7 @@
 #include "bsp_led.h"
 #include "bsp_time.h"
 #include "bsp_fan.h"
+#include "bsp_dma_adc.h"
 #include "bsp_ultrasonic.h"
 #include "bsp_plasma.h"
 #include "bsp_key.h"
