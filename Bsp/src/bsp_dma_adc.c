@@ -102,7 +102,7 @@ void read_adc_dma_voltage(void)
     
     
 	fan_adc_counter++;
-	 if(fan_adc_counter > 400){
+	 if(fan_adc_counter > 400){ //400 ->8s
 		 
       fan_adc_counter =0;
 	   
