@@ -61,7 +61,7 @@ void rfReceivedData_theFirst433MHZ_Handler(void)
 			  gpro_t.rf_syn_signal_numbers=0;
 			  #endif 
 			  gpro_t.rf_recieve_numbers=0;
-              gpro_t.powerOn_matchingId =0;
+           //  gpro_t.powerOn_matchingId ++;
               g_remote_data=0;
               rf_syn_flag=0;
               gpro_t.rf_receive_data_success=0;
@@ -85,55 +85,20 @@ void rfReceivedData_theFirst433MHZ_Handler(void)
 	case 1:
 
 
-	   // rf_data= g_remote_data,433MHZ,protocol 1527,ID=20BIT ,24BIT;
-	    rf_data = g_remote_data & 0xFFFFFF;
-
-	    if(rf_data == gpro_t.rf_decod_id ){
-
-              if(gpro_t.rf_receive_prcess_flag ==0){
-	            gpro_t.power_key_flag = 1;
-				gpro_t.gTimer_switch_onoff=0;
+	 
+	          gpro_t.power_key_flag = 1;
+			  gpro_t.gTimer_switch_onoff=0;
 		
-			   gpro_t.rf_receive_prcess_flag = 1;
-			   rf_data = 0;
+			    // gpro_t.rf_receive_data_success=0;
+				// gpro_t.rf_complete_receive_flag = 0;
+				// gpro_t.rf_recieve_numbers=0;
+                //  rf_syn_flag = 0;
+		
 	          
-			    #if DEBUG 
-		        rf_rec_numbers =  gpro_t.rf_recieve_numbers;
-		        rf_remote_data = g_remote_data;
-	            rf_remote_syn_counter = gpro_t.rf_syn_signal_numbers;
-
-			    #endif 
-            }
-          
-	        
 			
-            gpro_t.rf_receive_data_success=0; 
-			gpro_t.rf_recieve_numbers=0;
-	        g_remote_data =0;
-			 printf("syn_conter = %d\r\n",rf_remote_syn_counter);
-	       
-	       // gpro_t.rf_syn_signal_numbers=0;
-           
-	       
-	     }
-		else{
-			  gpro_t.rf_receive_data_success=0;
-			  rf_syn_flag=0;
-              #if DEBUG
-		      printf("receive_num = %d\r\n",gpro_t.rf_recieve_numbers);
-              
-			   rf_remote_syn_counter = gpro_t.rf_syn_signal_numbers;
-			   printf("syn_error_conter = %d\r\n",rf_remote_syn_counter);
-			   rf_remote_data = g_remote_data;
 			  
-			   #endif 
-			 
-			   g_remote_data=0;
-               gpro_t.rf_recieve_numbers =0;
-			  
-			   // gpro_t.rf_syn_signal_numbers=0;
 
-		}
+		
 	      
 	   break;
 	}

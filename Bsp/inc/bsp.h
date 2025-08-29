@@ -101,6 +101,7 @@ volatile   uint32_t  rf_decod_id;
    uint8_t gTimer_adc_detected_time;
    uint8_t gTimer_power_on_times;
    uint8_t gTimer_switch_onoff;
+   uint8_t gTimer_rf_receive_counter;
 
 
     
