@@ -45,7 +45,7 @@ volatile uint8_t bit_count = 0;
 **************************************************************************************************/
  void RF_ResetDecoder(void)// 				// 丢帧，重�?
  {
-
+      DISABLE_INT();
       if(RF_KEY_CMT2210LC_GetValue() == 1) {  // 上升沿捕�? (当前是低电平)
             up_dval = LL_TIM_IC_GetCaptureCH1(TIM3);
             LL_TIM_IC_SetPolarity(TIM3, LL_TIM_CHANNEL_CH1, LL_TIM_IC_POLARITY_FALLING);
@@ -73,9 +73,10 @@ volatile uint8_t bit_count = 0;
                   
 					    gpro_t.rf_recieve_numbers++;
                     if(gpro_t.rf_recieve_numbers >= BITS_IN_PACKET){
-						gpro_t.rf_receive_data_success=1;
+					//	gpro_t.rf_receive_data_success=1;
 						gpro_t.rf_complete_receive_flag = 1;
-						bit_count=gpro_t.rf_recieve_numbers;
+						
+					
 					}
                 } 
                 else if(dval > BIT1_MIN_US && dval < BIT1_MAX_US) { // 1�?
@@ -83,23 +84,16 @@ volatile uint8_t bit_count = 0;
                   
 					          gpro_t.rf_recieve_numbers++;
                     if(gpro_t.rf_recieve_numbers >= BITS_IN_PACKET){
-						gpro_t.rf_receive_data_success=1;
+						        gpro_t.rf_receive_data_success=1;
 						gpro_t.rf_complete_receive_flag = 1;
-						bit_count=gpro_t.rf_recieve_numbers;
+				
 					}
                 }
                 
-//                // �?查是否接收完整数据包
-//                 if(gpro_t.rf_receive_data_success==1){//if(gpro_t.rf_recieve_numbers >= BITS_IN_PACKET) {
-//                      gpro_t.rf_complete_receive_flag = 1;
-//                     rf_syn_flag = 0;
-//                     bit_count=gpro_t.rf_recieve_numbers;
-//                   
-//              
-//                     
-//                 }
+
             }
         }
+        ENABLE_INT();
 }
 /************************************************************************************************
 *
