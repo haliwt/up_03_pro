@@ -189,7 +189,7 @@ static void vTaskStart(void *pvParameters)
               rfReceivedData_theFirst433MHZ_Handler();
 
      }
-    vTaskDelay(5);
+    vTaskDelay(20);
   }
 }
 /**********************************************************************************************************

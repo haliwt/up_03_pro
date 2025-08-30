@@ -31,7 +31,7 @@ void rfReceivedData_theFirst433MHZ_Handler(void)
   
         gpro_t.powerOn_matchingId++;
         if(gpro_t.powerOn_matchingId ==1){
-           rf_id_1 = g_remote_data & 0xFFFFFF;
+           rf_id_1 = g_remote_data & 0xFFF;
 
 		  #if DEBUG 
 		    id_data = g_remote_data & 0x0F; //ID_DATA,20BIT is synchronization signal.
@@ -47,7 +47,7 @@ void rfReceivedData_theFirst433MHZ_Handler(void)
         }
         else{
 
-           rf_id_2 = g_remote_data & 0xFFFFFF;
+           rf_id_2 = g_remote_data & 0xFFF;
 
           if(rf_id_1 == rf_id_2){ //&& rf_id_1 > 0xffff){
               gpro_t.rf_decod_id = rf_id_1;
@@ -86,7 +86,7 @@ void rfReceivedData_theFirst433MHZ_Handler(void)
 
 
 	   // rf_data= g_remote_data,433MHZ,protocol 1527,ID=20BIT ,24BIT;
-	    rf_data = g_remote_data & 0xFFFFFF;
+	    rf_data = g_remote_data & 0xFFF;
 
 	    if(rf_data == gpro_t.rf_decod_id ){
 

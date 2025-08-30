@@ -84,7 +84,7 @@ void ADC_Read_DMA_Polling(void)
 
     // 3. ?????(VREF=3.3V)
     gdma_voltage[0] = adc_to_mv(gdma_adc_buf[0]);  // IN0??
-//	printf("ADC_IN_0=%d\r\n",gdma_voltage[0]);
+	printf("ADC_IN_0=%d\r\n",gdma_voltage[0]);
     //gdma_voltage[1] = (gdma_adc_buf[1] * 3300) / 4095;  // IN1??
 	//printf("ADC_IN_1=%d\r\n",gdma_voltage[1]);
 
