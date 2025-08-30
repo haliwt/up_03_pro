@@ -40,7 +40,7 @@
 #define Enable_EventRecorder 1
 
 
-#define DEBUG     1
+#define DEBUG     0
 
 
 	
@@ -81,7 +81,7 @@ volatile   uint32_t  rf_decod_id;
    uint8_t works_2_hours_timeout_flag;
    uint8_t rf_complete_receive_flag;
    uint8_t rf_recieve_numbers;
-   uint8_t rf_syn_counter;
+  
   
 
    uint8_t set_timer_timing_value;

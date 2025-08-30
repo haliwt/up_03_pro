@@ -158,7 +158,7 @@ static void vTaskMsgPro(void *pvParameters)
 				gpro_t.rf_complete_receive_flag = 0;
 				gpro_t.rf_recieve_numbers=0;
         rf_syn_flag = 0;
-         gpro_t.rf_syn_counter=0;
+         
    
 
       }
