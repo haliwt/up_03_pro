@@ -31,7 +31,7 @@ volatile uint32_t up_dval = 0;
 volatile uint32_t dval = 0;
 volatile uint8_t rf_syn_flag = 0;
 volatile uint32_t g_remote_data = 0;
-uint8_t bit_num;
+uint32_t bit_num;
 
 
 static void rf_chec_receive_data(void);
@@ -80,7 +80,7 @@ static void rf_chec_receive_data(void);
                   
 					          gpro_t.rf_recieve_numbers++;
                     if(gpro_t.rf_recieve_numbers >= BITS_IN_PACKET){
-                       bit_num = gpro_t.rf_recieve_numbers;
+                      // bit_num = gpro_t.rf_recieve_numbers;
                       rf_chec_receive_data();
 					             
 				           }
@@ -90,7 +90,7 @@ static void rf_chec_receive_data(void);
                   
 					          gpro_t.rf_recieve_numbers++;
                     if(gpro_t.rf_recieve_numbers >= BITS_IN_PACKET){
-                        bit_num = gpro_t.rf_recieve_numbers;
+                       // bit_num = gpro_t.rf_recieve_numbers;
                       rf_chec_receive_data();
                        
 						         }
@@ -134,21 +134,23 @@ void tim17_callback(void)
 static void rf_chec_receive_data(void)
 {
   if(checkRFCode_flag==1){
-
-   // if(gpro_t.rf_decod_id== g_remote_data & 0xfff){
+    bit_num =  g_remote_data & 0xFFFFFF;
+   if(gpro_t.rf_decod_id== bit_num){
     gpro_t.power_key_flag = 1;
     gpro_t.rf_receive_data_success=1;
     gpro_t.rf_complete_receive_flag = 1;
     gpro_t.gTimer_rf_receive_counter=0;
  
-   // }          
-   // else {
-      // gpro_t.rf_receive_data_success=0;
-      // gpro_t.rf_complete_receive_flag = 0;
-      // gpro_t.rf_recieve_numbers=0;
-      // rf_syn_flag = 0;
+   }          
+   else {
+       gpro_t.rf_receive_data_success=0;
+      gpro_t.rf_complete_receive_flag = 0;
+      gpro_t.rf_recieve_numbers=0;
+      rf_syn_flag = 0;
+       gpro_t.rf_syn_counter=0;
 
-   // }
+    }
+
   }
   else{
    // gpro_t.rf_receive_data_success=1;
