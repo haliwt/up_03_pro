@@ -75,24 +75,23 @@ typedef struct process_t{
 volatile   uint32_t  rf_decod_id;
 
    uint8_t power_on;
+   uint8_t power_key_flag;
    uint8_t setHours;
    uint8_t setMinutes;
    uint8_t works_2_hours_timeout_flag;
    uint8_t rf_complete_receive_flag;
-
+   uint8_t rf_recieve_numbers;
+   uint8_t rf_syn_counter;
   
 
    uint8_t set_timer_timing_value;
    uint8_t fan_warning_flag;
-   uint8_t rf_recieve_numbers;
+ 
  
    uint8_t powerOn_matchingId;
    uint8_t rf_syn_signal_numbers;
    uint8_t  rfPowerOnOff_soundFLag;
 
-   uint8_t power_key_flag ;
-   uint8_t rf_receive_prcess_flag;
-  
    uint8_t rf_receive_data_success;
 
    uint8_t gTimer_normal_run_main_function_times;
@@ -101,6 +100,7 @@ volatile   uint32_t  rf_decod_id;
    uint8_t gTimer_adc_detected_time;
    uint8_t gTimer_power_on_times;
    uint8_t gTimer_switch_onoff;
+   uint8_t gTimer_rf_receive_counter;
 
 
     

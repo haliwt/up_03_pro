@@ -151,10 +151,17 @@ static void vTaskMsgPro(void *pvParameters)
             
               
        }
-	  if(gpro_t.gTimer_switch_onoff > 0 && gpro_t.rf_receive_prcess_flag == 1){
-			
-			 gpro_t.rf_receive_prcess_flag = 0;
-	  	}
+	
+      if(gpro_t.gTimer_rf_receive_counter > 0 && gpro_t.rf_complete_receive_flag ==1){
+
+        gpro_t.rf_receive_data_success=0;
+				gpro_t.rf_complete_receive_flag = 0;
+				gpro_t.rf_recieve_numbers=0;
+        rf_syn_flag = 0;
+         gpro_t.rf_syn_counter=0;
+   
+
+      }
 
     vTaskDelay(20);
              
@@ -183,12 +190,13 @@ static void vTaskStart(void *pvParameters)
              gpro_t.power_key_flag = 1;
 	
     }
-    else if(gpro_t.rf_complete_receive_flag  == 1 && dc_power_on_first==1){ //wirleless remote
+    // else if(gpro_t.rf_complete_receive_flag  == 1 && dc_power_on_first==1){ //wirleless remote
 
-              gpro_t.rf_complete_receive_flag ++;
-              rfReceivedData_theFirst433MHZ_Handler();
+    //           gpro_t.rf_complete_receive_flag ++;
+    //           gpro_t.gTimer_rf_receive_counter=0;
+    //           rfReceivedData_theFirst433MHZ_Handler();
 
-     }
+    //  }
     vTaskDelay(20);
   }
 }

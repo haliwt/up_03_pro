@@ -31,10 +31,10 @@ volatile uint32_t up_dval = 0;
 volatile uint32_t dval = 0;
 volatile uint8_t rf_syn_flag = 0;
 volatile uint32_t g_remote_data = 0;
-volatile uint8_t rf_receive_complete = 0;
-volatile uint8_t bit_count = 0;
+uint8_t bit_num;
 
-//volatile uint8_t detected_rfSync_flag = 0; /* �?????测到遥控器代码标志位 */
+
+static void rf_chec_receive_data(void);
 /************************************************************************************************
 *
 *Function Name:void bsp_init(void)
@@ -45,66 +45,66 @@ volatile uint8_t bit_count = 0;
 **************************************************************************************************/
  void RF_ResetDecoder(void)// 				// 丢帧，重�?
  {
-
+   
       if(RF_KEY_CMT2210LC_GetValue() == 1) {  // 上升沿捕�? (当前是低电平)
             up_dval = LL_TIM_IC_GetCaptureCH1(TIM3);
             LL_TIM_IC_SetPolarity(TIM3, LL_TIM_CHANNEL_CH1, LL_TIM_IC_POLARITY_FALLING);
             LL_TIM_SetCounter(TIM3, 0);
             
         // 同步信号�?�?
-        if(up_dval > SYNC_MIN_US && up_dval < SYNC_MAX_US  && !gpro_t.rf_receive_data_success && rf_syn_flag==0) {
+        if(up_dval > SYNC_MIN_US && up_dval < SYNC_MAX_US && rf_syn_flag==0) {
                 rf_syn_flag = 1;
+                gpro_t.rf_syn_counter++;
                #if DEBUG
-               gpro_t.rf_syn_signal_numbers++;
+              // gpro_t.rf_syn_signal_numbers++;
 			   #endif 
 			  
                
         }
+        else if( rf_syn_flag ==1){ //高电平持续的时间
+
+              
+
+
+        }
       }
-      else if(RF_KEY_CMT2210LC_GetValue() == 0){  // 下降沿捕�? (当前是高电平)
+      else if(RF_KEY_CMT2210LC_GetValue() == 0){  // 
             dval = LL_TIM_IC_GetCaptureCH1(TIM3);
             LL_TIM_IC_SetPolarity(TIM3, LL_TIM_CHANNEL_CH1, LL_TIM_IC_POLARITY_RISING);
             LL_TIM_SetCounter(TIM3, 0);
             
-            if(rf_syn_flag && !gpro_t.rf_receive_data_success) {
+            if(rf_syn_flag && !gpro_t.rf_receive_data_success && (gpro_t.rf_syn_counter ==1)) {
                 // 数据位解�?
                 if(dval > BIT0_MIN_US && dval < BIT0_MAX_US) {        // 0�?
                     g_remote_data = (g_remote_data << 1);
                   
-					    gpro_t.rf_recieve_numbers++;
+					          gpro_t.rf_recieve_numbers++;
                     if(gpro_t.rf_recieve_numbers >= BITS_IN_PACKET){
-						gpro_t.rf_receive_data_success=1;
-						gpro_t.rf_complete_receive_flag = 1;
-						bit_count=gpro_t.rf_recieve_numbers;
-					}
+                       bit_num = gpro_t.rf_recieve_numbers;
+                      rf_chec_receive_data();
+					             
+				           }
                 } 
                 else if(dval > BIT1_MIN_US && dval < BIT1_MAX_US) { // 1�?
                     g_remote_data = (g_remote_data << 1) | 0x01;
                   
 					          gpro_t.rf_recieve_numbers++;
                     if(gpro_t.rf_recieve_numbers >= BITS_IN_PACKET){
-						gpro_t.rf_receive_data_success=1;
-						gpro_t.rf_complete_receive_flag = 1;
-						bit_count=gpro_t.rf_recieve_numbers;
-					}
+                        bit_num = gpro_t.rf_recieve_numbers;
+                      rf_chec_receive_data();
+                       
+						         }
                 }
                 
-//                // �?查是否接收完整数据包
-//                 if(gpro_t.rf_receive_data_success==1){//if(gpro_t.rf_recieve_numbers >= BITS_IN_PACKET) {
-//                      gpro_t.rf_complete_receive_flag = 1;
-//                     rf_syn_flag = 0;
-//                     bit_count=gpro_t.rf_recieve_numbers;
-//                   
-//              
-//                     
-//                 }
+
             }
         }
+       
 }
 /************************************************************************************************
 *
 *Function Name:void bsp_init(void)
-*Function: 
+*Function: 1ms this timer 
 *Input Ref:
 *Return Ref:
 *
@@ -118,6 +118,7 @@ void tim17_callback(void)
        gpro_t.gTimer_power_on_times++;
        gpro_t.gTimer_switch_onoff++;
        gpro_t.gTimer_adc_detected_time++;
+       gpro_t.gTimer_rf_receive_counter++;
 
       if(tm1 > 59){ //1 minute.
          tm1 =0;
@@ -130,7 +131,37 @@ void tim17_callback(void)
     }
     
 
+static void rf_chec_receive_data(void)
+{
+  if(checkRFCode_flag==1){
 
+   // if(gpro_t.rf_decod_id== g_remote_data & 0xfff){
+    gpro_t.power_key_flag = 1;
+    gpro_t.rf_receive_data_success=1;
+    gpro_t.rf_complete_receive_flag = 1;
+    gpro_t.gTimer_rf_receive_counter=0;
+ 
+   // }          
+   // else {
+      // gpro_t.rf_receive_data_success=0;
+      // gpro_t.rf_complete_receive_flag = 0;
+      // gpro_t.rf_recieve_numbers=0;
+      // rf_syn_flag = 0;
+
+   // }
+  }
+  else{
+   // gpro_t.rf_receive_data_success=1;
+    //gpro_t.rf_complete_receive_flag = 1;
+     gpro_t.rf_receive_data_success=0;
+      gpro_t.rf_complete_receive_flag = 0;
+      gpro_t.rf_recieve_numbers=0;
+      rf_syn_flag = 0;
+       gpro_t.rf_syn_counter=0;
+    rfReceivedData_theFirst433MHZ_Handler();
+  }
+
+}
 
   
 

@@ -87,7 +87,8 @@ void sound_power_on_off_handler(void)
 {
 
    if(gpro_t.rfPowerOnOff_soundFLag==1){
-          
+
+   
     
 		gpro_t.power_on = power_on;
         
@@ -99,20 +100,24 @@ void sound_power_on_off_handler(void)
         gdma_voltage[0] = 0; //WT.EDIT 2025.05.14
         led_on_fun();
         voice_power_on_sound();
+      
 		
         
      
    	}
    else if(gpro_t.rfPowerOnOff_soundFLag==2){
-   
+
+       
         gpro_t.power_on = power_off;
 		gpro_t.rfPowerOnOff_soundFLag=4;
         led_off_fun();
         voice_power_off_sound();
+
+       
 	
     }
    
- 
+    	   
 
 }
 /*****************************************************************

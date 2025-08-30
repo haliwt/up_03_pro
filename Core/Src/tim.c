@@ -122,7 +122,7 @@ void MX_TIM3_Init(void)
   LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /* TIM3 interrupt Init */
-  NVIC_SetPriority(TIM3_IRQn, 0);
+  NVIC_SetPriority(TIM3_IRQn, 1);
   NVIC_EnableIRQ(TIM3_IRQn);
 
   /* USER CODE BEGIN TIM3_Init 1 */
@@ -130,7 +130,7 @@ void MX_TIM3_Init(void)
   /* USER CODE END TIM3_Init 1 */
   TIM_InitStruct.Prescaler = 63;
   TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;
-  TIM_InitStruct.Autoreload = 65535;
+  TIM_InitStruct.Autoreload = 9999; //F =1MZ/(1+9999)=1x10^(-4) T =1us
   TIM_InitStruct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV1;
   LL_TIM_Init(TIM3, &TIM_InitStruct);
   LL_TIM_DisableARRPreload(TIM3);
@@ -149,6 +149,7 @@ void MX_TIM3_Init(void)
     // 使锟斤拷通锟斤拷锟斤拷锟斤拷锟斤拷锟�
     LL_TIM_CC_EnableChannel(TIM3, LL_TIM_CHANNEL_CH1);
     LL_TIM_EnableCounter(TIM3);
+  //  LL_TIM_EnableIT_UPDATE(TIM3);
    // NVIC_SetPriority(TIM3_IRQn, 0);
    // NVIC_EnableIRQ(TIM3_IRQn);
   /* USER CODE END TIM3_Init 2 */
