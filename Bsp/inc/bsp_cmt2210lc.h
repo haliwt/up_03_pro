@@ -15,7 +15,7 @@
 
 //#define RF_KEY_CMT2210LC_GetValue()     (((RF_KEY_GPIO_Port)->IDR & (1UL << (RF_KEY_Pin))) ? 1U : 0U)
 
-extern uint8_t checkRFCode_flag; 
+
 void rfReceivedData_theFirst433MHZ_Handler(void);
 
 

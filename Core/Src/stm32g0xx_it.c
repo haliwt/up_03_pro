@@ -136,14 +136,14 @@ void DMA1_Channel2_3_IRQHandler(void)
 void TIM3_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM3_IRQn 0 */
-  
-  // RF receive 
+  // ������CC1OF������̫�쵼�¶��¼���
 	 if(LL_TIM_IsActiveFlag_CC1(TIM3)) {
         LL_TIM_ClearFlag_CC1(TIM3);
-	      RF_ResetDecoder(); 				// ��֡������ͬ��
-        
+	 
+		
+	 
+		 RF_ResetDecoder(); 				// ��֡������ͬ��
 	 }
-  
 
 
   /* USER CODE END TIM3_IRQn 0 */
@@ -177,11 +177,11 @@ void TIM17_IRQHandler(void)
    if(LL_TIM_IsActiveFlag_UPDATE(TIM17)) {
         LL_TIM_ClearFlag_UPDATE(TIM17);
 	     timer17_counter++;
-      if(timer17_counter > 999){
+         if(timer17_counter > 999){
 			 timer17_counter=0;
          tim17_callback();
 
-      }
+         }
        
         
     }
@@ -200,15 +200,15 @@ void USART2_IRQHandler(void)
   /* USER CODE BEGIN USART2_IRQn 0 */
    if(LL_USART_IsActiveFlag_RXNE(USART2)) {
        // uint8_t data = LL_USART_ReceiveData8(USART2);
-       // bsp_uart_rx_handler(data); // ������յ������ￄ1�7
+       // bsp_uart_rx_handler(data); // ������յ�������
     }
   /* USER CODE END USART2_IRQn 0 */
   
   /* USER CODE BEGIN USART2_IRQn 1 */
-    // �����жϴ���������־��飄1�7
+    // �����жϴ���������־��飩
   if (LL_USART_IsActiveFlag_ORE(USART2) || LL_USART_IsActiveFlag_FE(USART2)) 
   {
-      LL_USART_ClearFlag_ORE(USART2);  // �����������ք1�7
+      LL_USART_ClearFlag_ORE(USART2);  // �����������־
       LL_USART_ClearFlag_FE(USART2);   // ���֡�����־
   }
   /* USER CODE END USART2_IRQn 1 */

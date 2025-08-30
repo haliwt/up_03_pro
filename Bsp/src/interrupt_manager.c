@@ -45,7 +45,7 @@ volatile uint8_t bit_count = 0;
 **************************************************************************************************/
  void RF_ResetDecoder(void)// 				// 丢帧，重�?
  {
-   
+      
       if(RF_KEY_CMT2210LC_GetValue() == 1) {  // 上升沿捕�? (当前是低电平)
             up_dval = LL_TIM_IC_GetCaptureCH1(TIM3);
             LL_TIM_IC_SetPolarity(TIM3, LL_TIM_CHANNEL_CH1, LL_TIM_IC_POLARITY_FALLING);
@@ -55,7 +55,7 @@ volatile uint8_t bit_count = 0;
         if(up_dval > SYNC_MIN_US && up_dval < SYNC_MAX_US  && !gpro_t.rf_receive_data_success && rf_syn_flag==0) {
                 rf_syn_flag = 1;
                #if DEBUG
-              // gpro_t.rf_syn_signal_numbers++;
+               gpro_t.rf_syn_signal_numbers++;
 			   #endif 
 			  
                
@@ -71,64 +71,44 @@ volatile uint8_t bit_count = 0;
                 if(dval > BIT0_MIN_US && dval < BIT0_MAX_US) {        // 0�?
                     g_remote_data = (g_remote_data << 1);
                   
-					          gpro_t.rf_recieve_numbers++;
+					    gpro_t.rf_recieve_numbers++;
                     if(gpro_t.rf_recieve_numbers >= BITS_IN_PACKET){
-                        if(checkRFCode_flag==1){
-                        gpro_t.rf_decod_id== g_remote_data & 0xfff;
-                        gpro_t.rf_receive_data_success=1;
-						            gpro_t.rf_complete_receive_flag = 1;
-                    
-                     }else if(gpro_t.powerOn_matchingId ==2){
-                        gpro_t.rf_receive_data_success=0;
-						            gpro_t.rf_complete_receive_flag = 0;
-                          gpro_t.rf_recieve_numbers=0;
-                        rf_syn_flag = 0;
-
-                     }
-                     else{
-                        gpro_t.rf_receive_data_success=1;
-						            gpro_t.rf_complete_receive_flag = 1;
-
-                     }
-					
-					
-					        }
+						gpro_t.rf_receive_data_success=1;
+						gpro_t.rf_complete_receive_flag = 1;
+						//bit_count=gpro_t.rf_recieve_numbers;
+					//	bit_count= gpro_t.rf_syn_signal_numbers;//gpro_t.rf_recieve_numbers
+					//	gpro_t.rf_syn_signal_numbers=0;
+					}
                 } 
                 else if(dval > BIT1_MIN_US && dval < BIT1_MAX_US) { // 1�?
                     g_remote_data = (g_remote_data << 1) | 0x01;
                   
 					          gpro_t.rf_recieve_numbers++;
                     if(gpro_t.rf_recieve_numbers >= BITS_IN_PACKET){
-                     if(checkRFCode_flag==1){
-                        gpro_t.rf_decod_id== g_remote_data & 0xfff;
-                        gpro_t.rf_receive_data_success=1;
-						            gpro_t.rf_complete_receive_flag = 1;
-                     }else if(gpro_t.powerOn_matchingId ==2){
-                        gpro_t.rf_receive_data_success=0;
-						            gpro_t.rf_complete_receive_flag = 0;
-                          gpro_t.rf_recieve_numbers=0;
-                        rf_syn_flag = 0;
-
-                     }
-                     else{
-                        gpro_t.rf_receive_data_success=1;
-						            gpro_t.rf_complete_receive_flag = 1;
-
-                     }
-						       
-				
+						        gpro_t.rf_receive_data_success=1;
+						gpro_t.rf_complete_receive_flag = 1;
+					//	bit_count= gpro_t.rf_syn_signal_numbers;//gpro_t.rf_recieve_numbers
+					//	 gpro_t.rf_syn_signal_numbers=0;
 					}
                 }
                 
-
+//                // �?查是否接收完整数据包
+//                 if(gpro_t.rf_receive_data_success==1){//if(gpro_t.rf_recieve_numbers >= BITS_IN_PACKET) {
+//                      gpro_t.rf_complete_receive_flag = 1;
+//                     rf_syn_flag = 0;
+//                     bit_count=gpro_t.rf_recieve_numbers;
+//                   
+//              
+//                     
+//                 }
             }
         }
-       
+        
 }
 /************************************************************************************************
 *
 *Function Name:void bsp_init(void)
-*Function: 1ms this timer 
+*Function: 
 *Input Ref:
 *Return Ref:
 *
@@ -142,7 +122,6 @@ void tim17_callback(void)
        gpro_t.gTimer_power_on_times++;
        gpro_t.gTimer_switch_onoff++;
        gpro_t.gTimer_adc_detected_time++;
-       gpro_t.gTimer_rf_receive_counter++;
 
       if(tm1 > 59){ //1 minute.
          tm1 =0;
