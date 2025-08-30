@@ -25,7 +25,7 @@ void rfReceivedData_theFirst433MHZ_Handler(void)
   
         gpro_t.powerOn_matchingId++;
         if(gpro_t.powerOn_matchingId ==1){
-           rf_id_1 = g_remote_data & 0xFFF;
+           rf_id_1 = g_remote_data ;
 
 		 
 		    gpro_t.rf_recieve_numbers=0;
@@ -36,11 +36,12 @@ void rfReceivedData_theFirst433MHZ_Handler(void)
         }
         else{
 
-           rf_id_2 = g_remote_data & 0xFFF;
+           rf_id_2 = g_remote_data ;
 
           if(rf_id_1 == rf_id_2){ //&& rf_id_1 > 0xffff){
-              gpro_t.rf_decod_id = rf_id_1& 0xFFF;
-               rf_data= rf_id_2;
+              gpro_t.rf_decod_id = rf_id_1;
+                 rf_data=rf_id_1;
+              gpro_t.rf_decod_id = gpro_t.rf_decod_id & 0xFFFFFF ;
               checkRFCode_flag=1;
 		         gpro_t.power_key_flag = 1;
               gpro_t.rf_recieve_numbers=0;
