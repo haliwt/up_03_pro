@@ -136,11 +136,14 @@ void DMA1_Channel2_3_IRQHandler(void)
 void TIM3_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM3_IRQn 0 */
+  
   // RF receive 
 	 if(LL_TIM_IsActiveFlag_CC1(TIM3)) {
         LL_TIM_ClearFlag_CC1(TIM3);
 	      RF_ResetDecoder(); 				// ��֡������ͬ��
+        
 	 }
+  
 
 
   /* USER CODE END TIM3_IRQn 0 */

@@ -45,7 +45,7 @@ volatile uint8_t bit_count = 0;
 **************************************************************************************************/
  void RF_ResetDecoder(void)// 				// 丢帧，重�?
  {
-      DISABLE_INT();
+   
       if(RF_KEY_CMT2210LC_GetValue() == 1) {  // 上升沿捕�? (当前是低电平)
             up_dval = LL_TIM_IC_GetCaptureCH1(TIM3);
             LL_TIM_IC_SetPolarity(TIM3, LL_TIM_CHANNEL_CH1, LL_TIM_IC_POLARITY_FALLING);
@@ -123,7 +123,7 @@ volatile uint8_t bit_count = 0;
 
             }
         }
-        ENABLE_INT();
+       
 }
 /************************************************************************************************
 *
