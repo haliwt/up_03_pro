@@ -71,7 +71,7 @@ volatile uint8_t bit_count = 0;
                 if(dval > BIT0_MIN_US && dval < BIT0_MAX_US) {        // 0�?
                     g_remote_data = (g_remote_data << 1);
                   
-					    gpro_t.rf_recieve_numbers++;
+					          gpro_t.rf_recieve_numbers++;
                     if(gpro_t.rf_recieve_numbers >= BITS_IN_PACKET){
                         if(checkRFCode_flag==1){
                         gpro_t.rf_decod_id== g_remote_data & 0xfff;

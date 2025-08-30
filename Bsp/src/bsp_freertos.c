@@ -151,11 +151,7 @@ static void vTaskMsgPro(void *pvParameters)
             
               
        }
-	  if(gpro_t.gTimer_switch_onoff > 0 && gpro_t.rf_receive_prcess_flag == 1){
-			
-			 gpro_t.rf_receive_prcess_flag = 0;
-	  	}
-
+	
       if(gpro_t.gTimer_rf_receive_counter > 0 && gpro_t.rf_complete_receive_flag ==2){
 
         gpro_t.rf_receive_data_success=0;
@@ -200,7 +196,7 @@ static void vTaskStart(void *pvParameters)
               rfReceivedData_theFirst433MHZ_Handler();
 
      }
-    vTaskDelay(20);
+    vTaskDelay(10);
   }
 }
 /**********************************************************************************************************
