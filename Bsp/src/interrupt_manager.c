@@ -116,9 +116,9 @@ void tim17_callback(void)
      gpro_t.gTimer_normal_run_main_function_times++;
     
        gpro_t.gTimer_power_on_times++;
-       gpro_t.gTimer_switch_onoff++;
+     
        gpro_t.gTimer_adc_detected_time++;
-       gpro_t.gTimer_rf_receive_counter++;
+      
 
       if(tm1 > 59){ //1 minute.
          tm1 =0;
@@ -136,9 +136,10 @@ static void rf_chec_receive_data(void)
   if(checkRFCode_flag==1){
    bit_num =  g_remote_data & 0xFFFFFF;
    if(gpro_t.rf_decod_id== bit_num){
-    gpro_t.power_key_flag = 1;
+    //gpro_t.power_key_flag = 1;
     gpro_t.rf_complete_receive_flag = 1;
     gpro_t.gTimer_rf_receive_counter=0;
+    gpro_t.rfPowerOnOff_soundFLag=1;
  
    }          
    else {
@@ -146,7 +147,7 @@ static void rf_chec_receive_data(void)
       gpro_t.rf_complete_receive_flag = 0;
       gpro_t.rf_recieve_numbers=0;
       rf_syn_flag = 0;
-       
+      gpro_t.rfPowerOnOff_soundFLag=0; 
 
     }
 
@@ -156,6 +157,7 @@ static void rf_chec_receive_data(void)
       gpro_t.rf_complete_receive_flag = 0;
       gpro_t.rf_recieve_numbers=0;
       rf_syn_flag = 0;
+     
        
     rfReceivedData_theFirst433MHZ_Handler();
   }
@@ -281,12 +283,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
       tm0=0;
       tm1++;
 
-    //  gpro_t.gTimer_adc_detected_time++;
+  
    
       gpro_t.gTimer_normal_run_main_function_times++;
-   //   gpro_t.gTimer_timer_time_long_key ++;
+ 
       gpro_t.gTimer_power_on_times++;
-       gpro_t.gTimer_switch_onoff++;
+      
 
       if(tm1 > 59){ //1 minute.
          tm1 =0;

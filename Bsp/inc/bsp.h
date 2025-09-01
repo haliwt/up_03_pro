@@ -64,7 +64,7 @@
 
 typedef enum _power_on_state{
 
-   power_off=1,
+   power_off,
    power_on,
 
 }power_on_state;
@@ -86,10 +86,7 @@ volatile   uint32_t  rf_decod_id;
 
    uint8_t set_timer_timing_value;
    uint8_t fan_warning_flag;
- 
- 
    uint8_t powerOn_matchingId;
-   uint8_t rf_syn_signal_numbers;
    uint8_t  rfPowerOnOff_soundFLag;
 
    uint8_t rf_receive_data_success;
@@ -99,8 +96,8 @@ volatile   uint32_t  rf_decod_id;
    uint8_t gTimer_works_total_times_minutes;
    uint8_t gTimer_adc_detected_time;
    uint8_t gTimer_power_on_times;
-   uint8_t gTimer_switch_onoff;
-   uint8_t gTimer_rf_receive_counter;
+
+   uint16_t gTimer_rf_receive_counter;
 
 
     

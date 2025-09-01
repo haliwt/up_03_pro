@@ -177,6 +177,7 @@ void TIM17_IRQHandler(void)
    if(LL_TIM_IsActiveFlag_UPDATE(TIM17)) {
         LL_TIM_ClearFlag_UPDATE(TIM17);
 	     timer17_counter++;
+        gpro_t.gTimer_rf_receive_counter++;
       if(timer17_counter > 999){
 			 timer17_counter=0;
          tim17_callback();
