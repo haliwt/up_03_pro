@@ -84,7 +84,9 @@ void ADC_Read_DMA_Polling(void)
 
     // 3. ?????(VREF=3.3V)
     gdma_voltage[0] = adc_to_mv(gdma_adc_buf[0]);  // IN0??
-//	printf("ADC_IN_0=%d\r\n",gdma_voltage[0]);
+    #if 1 //DEBUG 
+	    printf("ADC_IN_0=%d\r\n",gdma_voltage[0]);
+    #endif 
     //gdma_voltage[1] = (gdma_adc_buf[1] * 3300) / 4095;  // IN1??
 	//printf("ADC_IN_1=%d\r\n",gdma_voltage[1]);
 
@@ -103,9 +105,11 @@ void ADC_Read_DMA_Polling(void)
 void read_adc_dma_voltage(void)
 {
     
-    
+    static uint8_t read_fault_counter;
+
+   
 	fan_adc_counter++;
-	 if(fan_adc_counter > 400){ //400 ->8s
+	 if(fan_adc_counter > 500){ //400 ->8s
 		 
       fan_adc_counter =0;
 	   
@@ -115,29 +119,33 @@ void read_adc_dma_voltage(void)
            
       if(gdma_voltage[0]< 86){
             
-             fan_counter ++ ;    
+             fan_counter ++ ; 
+
       }else if(gdma_voltage[0] > 86){
 
             fan_counter=0;
+            if(gpro_t.fan_warning_flag == 1){
+                  read_fault_counter++;
+                 if(read_fault_counter > 6){
+                  read_fault_counter =0;
+                 gpro_t.fan_warning_flag = 0;
+            }
 
-      }
+            }
+     }
 
-        if(fan_counter > 4 && gpro_t.fan_warning_flag == 0){
+     if(fan_counter > 6 && gpro_t.fan_warning_flag == 0){
           fan_counter =0;
 
           gpro_t.fan_warning_flag = 1;
+   
+       
 
-         }
-
-    
-  
-  
- 
-      
+        }
      }
+     
       
-
-   }
+}
 
 
 /**********************************************************

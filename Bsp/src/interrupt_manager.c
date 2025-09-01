@@ -115,10 +115,10 @@ void tim17_callback(void)
      tm1++;
      gpro_t.gTimer_normal_run_main_function_times++;
     
-       gpro_t.gTimer_power_on_times++;
+      // gpro_t.gTimer_power_on_times++;
      
-       gpro_t.gTimer_adc_detected_time++;
-      
+     //  gpro_t.gTimer_adc_detected_time++;
+       gpro_t.gTimer_led_blink_counter++;
 
       if(tm1 > 59){ //1 minute.
          tm1 =0;

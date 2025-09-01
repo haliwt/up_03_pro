@@ -135,8 +135,9 @@ static void vTaskMsgPro(void *pvParameters)
 
       if(gpro_t.power_on == power_on ){
 
-    
-		    led_on_fun(); //WT.EDIT 2025.05.14
+        if(gpro_t.fan_warning_flag ==0){
+		      led_on_fun(); //WT.EDIT 2025.05.14
+        }
 
          main_board_ctl_handler(gpro_t.works_2_hours_timeout_flag);
          device_works_time_counter_handler();
@@ -169,11 +170,12 @@ static void vTaskMsgPro(void *pvParameters)
       
  }
 /**********************************************************************************************************
-*	�????1�????7 �????1�????7 �????1�????7: vTaskStart
+ * 
+*	Funtion Name:
 *	功能说明: 启动任务，也就是朢�高优先级任务，这里用作按键扫描��????1�????7
-*	�????1�????7    �????1�????7: pvParameters 是在创建该任务时传��的形参
-*	�????1�????7 �????1�????7 �????1�????7: �????1�????7
-*   �????1�????7 �????1�????7 �????1�????7: 3  
+*	Input Ref: pvParameters 是在创建该任务时传��的形参
+*	Return Ref:
+*  
 **********************************************************************************************************/
 static void vTaskStart(void *pvParameters)
 {
@@ -186,8 +188,7 @@ static void vTaskStart(void *pvParameters)
 		//bsp_KeyScan();
     if(KEY_POWER_GetValue()  == KEY_DOWN){
 
-        
-             gpro_t.power_key_flag = 1;
+        gpro_t.power_key_flag = 1;
 	
     }
      

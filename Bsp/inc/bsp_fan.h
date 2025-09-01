@@ -19,7 +19,7 @@
 
 void fan_output_fun(void);
 void fan_stop_fun(void);
-
+void fan_fault_handler(void);
 
 
 #endif 

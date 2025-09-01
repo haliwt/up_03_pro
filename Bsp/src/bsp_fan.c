@@ -27,11 +27,11 @@ void fan_stop_fun(void)
 
 void fan_fault_handler(void)
 {
-   // GPIO_LED_TOGGLE() ;
-    GPIO_1_CLOSE() ;
-    vTaskDelay(pdMS_TO_TICKS(300));//osDelay(400);
-	  GPIO_1_OPEN();
-    vTaskDelay(pdMS_TO_TICKS(300));//osDelay(400)
+  if(gpro_t.gTimer_led_blink_counter > 0){
+    gpro_t.gTimer_led_blink_counter=0;
+    GPIO_LED_TOGGLE() ;
+  
+  }
 }
 
 

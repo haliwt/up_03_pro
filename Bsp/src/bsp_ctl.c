@@ -26,9 +26,9 @@ void main_board_ctl_handler(uint8_t flag)
             ultra_output_fun();
 
          }
-         
-      }      
-    fan_adc_dma_fun();
+        fan_adc_dma_fun();
+    }      
+   
 }
 
 

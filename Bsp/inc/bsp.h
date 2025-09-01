@@ -94,8 +94,9 @@ volatile   uint32_t  rf_decod_id;
    uint8_t gTimer_normal_run_main_function_times;
    uint8_t gTimer_timer_time_long_key ;
    uint8_t gTimer_works_total_times_minutes;
-   uint8_t gTimer_adc_detected_time;
-   uint8_t gTimer_power_on_times;
+  // uint8_t gTimer_adc_detected_time;
+   //uint8_t gTimer_power_on_times;
+   uint8_t gTimer_led_blink_counter;
 
    uint16_t gTimer_rf_receive_counter;
 
