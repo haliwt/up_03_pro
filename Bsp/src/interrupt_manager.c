@@ -47,8 +47,8 @@ static void rf_chec_receive_data(void);
  {
    
       if(GPIOA->IDR & GPIO_IDR_ID6) {  // 上升沿捕�? (当前是低电平)
-            up_dval = LL_TIM_IC_GetCaptureCH1(TIM3);
-            LL_TIM_IC_SetPolarity(TIM3, LL_TIM_CHANNEL_CH1, LL_TIM_IC_POLARITY_FALLING);
+            up_dval = TIM3->CCR1;//up_dval = LL_TIM_IC_GetCaptureCH1(TIM3);
+            TIM3->CCER =(TIM3->CCER & ~TIM_CCER_CC1NP)|TIM_CCER_CC1P;//LL_TIM_IC_SetPolarity(TIM3, LL_TIM_CHANNEL_CH1, LL_TIM_IC_POLARITY_FALLING);
             TIM3->CNT = 0; // 清零计数器//LL_TIM_SetCounter(TIM3, 0);
             
         // 同步信号�?�?
@@ -69,8 +69,8 @@ static void rf_chec_receive_data(void);
         }
       }
       else{  // 
-            dval = LL_TIM_IC_GetCaptureCH1(TIM3);
-            LL_TIM_IC_SetPolarity(TIM3, LL_TIM_CHANNEL_CH1, LL_TIM_IC_POLARITY_RISING);
+            dval = TIM3->CCR1 ;//dval = LL_TIM_IC_GetCaptureCH1(TIM3);
+            TIM3->CCER &=~(TIM_CCER_CC1P | TIM_CCER_CC1NP);//LL_TIM_IC_SetPolarity(TIM3, LL_TIM_CHANNEL_CH1, LL_TIM_IC_POLARITY_RISING);
               TIM3->CNT = 0; // 清零计数器//LL_TIM_SetCounter(TIM3, 0);
             
             if(rf_syn_flag && !gpro_t.rf_receive_data_success) {
