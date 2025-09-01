@@ -40,13 +40,14 @@ void rfReceivedData_theFirst433MHZ_Handler(void)
 
           if(rf_id_1 == rf_id_2){ //&& rf_id_1 > 0xffff){
               gpro_t.rf_decod_id = rf_id_1;
-             // gpro_t.rf_decod_id = gpro_t.rf_decod_id & 0x0FFFFF ;
+         
               checkRFCode_flag=1;
-		        // gpro_t.power_key_flag = 1;
+		         
              gpro_t.rf_complete_receive_flag = 1;
+             gpro_t.rfPowerOnOff_soundFLag =1;
              
-              gpro_t.rfPowerOnOff_soundFLag =1;
-              g_remote_data=0;
+              gpro_t.gTimer_rf_receive_counter=0;
+             
              
              
           }

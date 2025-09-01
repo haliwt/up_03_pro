@@ -14,7 +14,7 @@
 void main_board_ctl_handler(uint8_t flag)
 {
     //TODO
-   
+
     if(flag == 0){ //works 2 hours times lable .
     
 
@@ -27,7 +27,12 @@ void main_board_ctl_handler(uint8_t flag)
 
          }
         fan_adc_dma_fun();
-    }      
+    }
+    else{
+     
+         fan_stop_fun();
+      
+    }     
    
 }
 

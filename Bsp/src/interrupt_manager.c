@@ -54,19 +54,7 @@ static void rf_chec_receive_data(void);
         // 同步信号�?�?
         if(up_dval > SYNC_MIN_US && up_dval < SYNC_MAX_US && rf_syn_flag==0) {
                 rf_syn_flag = 1;
-                
-               #if DEBUG
-              // gpro_t.rf_syn_signal_numbers++;
-			   #endif 
-			  
-               
-        }
-        else if( rf_syn_flag ==1){ //高电平持续的时间
-
-              
-
-
-        }
+            }
       }
       else{  // 
             dval = TIM3->CCR1 ;//dval = LL_TIM_IC_GetCaptureCH1(TIM3);
@@ -133,7 +121,7 @@ void tim17_callback(void)
 
 static void rf_chec_receive_data(void)
 {
-  if(checkRFCode_flag==1){
+  if(checkRFCode_flag==1 && gpro_t.powerOn_matchingId !=3){
    bit_num =  g_remote_data & 0xFFFFFF;
    if(gpro_t.rf_decod_id== bit_num){
     //gpro_t.power_key_flag = 1;

@@ -12,6 +12,7 @@ PROCESS_T  gpro_t;
 void bsp_init(void)
 {
    DMA_ADC_Init();
+   gpro_t.power_on = power_off;
 #if Enable_EventRecorder == 1  
 	/* 𸀆𸀽𸀜𸀎𸀍𸀄EventRecorder𸀅𷿺𸀑𷿿𸀘𸀼 */
 	EventRecorderInitialize(EventRecordAll, 1U);
@@ -35,11 +36,14 @@ void power_off_handler(void)
 {
     // Turn off the device
     // ...
+    gpro_t.power_on = power_off;
     led_off_fun();
     fan_stop_fun();
     
      plasma_stop_fun();
      ultra_stop_fun();
+     gpro_t.works_2_hours_timeout_flag=0;
+     gpro_t.fan_warning_flag = 0;
      gpro_t.gTimer_works_total_times_minutes=0;
     
     
@@ -68,7 +72,8 @@ void device_works_time_counter_handler(void)
 
              gpro_t.gTimer_works_total_times_minutes= 0; 
              gpro_t.gTimer_normal_run_main_function_times =10;
-             gpro_t.works_2_hours_timeout_flag = 0;  
+             gpro_t.works_2_hours_timeout_flag = 0;
+             fan_output_fun();  
          }
     }
 }
@@ -101,6 +106,10 @@ void sound_power_on_off_handler(void)
         led_on_fun();
         voice_power_on_sound();
         printf("power_on !!!\r\n");
+        if(gpro_t.powerOn_matchingId==2){
+            gpro_t.powerOn_matchingId++;
+            gpro_t.gTimer_rf_receive_counter=0;
+        }
       
     
 		
@@ -113,6 +122,10 @@ void sound_power_on_off_handler(void)
         led_off_fun();
         voice_power_off_sound();
         printf("power_off !!!\r\n");
+        if(gpro_t.powerOn_matchingId==2){
+            gpro_t.powerOn_matchingId++;
+            gpro_t.gTimer_rf_receive_counter=0;
+        }
         
     }
    
@@ -129,16 +142,16 @@ void sound_power_on_off_handler(void)
 *****************************************************************/
 void powerOnOff_handler(void)
 {
-	if(gpro_t.power_on == power_off){
+	// if(gpro_t.power_on == power_off){
 
-	    gpro_t.rfPowerOnOff_soundFLag =1;
+	//     gpro_t.rfPowerOnOff_soundFLag =1;
        
-	}
-	else if(gpro_t.power_on == power_on){
+	// }
+	// else if(gpro_t.power_on == power_on){
 
 	  gpro_t.rfPowerOnOff_soundFLag =1;
 
-	}
+	//}
 	
 
 }

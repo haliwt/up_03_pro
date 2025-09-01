@@ -144,8 +144,7 @@ static void vTaskMsgPro(void *pvParameters)
 
       	}
         else if(gpro_t.power_on == power_off){
-             gpro_t.works_2_hours_timeout_flag=0;
-             gpro_t.fan_warning_flag = 0;
+          
               
               power_off_handler();
               led_off_fun();
@@ -153,12 +152,22 @@ static void vTaskMsgPro(void *pvParameters)
               
        }
 
-        if(gpro_t.rf_complete_receive_flag ==1 && gpro_t.gTimer_rf_receive_counter > 599 ){
+        if(gpro_t.gTimer_rf_receive_counter > 999 && gpro_t.powerOn_matchingId==3 ){
+          gpro_t.powerOn_matchingId++;
+          gpro_t.rf_receive_data_success=0;
+          gpro_t.rf_complete_receive_flag = 0;
+          gpro_t.rf_recieve_numbers=0;
+          gpro_t.gTimer_rf_receive_counter=0;
+           g_remote_data=0;
+          rf_syn_flag = 0;
+        }
+        else if(gpro_t.rf_complete_receive_flag ==1 && gpro_t.gTimer_rf_receive_counter > 599 ){
 
         gpro_t.rf_receive_data_success=0;
         gpro_t.rf_complete_receive_flag = 0;
         gpro_t.rf_recieve_numbers=0;
         gpro_t.gTimer_rf_receive_counter=0;
+         g_remote_data=0;
         rf_syn_flag = 0;
         }
 	
