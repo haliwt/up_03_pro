@@ -7,7 +7,7 @@
 
 
 /***********************************************************************************************************
-											宏定�????1�????7
+											宏定�?????1�?????7
 ***********************************************************************************************************/
 #define POWER_KEY_0	        (1 << 0)
 
@@ -40,40 +40,20 @@ static TaskHandle_t xHandleTaskMsgPro = NULL;
 static TaskHandle_t xHandleTaskStart = NULL;
 //static TimerHandle_t xTimers[2] = {NULL};
 
-//static TimerHandle_t           Timer1Timer_Handler;/* 定时�????1�????71句柄 */
-//static TimerHandle_t           Timer2Timer_Handler;/* 定时�????1�????72句柄 */
-
-
-
-
+//static TimerHandle_t           Timer1Timer_Handler;/* 定时�?????1�?????71句柄 */
+//static TimerHandle_t           Timer2Timer_Handler;/* 定时�?????1�?????72句柄 */
 
 
 uint8_t dc_power_on_first;
 
 
-
-//typedef struct Msg
-//{
-
-// 
-//    //uint8_t  rfPowerOnOff_soundFLag;
-//    
-// //   uint8_t  power_key_flag ;
-
-//  //  uint8_t  power_on_off_numbers;
-//    
-//   
-//}MSG_T;
-
-//MSG_T   g_tmsg; /* 定义丢�个结构体用于消息队列 */
-
-
-
 /**********************************************************************************************************
-*	�????1�????7 �????1�????7 �????1�????7: main
-*	功能说明: 标准c程序入口�????1�????7
-*	�????1�????7    参：�????1�????7
-*	�????1�????7 �????1�????7 �????1�????7: �????1�????7
+*
+*	Function Name:
+*	Function:
+*	Input Ref:
+*	Return Ref:
+*
 **********************************************************************************************************/
 void freertos_handler(void)
 {
@@ -83,25 +63,20 @@ void freertos_handler(void)
 	/* 创建任务通信机制 */
 	//AppObjCreate();
 	
-    /* 启动调度，开始执行任�????1�????7 */
+    /* 启动调度，开始执行任�?????1�?????7 */
     vTaskStartScheduler();
 }
 
 /**********************************************************************************************************
-*	�????1�????7 �????1�????7 �????1�????7: vTaskMsgPro
-*	功能说明: 使用函数xTaskNotifyWait接收任务vTaskTaskUserIF发��的事件标志位设�????1�????7
-*	�????1�????7    �????1�????7: pvParameters 是在创建该任务时传��的形参
-*	�????1�????7 �????1�????7 �????1�????7: �????1�????7
-*   �????1�????7 �????1�????7 �????1�????7: 2  
+*	Function Name: vTaskMsgPro
+*	Function:
+*	Input Ref: *pvParameters
+*	Return Ref:NO
+*   
 **********************************************************************************************************/
 static void vTaskMsgPro(void *pvParameters)
 {
-//    BaseType_t xResult;
-//	const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置朢�大等待时间为50ms */
-//	uint32_t ulValue;
 
-
-  //  static uint8_t switch_onoff;
     while(1)
     {
 		
@@ -116,7 +91,7 @@ static void vTaskMsgPro(void *pvParameters)
 			   led_on_fun();
 			   osDelay(400);
 			   led_on_fun();
-              // VOICE_SOUND();
+              
                
       }
 
@@ -181,19 +156,17 @@ static void vTaskMsgPro(void *pvParameters)
 /**********************************************************************************************************
  * 
 *	Funtion Name:
-*	功能说明: 启动任务，也就是朢�高优先级任务，这里用作按键扫描��????1�????7
-*	Input Ref: pvParameters 是在创建该任务时传��的形参
+*	Funtion:
+*	Input Ref: pvParameters 
 *	Return Ref:
 *  
 **********************************************************************************************************/
 static void vTaskStart(void *pvParameters)
 {
-   //BaseType_t xResult;
-   ///const TickType_t xMaxBlockTime = pdMS_TO_TICKS(50); /* 设置朢�大等待时间为500ms */
-
-    while(1)
+   
+   while(1)
     {
-		/* 按键扫描 */
+	
 		//bsp_KeyScan();
     if(KEY_POWER_GetValue()  == KEY_DOWN){
 
@@ -205,37 +178,30 @@ static void vTaskStart(void *pvParameters)
   }
 }
 /**********************************************************************************************************
-*	�????1�????7 �????1�????7 �????1�????7: AppTaskCreate
-*	功能说明: 创建应用任务
-*	�????1�????7    参：�????1�????7
-*	�????1�????7 �????1�????7 �????1�????7: �????1�????7
+* 
+* Function Name: 
+* Function:
+* Input Ref: NO
+* Return Ref: NO
+* 
 **********************************************************************************************************/
 static void AppTaskCreate (void)
 {
 
   xTaskCreate( vTaskMsgPro,     		/* 任务函数  */
-                 "vTaskMsgPro",   		/* 任务�????1�????7    */
+                 "vTaskMsgPro",   		/* 任务�?????1�?????7    */
                  128,             		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
-                 1,               		/* 任务优先级次�????1�????7*/
+                 1,               		/* 任务优先级次�?????1�?????7*/
                  &xHandleTaskMsgPro );  /* 任务句柄  */
 	
 	
 	xTaskCreate( vTaskStart,     		/* 任务函数  */
-                 "vTaskStart",   		/* 任务�????1�????7    */
+                 "vTaskStart",   		/* 任务�?????1�?????7    */
                  128,            		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
-                 2,              		/* 任务优先级最�????1�????7*/
+                 2,              		/* 任务优先级最�?????1�?????7*/
                  &xHandleTaskStart );   /* 任务句柄  */
 }
-
-/*****************************************************************************
- * 
- * Function Name: 
- * Function:
- * Input Ref: NO
- * Return Ref: NO
- * 
-*****************************************************************************/
 
 
