@@ -79,17 +79,17 @@ volatile   uint32_t  rf_decod_id;
    uint8_t setHours;
    uint8_t setMinutes;
    uint8_t works_2_hours_timeout_flag;
-   uint8_t rf_complete_receive_flag;
-   uint8_t rf_recieve_numbers;
+   volatile uint8_t rf_complete_receive_flag;
+   volatile uint8_t rf_recieve_numbers;
   
   
 
    uint8_t set_timer_timing_value;
    uint8_t fan_warning_flag;
    uint8_t powerOn_matchingId;
-   uint8_t  rfPowerOnOff_soundFLag;
+   volatile uint8_t  rfPowerOnOff_soundFLag;
 
-   uint8_t rf_receive_data_success;
+   volatile uint8_t rf_receive_data_success;
 
    uint8_t gTimer_normal_run_main_function_times;
    uint8_t gTimer_timer_time_long_key ;
@@ -108,7 +108,7 @@ volatile   uint32_t  rf_decod_id;
 
 extern PROCESS_T  gpro_t;
 
-extern uint8_t checkRFCode_flag;
+extern uint8_t pair_remote_ID_success_flag;
 
 void bsp_init(void);
 
@@ -122,7 +122,7 @@ void device_works_time_counter_handler(void);
 void sound_power_on_off_handler(void);
 
 
-void powerOnOff_handler(void);
+
 
 
 #endif 

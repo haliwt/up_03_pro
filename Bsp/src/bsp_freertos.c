@@ -98,17 +98,16 @@ static void vTaskMsgPro(void *pvParameters)
 
          if(gpro_t.power_key_flag == 1 &&  KEY_POWER_GetValue()  == KEY_UP){
 
-                gpro_t.power_key_flag ++;
-               
-                powerOnOff_handler();
+              gpro_t.power_key_flag ++;
+              gpro_t.rfPowerOnOff_soundFLag =1;
+              
 		       
-                  
-           }
+         }
             
         sound_power_on_off_handler();        
       
 
-      if(gpro_t.power_on == power_on ){
+      if(gpro_t.power_on == power_on){
 
         if(gpro_t.fan_warning_flag ==0){
 		      led_on_fun(); //WT.EDIT 2025.05.14
@@ -120,30 +119,27 @@ static void vTaskMsgPro(void *pvParameters)
       	}
         else if(gpro_t.power_on == power_off){
           
-              
               power_off_handler();
               led_off_fun();
-            
-              
-       }
+        }
 
-        if(gpro_t.gTimer_rf_receive_counter > 999 && gpro_t.powerOn_matchingId==3 ){
+        if(gpro_t.gTimer_rf_receive_counter > 9 && gpro_t.powerOn_matchingId==3 ){ // 10ms *10 =1000ms =1s
           gpro_t.powerOn_matchingId++;
           gpro_t.rf_receive_data_success=0;
           gpro_t.rf_complete_receive_flag = 0;
           gpro_t.rf_recieve_numbers=0;
           gpro_t.gTimer_rf_receive_counter=0;
            g_remote_data=0;
-          rf_syn_flag = 0;
+          rf_sync_signal_flag = 0;
         }
-        else if(gpro_t.rf_complete_receive_flag ==1 && gpro_t.gTimer_rf_receive_counter > 599 ){
+        else if(gpro_t.rf_complete_receive_flag ==1 && gpro_t.gTimer_rf_receive_counter > 5 ){ // 60ms *10 = 600ms = 0.6s
 
         gpro_t.rf_receive_data_success=0;
         gpro_t.rf_complete_receive_flag = 0;
         gpro_t.rf_recieve_numbers=0;
         gpro_t.gTimer_rf_receive_counter=0;
          g_remote_data=0;
-        rf_syn_flag = 0;
+        rf_sync_signal_flag = 0;
         }
 	
 
@@ -180,7 +176,7 @@ static void vTaskStart(void *pvParameters)
 /**********************************************************************************************************
 * 
 * Function Name: 
-* Function:
+* Function: 
 * Input Ref: NO
 * Return Ref: NO
 * 
@@ -192,7 +188,7 @@ static void AppTaskCreate (void)
                  "vTaskMsgPro",   		/* 任务�?????1�?????7    */
                  128,             		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
-                 1,               		/* 任务优先级次�?????1�?????7*/
+                 1,               		/* priority is 1*/
                  &xHandleTaskMsgPro );  /* 任务句柄  */
 	
 	
@@ -200,7 +196,7 @@ static void AppTaskCreate (void)
                  "vTaskStart",   		/* 任务�?????1�?????7    */
                  128,            		/* 任务栈大小，单位word，也就是4字节 */
                  NULL,           		/* 任务参数  */
-                 2,              		/* 任务优先级最�?????1�?????7*/
+                 2,              		/* priority is 2*/
                  &xHandleTaskStart );   /* 任务句柄  */
 }
 
