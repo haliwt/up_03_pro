@@ -123,23 +123,14 @@ static void vTaskMsgPro(void *pvParameters)
               led_off_fun();
         }
 
-        if(gpro_t.gTimer_rf_receive_counter > 9 && gpro_t.powerOn_matchingId==3 ){ // 10ms *10 =1000ms =1s
-          gpro_t.powerOn_matchingId++;
-          gpro_t.rf_receive_data_success=0;
-          gpro_t.rf_complete_receive_flag = 0;
-          gpro_t.rf_recieve_numbers=0;
-          gpro_t.gTimer_rf_receive_counter=0;
-           g_remote_data=0;
-          rf_sync_signal_flag = 0;
-        }
-        else if(gpro_t.rf_complete_receive_flag ==1 && gpro_t.gTimer_rf_receive_counter > 5 ){ // 60ms *10 = 600ms = 0.6s
+       if(gpro_t.rf_complete_receive_flag ==1 && gpro_t.gTimer_rf_receive_counter > 5 ){ // 60ms *10 = 600ms = 0.6s
 
         gpro_t.rf_receive_data_success=0;
         gpro_t.rf_complete_receive_flag = 0;
         gpro_t.rf_recieve_numbers=0;
         gpro_t.gTimer_rf_receive_counter=0;
          g_remote_data=0;
-        rf_sync_signal_flag = 0;
+         rf_sync_signal_flag = 0;
         }
 	
 

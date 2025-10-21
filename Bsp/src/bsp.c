@@ -113,12 +113,7 @@ void sound_power_on_off_handler(void)
 		#endif 
 
        vTaskDelay(500);
-		
-//        if(gpro_t.powerOn_matchingId==2){
-//            gpro_t.powerOn_matchingId++;
-//            gpro_t.gTimer_rf_receive_counter=0;
-//        }
-      
+	
     
 		
     }
@@ -136,10 +131,7 @@ void sound_power_on_off_handler(void)
 		#if DEBUG
         	printf("power_off !!!\r\n");
 		#endif 
-//        if(gpro_t.powerOn_matchingId==2){
-//            gpro_t.powerOn_matchingId++;
-//            gpro_t.gTimer_rf_receive_counter=0;
-//        }
+
          vTaskDelay(500);
         
     }
