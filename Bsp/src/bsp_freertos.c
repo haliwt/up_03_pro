@@ -80,9 +80,9 @@ static void vTaskMsgPro(void *pvParameters)
     while(1)
     {
 		
-      if(dc_power_on_first==0){
-        dc_power_on_first++;
-			   gpro_t.power_on = power_off;//WT.EDIT 2025.05.10
+      if(gpro_t.dc_power_on_first==0){
+         gpro_t.dc_power_on_first++;
+	      gpro_t.power_on = power_off;//WT.EDIT 2025.05.10
               
           led_on_fun();
           osDelay(400);

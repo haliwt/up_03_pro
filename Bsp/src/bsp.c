@@ -98,10 +98,25 @@ void sound_power_on_off_handler(void)
    case power_off:
    if(gpro_t.rfPowerOnOff_soundFLag==1){
 
-        gpro_t.power_on = power_on;
+
+        if(gpro_t.dc_power_on_first==1 || gpro_t.dc_power_on_first ==0){ //WT.EDIT 2025.11.10
+			gpro_t.dc_power_on_first=2;
+			gpro_t.rfPowerOnOff_soundFLag=2;
+		 	gpro_t.rf_receive_data_success=0;
+	      	gpro_t.rf_complete_receive_flag = 0;
+	      	gpro_t.rf_recieve_numbers=0;
+	      	rf_sync_signal_flag = 1;
+			gpro_t.rf_recieve_numbers=0;
+	     	gpro_t.rfPowerOnOff_soundFLag=0; 
+		    vTaskDelay(pdMS_TO_TICKS(1000));
+			rf_sync_signal_flag=0;
+		    
+		}
+		else{
+       
         
 		gpro_t.rfPowerOnOff_soundFLag++;
-      
+         gpro_t.power_on = power_on;
 	    gpro_t.works_2_hours_timeout_flag=0;
         gpro_t.fan_warning_flag = 0;
         gpro_t.gTimer_normal_run_main_function_times =10;
@@ -111,33 +126,45 @@ void sound_power_on_off_handler(void)
 		#if DEBUG
         	printf("power_on !!!\r\n");
 		#endif 
-
-       vTaskDelay(500);
 	
-    
-		
+	     rf_sync_signal_flag = 1;
+	     gpro_t.rfPowerOnOff_soundFLag=0; 
+		 gpro_t.rf_recieve_numbers=0;
+       vTaskDelay(500);
+	    rf_sync_signal_flag = 0;
+	
     }
+   }
    break;
 
    case power_on:
    	
     if(gpro_t.rfPowerOnOff_soundFLag==1 ){
 
-      
+      	gpro_t.rfPowerOnOff_soundFLag++;
         gpro_t.power_on = power_off;
-		gpro_t.rfPowerOnOff_soundFLag++;
+	
         led_off_fun();
         voice_power_off_sound();
 		#if DEBUG
         	printf("power_off !!!\r\n");
 		#endif 
 
-         vTaskDelay(500);
-        
-    }
+       gpro_t.rfPowerOnOff_soundFLag=2;
+		
+	      	rf_sync_signal_flag = 1;
+
+			gpro_t.rf_recieve_numbers=0;
+	     	gpro_t.rfPowerOnOff_soundFLag=0; 
+		  vTaskDelay(500);
+		  rf_sync_signal_flag = 0;
+
+		 }
+         
+   
    break;
   }	   
 
-}
+ }
 
 
