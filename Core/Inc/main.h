@@ -74,12 +74,12 @@ void Error_Handler(void);
 #define ULTR_PWM_Pin GPIO_PIN_3
 #define ULTR_PWM_GPIO_Port GPIOB
 
-#define FAN_CTL_Pin GPIO_PIN_7
-#define FAN_CTL_GPIO_Port GPIOB
+#define FAN_CTL_Pin                 GPIO_PIN_7
+#define FAN_CTL_GPIO_Port           GPIOB
 
 //VOICE_GPIO
-#define VOICE_MUTE_Pin GPIO_PIN_5
-#define VOICE_MUTE_GPIO_Port GPIOA
+#define VOICE_MUTE_Pin                  GPIO_PIN_5
+#define VOICE_MUTE_GPIO_Port            GPIOA
 
 
 //KEY GPIO
