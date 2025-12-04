@@ -117,11 +117,12 @@ void read_adc_dma_voltage(void)
 	   ADC_Read_DMA_Polling();
 
            
-      if(gdma_voltage[0]< 86){
+      if(gdma_voltage[0]< 5){
             
              fan_counter ++ ; 
 
-      }else if(gdma_voltage[0] > 86){
+      }
+	  else if(gdma_voltage[0] > 5){
 
             fan_counter=0;
             if(gpro_t.fan_warning_flag == 1){
