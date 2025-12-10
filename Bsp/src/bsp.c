@@ -102,14 +102,13 @@ void sound_power_on_off_handler(void)
         if(gpro_t.dc_power_on_first==1 || gpro_t.dc_power_on_first ==0){ //WT.EDIT 2025.11.10
 			gpro_t.dc_power_on_first=2;
 			gpro_t.rfPowerOnOff_soundFLag=2;
-		 	gpro_t.rf_receive_data_success=0;
+		 	rf_sync_signal_flag = 0; //WT.EDIT 2025.12.10
 	      	gpro_t.rf_complete_receive_flag = 0;
-	      	gpro_t.rf_recieve_numbers=0;
-	      	rf_sync_signal_flag = 1;
-			gpro_t.rf_recieve_numbers=0;
+	      	gpro_t.rf_rx_data_num=0;
+	      
 	     	gpro_t.rfPowerOnOff_soundFLag=0; 
-		    vTaskDelay(pdMS_TO_TICKS(1000));
-			rf_sync_signal_flag=0;
+		    vTaskDelay(pdMS_TO_TICKS(500));//WT.EDIT 2025.12.10 //vTaskDelay(pdMS_TO_TICKS(1000));
+			gpro_t.rf_receive_data_success=0; //WT.EDIT 2025.12.10 add .
 		    
 		}
 		else{
@@ -127,11 +126,12 @@ void sound_power_on_off_handler(void)
         	printf("power_on !!!\r\n");
 		#endif 
 	
-	     rf_sync_signal_flag = 1;
+	     rf_sync_signal_flag = 0;//1 //WT.EDIT 2025.12.10 modify 
 	     gpro_t.rfPowerOnOff_soundFLag=0; 
-		 gpro_t.rf_recieve_numbers=0;
-       vTaskDelay(500);
-	    rf_sync_signal_flag = 0;
+		 gpro_t.rf_rx_data_num=0;
+         vTaskDelay(pdMS_TO_TICKS(500));
+	    //rf_sync_signal_flag = 0;
+	     gpro_t.rf_receive_data_success=0; //WT.EDIT 2025.12.10 add .
 	
     }
    }
@@ -152,12 +152,13 @@ void sound_power_on_off_handler(void)
 
        gpro_t.rfPowerOnOff_soundFLag=2;
 		
-	      	rf_sync_signal_flag = 1;
+	       rf_sync_signal_flag = 0; //WT.EDIT modify 2025.12.10
 
-			gpro_t.rf_recieve_numbers=0;
+			gpro_t.rf_rx_data_num=0;
 	     	gpro_t.rfPowerOnOff_soundFLag=0; 
-		  vTaskDelay(500);
-		  rf_sync_signal_flag = 0;
+		  vTaskDelay(pdMS_TO_TICKS(300));//WT.EDIT modify :2025.12.10//vTaskDelay(500);
+		  //rf_sync_signal_flag = 0;
+		  gpro_t.rf_receive_data_success=0; //WT.EDIT 2025.12.10 add .
 
 		 }
          

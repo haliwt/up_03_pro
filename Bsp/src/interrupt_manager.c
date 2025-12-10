@@ -62,8 +62,8 @@ static void rf_recieve_data_fun(void);
                 if(dval > BIT0_MIN_US && dval < BIT0_MAX_US) {        // 0ï¿??
                     g_remote_data = (g_remote_data << 1);
                   
-					   gpro_t.rf_recieve_numbers++;
-                    if(gpro_t.rf_recieve_numbers >= BITS_IN_PACKET){
+					   gpro_t.rf_rx_data_num++;
+                    if(gpro_t.rf_rx_data_num >= BITS_IN_PACKET){
                        gpro_t.rf_receive_data_success=1;
                         rf_recieve_data_fun();
 					             
@@ -72,8 +72,8 @@ static void rf_recieve_data_fun(void);
                 else if(dval > BIT1_MIN_US && dval < BIT1_MAX_US) { // 1ï¿??
                     g_remote_data = (g_remote_data << 1) | 0x01;
                   
-					 gpro_t.rf_recieve_numbers++;
-                    if(gpro_t.rf_recieve_numbers >= BITS_IN_PACKET){
+					 gpro_t.rf_rx_data_num++;
+                    if(gpro_t.rf_rx_data_num >= BITS_IN_PACKET){
                        gpro_t.rf_receive_data_success=1;
                        rf_recieve_data_fun();
                        
@@ -136,7 +136,7 @@ static void rf_recieve_data_fun(void)
    else {
       gpro_t.rf_receive_data_success=0;
       gpro_t.rf_complete_receive_flag = 0;
-      gpro_t.rf_recieve_numbers=0;
+      gpro_t.rf_rx_data_num=0;
       rf_sync_signal_flag = 0;
       gpro_t.rfPowerOnOff_soundFLag=0; 
 
@@ -149,7 +149,7 @@ static void rf_recieve_data_fun(void)
  
       gpro_t.rf_receive_data_success=0;
       gpro_t.rf_complete_receive_flag = 0;
-      gpro_t.rf_recieve_numbers=0;
+      gpro_t.rf_rx_data_num=0;
       rf_sync_signal_flag = 0;
       remoteControl_ID_firstPair433Mhz_handler();
   break;
@@ -220,7 +220,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
                         //g_remote_data <<= 1;              /* å·¦ç§»ï¿??????ï¿?????? */
                         //g_remote_data &= ~(0x000001);     /* æŽ¥æ”¶ï¿??????0 */
                       g_remote_data = (g_remote_data << 1) | 0x0;
-                      gpro_t.rf_recieve_numbers++;
+                      gpro_t.rf_rx_data_num++;
                       
                       
                     }
@@ -229,10 +229,10 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
                         //g_remote_data  <<= 1;             /* å·¦ç§»ï¿??????ï¿?????? */
                         //g_remote_data |= 0x000001;        /* æŽ¥æ”¶ï¿??????1 */
                         g_remote_data = (g_remote_data << 1) | 0x01;
-                        gpro_t.rf_recieve_numbers++;
+                        gpro_t.rf_rx_data_num++;
                        
                     }
-                    if( gpro_t.rf_recieve_numbers > 23){
+                    if( gpro_t.rf_rx_data_num > 23){
                           
                          gpro_t.rf_receive_data_success=1;
                          rf_sync_signal_flag = 0;//detected_rfSync_flag=1;

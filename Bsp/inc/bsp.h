@@ -80,7 +80,7 @@ volatile   uint32_t  rf_decod_id;
    uint8_t setMinutes;
    uint8_t works_2_hours_timeout_flag;
    volatile uint8_t rf_complete_receive_flag;
-   volatile uint8_t rf_recieve_numbers;
+   volatile uint8_t rf_rx_data_num;
    uint8_t dc_power_on_first;
   
   

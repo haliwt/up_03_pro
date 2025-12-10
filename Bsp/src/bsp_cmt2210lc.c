@@ -28,7 +28,7 @@ void remoteControl_ID_firstPair433Mhz_handler(void)
            rf_id_1 = g_remote_data & 0xFFFFFF ;
 
 		 
-		    gpro_t.rf_recieve_numbers=0;
+		    gpro_t.rf_rx_data_num=0;
 		    gpro_t.rf_receive_data_success=0;
 			 
 		    g_remote_data=0;
@@ -56,7 +56,7 @@ void remoteControl_ID_firstPair433Mhz_handler(void)
               gpro_t.rf_receive_data_success=0;
               g_remote_data =0;  
               rf_sync_signal_flag = 0;
-              gpro_t.rf_recieve_numbers =0;
+              gpro_t.rf_rx_data_num =0;
               
           }
         }
