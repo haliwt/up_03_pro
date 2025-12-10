@@ -122,15 +122,15 @@ void MX_TIM3_Init(void)
   LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /* TIM3 interrupt Init */
-  NVIC_SetPriority(TIM3_IRQn, 1);
+  NVIC_SetPriority(TIM3_IRQn, 0); //1//WT.EDIT 2025.12.10
   NVIC_EnableIRQ(TIM3_IRQn);
 
   /* USER CODE BEGIN TIM3_Init 1 */
 
   /* USER CODE END TIM3_Init 1 */
-  TIM_InitStruct.Prescaler = 63;
+  TIM_InitStruct.Prescaler = 63 ;
   TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;
-  TIM_InitStruct.Autoreload = 9999; //F =1MZ/(1+9999)=1x10^(-4) T =1us
+  TIM_InitStruct.Autoreload = 9999 ;//T= 1MHZ/(1+9999)=1x10^(-4) T =1us
   TIM_InitStruct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV1;
   LL_TIM_Init(TIM3, &TIM_InitStruct);
   LL_TIM_DisableARRPreload(TIM3);
