@@ -107,7 +107,7 @@ void sound_power_on_off_handler(void)
 	      	gpro_t.rf_rx_data_num=0;
 	      
 	     	gpro_t.rfPowerOnOff_soundFLag=0; 
-		    vTaskDelay(pdMS_TO_TICKS(500));//WT.EDIT 2025.12.10 //vTaskDelay(pdMS_TO_TICKS(1000));
+		    vTaskDelay(pdMS_TO_TICKS(300));//WT.EDIT 2025.12.10 //vTaskDelay(pdMS_TO_TICKS(1000));
 			gpro_t.rf_receive_data_success=0; //WT.EDIT 2025.12.10 add .
 		    
 		}
