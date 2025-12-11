@@ -127,11 +127,14 @@ static void rf_recieve_data_fun(void)
 
    bit_num =  g_remote_data & 0xFFFFFF;
    g_remote_data =0; //WT.EDIT 2025.10.21
-   if(gpro_t.rf_decod_id== bit_num  &&  bit_num !=0){ ////WT.EDIT 2025.10.21
+   if(gpro_t.rf_decod_ID== bit_num  &&  bit_num !=0){ ////WT.EDIT 2025.10.21
     gpro_t.rf_complete_receive_flag = 1;
     gpro_t.gTimer_rf_receive_counter=0;
     gpro_t.rfPowerOnOff_soundFLag=1;
- 
+	rf_sync_signal_flag = 0; //WT.EDIT 2025.12.11
+	gpro_t.rf_rx_data_num=0;//WT.EDIT 2025.12.11
+    gpro_t.rf_complete_receive_flag = 0;//WT.EDIT 2025.12.11
+	g_remote_data=0;//WT.EDIT 2025.12.11
    }          
    else {
       gpro_t.rf_receive_data_success=0;
@@ -139,6 +142,7 @@ static void rf_recieve_data_fun(void)
       gpro_t.rf_rx_data_num=0;
       rf_sync_signal_flag = 0;
       gpro_t.rfPowerOnOff_soundFLag=0; 
+	  g_remote_data=0;//WT.EDIT 2025.12.11
 
     }
 

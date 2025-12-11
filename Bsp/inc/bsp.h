@@ -72,7 +72,7 @@ typedef enum _power_on_state{
 
 typedef struct process_t{
 
-volatile   uint32_t  rf_decod_id;
+volatile   uint32_t  rf_decod_ID;
 
    uint8_t power_on;
    uint8_t power_key_flag;

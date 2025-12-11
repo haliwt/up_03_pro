@@ -39,7 +39,7 @@ void remoteControl_ID_firstPair433Mhz_handler(void)
            rf_id_2 = g_remote_data & 0xFFFFFF  ;
 
           if(rf_id_1 == rf_id_2){ //&& rf_id_1 > 0xffff){
-              gpro_t.rf_decod_id = rf_id_1;
+              gpro_t.rf_decod_ID = rf_id_1;
          
               pair_remote_ID_success_flag=1;
 		         
