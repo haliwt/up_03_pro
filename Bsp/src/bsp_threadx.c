@@ -7,22 +7,22 @@
 											函数声明
 ***********************************************************************************************************/
 /* ????????? */
-#define STACK_SIZE_ONE  896//768
-#define STATC_SIZE_TWO  256//256
+#define STACK_SIZE_ONE  2048//3072//2048//1024//896//768
+//#define STATC_SIZE_TWO  512//256
 
 static TX_THREAD thread_msg_pro;
-static TX_THREAD thread_start;
+//static TX_THREAD thread_start;
 /* 定义信号量 */
 //TX_SEMAPHORE remote_semaphore;
 
 
 static UCHAR stack_msg_pro[STACK_SIZE_ONE];
-static UCHAR stack_start[STATC_SIZE_TWO];
+//static UCHAR stack_start[STATC_SIZE_TWO];
 
 
 
 static void vTaskMsgPro(ULONG thread_input);
-static void vTaskStart(ULONG thread_input);
+//static void vTaskStart(ULONG thread_input);
 
 //TX_THREAD remote_task;
 //UCHAR remote_task_stack[STACK_SIZE];
@@ -62,8 +62,9 @@ static void vTaskMsgPro(ULONG thread_input)
               
           led_on_fun();
 
-        }
-	  
+     }
+
+	  gpro_t.power_key_flag ++;
 	 if(gpro_t.rf_complete_receive_flag ==1 && gpro_t.gTimer_rf_receive_counter > 3 ){//5 // 60ms *10 = 600ms = 0.6s
 
         gpro_t.rf_receive_data_success=0;
@@ -73,9 +74,13 @@ static void vTaskMsgPro(ULONG thread_input)
          g_remote_data=0;
          rf_sync_signal_flag = 0;
        }
-	   else if(gpro_t.power_key_flag == 1 && KEY_POWER_GetValue()  == KEY_UP){
-	  
+	   else if(KEY_POWER_GetValue()  == KEY_DOWN){
 			gpro_t.power_key_flag ++;
+
+	        tx_thread_sleep(100);
+			
+	      if(KEY_POWER_GetValue()  == KEY_DOWN){
+			
 		    gpro_t.rfPowerOnOff_soundFLag =0;
 	        if(gpro_t.power_on == power_off){
                    gpro_t.power_on = power_on;
@@ -84,7 +89,7 @@ static void vTaskMsgPro(ULONG thread_input)
 				   fan_output_fun();
 
 			    
-
+         
 			}
 			else if(gpro_t.power_on == power_on){
 			   gpro_t.power_on = power_off;
@@ -96,15 +101,12 @@ static void vTaskMsgPro(ULONG thread_input)
 			   
 
 			}
-				   
+	      }	   
 	  }
-    
-      sound_power_on_off_handler();        
+      else if(gpro_t.power_on == power_on){
+
       
-
-      if(gpro_t.power_on == power_on){
-
-        if(gpro_t.fan_warning_flag ==0){
+		if(gpro_t.fan_warning_flag ==0){
 		      led_on_fun(); //WT.EDIT 2025.05.14
 		     // fan_output_fun();
         }
@@ -121,9 +123,10 @@ static void vTaskMsgPro(ULONG thread_input)
 
       
 	
+	 sound_power_on_off_handler();		  
 
 
-    tx_thread_sleep(100);//2*10
+     tx_thread_sleep(20);//2*10
              
     }
       
@@ -136,6 +139,7 @@ static void vTaskMsgPro(ULONG thread_input)
 *	Return Ref:
 *  
 **********************************************************************************************************/
+#if 0
 static void vTaskStart(ULONG thread_input)
 {
     (void)thread_input;  /* 消除未使用的参数警告 */
@@ -154,6 +158,7 @@ static void vTaskStart(ULONG thread_input)
     tx_thread_sleep(20);//3*10
   }
 }
+#endif 
 /**********************************************************************************************************
 * 
 * Function Name: 
@@ -174,10 +179,11 @@ void AppTaskCreate (void)
                      vTaskMsgPro, 0,
                      stack_msg_pro, 
                      STACK_SIZE_ONE,
-                     1,
-                     1,
+                     0,
+                     0,
                      TX_NO_TIME_SLICE, 
                      TX_AUTO_START);
+ #if 0
 
     tx_thread_create(&thread_start, "Start",
                      vTaskStart, 0,
@@ -187,7 +193,7 @@ void AppTaskCreate (void)
                      2, 
                      TX_NO_TIME_SLICE, 
                      TX_AUTO_START);
-
+  #endif 
 
    /* 创建信号量 */
   // tx_semaphore_create(&remote_semaphore, "RemoteSemaphore", 0);
