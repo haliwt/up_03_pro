@@ -324,6 +324,7 @@ static void voice_send_power_on_cmd(void)
 	// 	//HAL_UART_Transmit_IT(&huart2,outputBuf,transferSize);
 	// }
      USART2_DMA_Send(outputBuf, transferSize);
+	 tx_thread_sleep(50);
 
 }
 
@@ -351,6 +352,7 @@ static void voice_send_power_off_cmd(void)
     #else 
          //HAL_UART_Transmit(&huart2,outputBuf,transferSize,0xffff);
          USART2_DMA_Send(outputBuf, transferSize);
+	     tx_thread_sleep(50);
     #endif 
 
 }

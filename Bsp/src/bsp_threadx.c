@@ -7,7 +7,7 @@
 											函数声明
 ***********************************************************************************************************/
 /* ????????? */
-#define STACK_SIZE_ONE  768
+#define STACK_SIZE_ONE  896//768
 #define STATC_SIZE_TWO  256//256
 
 static TX_THREAD thread_msg_pro;
@@ -61,17 +61,10 @@ static void vTaskMsgPro(ULONG thread_input)
 	      gpro_t.power_on = power_off;//WT.EDIT 2025.05.10
               
           led_on_fun();
-//          tx_thread_sleep(400);
-//			   led_off_fun();
-//			   tx_thread_sleep(400);
-//			   led_on_fun();
-//			   tx_thread_sleep(400);
-//			   led_on_fun();
-              
-               
-      }
+
+        }
 	  
-	 if(gpro_t.rf_complete_receive_flag ==1 && gpro_t.gTimer_rf_receive_counter > 5 ){ // 60ms *10 = 600ms = 0.6s
+	 if(gpro_t.rf_complete_receive_flag ==1 && gpro_t.gTimer_rf_receive_counter > 3 ){//5 // 60ms *10 = 600ms = 0.6s
 
         gpro_t.rf_receive_data_success=0;
         gpro_t.rf_complete_receive_flag = 0;
@@ -83,21 +76,37 @@ static void vTaskMsgPro(ULONG thread_input)
 	   else if(gpro_t.power_key_flag == 1 && KEY_POWER_GetValue()  == KEY_UP){
 	  
 			gpro_t.power_key_flag ++;
-		    gpro_t.rfPowerOnOff_soundFLag =1;
+		    gpro_t.rfPowerOnOff_soundFLag =0;
+	        if(gpro_t.power_on == power_off){
+                   gpro_t.power_on = power_on;
+				   led_on_fun();
+                   voice_power_on_sound();
+				   fan_output_fun();
+
+			    
+
+			}
+			else if(gpro_t.power_on == power_on){
+			   gpro_t.power_on = power_off;
+			   
+			    led_off_fun();
+			   voice_power_off_sound();
+			   fan_stop_fun();
+			    
+			   
+
+			}
 				   
 	  }
     
-
-
-     
-            
-       sound_power_on_off_handler();        
+      sound_power_on_off_handler();        
       
 
       if(gpro_t.power_on == power_on){
 
         if(gpro_t.fan_warning_flag ==0){
 		      led_on_fun(); //WT.EDIT 2025.05.14
+		     // fan_output_fun();
         }
 
          main_board_ctl_handler(gpro_t.works_2_hours_timeout_flag);
@@ -114,7 +123,7 @@ static void vTaskMsgPro(ULONG thread_input)
 	
 
 
-    tx_thread_sleep(200);//2*10
+    tx_thread_sleep(20);//2*10
              
     }
       
@@ -137,10 +146,12 @@ static void vTaskStart(ULONG thread_input)
     if(KEY_POWER_GetValue()  == KEY_DOWN){
 
         gpro_t.power_key_flag = 1;
+		/* 检测到按键按下，通知处理任务 */
+        //tx_semaphore_put(&key_semaphore);
 	
     }
      
-    tx_thread_sleep(40);//3*10
+    tx_thread_sleep(20);//3*10
   }
 }
 /**********************************************************************************************************
@@ -161,13 +172,21 @@ void AppTaskCreate (void)
 {
  tx_thread_create(&thread_msg_pro, "MsgPro",
                      vTaskMsgPro, 0,
-                     stack_msg_pro, STACK_SIZE_ONE,
-                     1, 1, TX_NO_TIME_SLICE, TX_AUTO_START);
+                     stack_msg_pro, 
+                     STACK_SIZE_ONE,
+                     1,
+                     1,
+                     TX_NO_TIME_SLICE, 
+                     TX_AUTO_START);
 
     tx_thread_create(&thread_start, "Start",
                      vTaskStart, 0,
-                     stack_start, STATC_SIZE_TWO,
-                     2, 2, TX_NO_TIME_SLICE, TX_AUTO_START);
+                     stack_start, 
+                     STATC_SIZE_TWO,
+                     2, 
+                     2, 
+                     TX_NO_TIME_SLICE, 
+                     TX_AUTO_START);
 
 
    /* 创建信号量 */
