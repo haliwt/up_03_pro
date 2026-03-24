@@ -123,7 +123,7 @@ static void vTaskMsgPro(ULONG thread_input)
 	
 
 
-    tx_thread_sleep(20);//2*10
+    tx_thread_sleep(100);//2*10
              
     }
       
