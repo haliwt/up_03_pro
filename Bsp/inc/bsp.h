@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 #include "main.h"
-#include "cmsis_os.h"
+#include "app_threadx.h"
 #include "adc.h"
 #include "dma.h"
 #include "tim.h"
@@ -30,8 +30,7 @@
 
 
 
-#include "FreeRTOS.h"
-#include "task.h"
+
 
 
 

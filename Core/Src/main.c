@@ -13,8 +13,8 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
+#include "app_threadx.h"
 #include "main.h"
-#include "cmsis_os.h"
 #include "adc.h"
 #include "dma.h"
 #include "tim.h"
@@ -49,13 +49,13 @@
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+/* ThreadX ?????? */
 
 /* USER CODE END 0 */
 
@@ -95,18 +95,14 @@ int main(void)
   MX_TIM1_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-   bsp_init();
+   //bsp_init();
    LL_TIM_EnableCounter(TIM17);//HAL_TIM_Base_Start_IT(&htim17);
    LL_USART_EnableIT_RXNE(USART2);
-  freertos_handler();
+
 
   /* USER CODE END 2 */
 
-  /* Call init function for freertos objects (in cmsis_os2.c) */
-  //MX_FREERTOS_Init();
-
-  /* Start scheduler */
-  //osKernelStart();
+  MX_ThreadX_Init();
 
   /* We should never get here as control is now taken by the scheduler */
 
@@ -207,8 +203,7 @@ void Error_Handler(void)
   }
   /* USER CODE END Error_Handler_Debug */
 }
-
-#ifdef  USE_FULL_ASSERT
+#ifdef USE_FULL_ASSERT
 /**
   * @brief  Reports the name of the source file and the source line number
   *         where the assert_param error has occurred.

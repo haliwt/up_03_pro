@@ -1,5 +1,5 @@
 #ifndef __BSP_DMA_ADC_H
-#define __BSP_DAM_ADC_H
+#define __BSP_DMA_ADC_H
 #include "main.h"
 
 

@@ -180,7 +180,7 @@ void TIM17_IRQHandler(void)
          tim17_10ms++;
 	  if(tim17_10ms > 9){
 	  	tim17_10ms = 0;
-        gpro_t.gTimer_rf_receive_counter++;
+       gpro_t.gTimer_rf_receive_counter++;
 	  }
       if(timer17_counter > 999){
 			 timer17_counter=0;
@@ -205,15 +205,15 @@ void USART2_IRQHandler(void)
   /* USER CODE BEGIN USART2_IRQn 0 */
    if(LL_USART_IsActiveFlag_RXNE(USART2)) {
        // uint8_t data = LL_USART_ReceiveData8(USART2);
-       // bsp_uart_rx_handler(data); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿?1ï¿?7
+       // bsp_uart_rx_handler(data); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?1ï¿½?7
     }
   /* USER CODE END USART2_IRQn 0 */
   
   /* USER CODE BEGIN USART2_IRQn 1 */
-    // ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½é£?1ï¿?7
+    // ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶Ï´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½?1ï¿½?7
   if (LL_USART_IsActiveFlag_ORE(USART2) || LL_USART_IsActiveFlag_FE(USART2)) 
   {
-      LL_USART_ClearFlag_ORE(USART2);  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö?1ï¿?7
+      LL_USART_ClearFlag_ORE(USART2);  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?1ï¿½?7
       LL_USART_ClearFlag_FE(USART2);   // ï¿½ï¿½ï¿½Ö¡ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
   }
   /* USER CODE END USART2_IRQn 1 */

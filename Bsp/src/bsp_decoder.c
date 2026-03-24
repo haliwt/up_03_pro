@@ -1,5 +1,6 @@
 #include "bsp.h"
 
+#if 0
 /*
  * File: rf_ev1527_decoder_ll.c
  * Target: STM32G030F6P6
@@ -145,6 +146,7 @@ static void TIM3_IC_1MHz_Init(void) {
 
 // TIM14 作为 1 MHz 微秒计数器（仅时间戳用，不影响捕获）
 static uint32_t TIM14_GetClockHz(void) {
+	#if 0
     LL_RCC_ClocksTypeDef c;
     LL_RCC_GetSystemClocksFreq(&c);
     // G0: TIM14 on APB2
@@ -152,6 +154,7 @@ static uint32_t TIM14_GetClockHz(void) {
     uint32_t apbdiv = LL_RCC_GetAPB2Prescaler();
     uint32_t timclk = (apbdiv == LL_RCC_APB2_DIV_1) ? pclk2 : (pclk2 * 2U);
     return timclk;
+	#endif 
 }
 
 static void TIM14_UsClock_Init(void) {
@@ -231,7 +234,7 @@ void TIM14_IRQHandler(void) {
         g_us_hi++;
     }
 }
-
+#if 0
 void TIM3_IRQHandler(void) {
     // 超时：任意 UPDATE 事件都视为帧中断
     if (LL_TIM_IsActiveFlag_UPDATE(TIM3)) {
@@ -306,7 +309,7 @@ void TIM3_IRQHandler(void) {
         }
     }
 }
-
+#endif 
 // ===================== 对外 API =====================
 void RF_Decode_Init(void) {
     // 假定 SystemCoreClock 已配置并更新（LL_Init1msTick/SystemCoreClockUpdate）
@@ -356,3 +359,4 @@ int main(void) {
 #endif
 
 
+#endif 

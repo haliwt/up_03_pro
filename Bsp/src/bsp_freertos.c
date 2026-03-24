@@ -1,8 +1,9 @@
 #include "bsp.h"
-#include "FreeRTOS.h"
-#include "task.h"
+#include "app_azure_rtos.h"
+#include "stm32g0xx.h"
 
-#include "cmsis_os.h"
+
+
 
 
 
@@ -20,28 +21,26 @@
 /***********************************************************************************************************
 											函数声明
 ***********************************************************************************************************/
-//static void vTaskLedPro(void *pvParameters);
-static void vTaskMsgPro(void *pvParameters);
-static void vTaskStart(void *pvParameters);
-static void AppTaskCreate (void);
-//static void AppObjCreate (void);
-//static void vTimer1Callback(xTimerHandle pxTimer);
-//static void vTimer2Callback(xTimerHandle pxTimer);
+/* ????????? */
+#define STACK_SIZE 512
+
+static TX_THREAD thread_msg_pro;
+static TX_THREAD thread_start;
+/* 定义信号量 */
+//TX_SEMAPHORE remote_semaphore;
+
+
+static UCHAR stack_msg_pro[STACK_SIZE];
+static UCHAR stack_start[STACK_SIZE];
 
 
 
-/***********************************************************************************************************
-											变量声明
-***********************************************************************************************************/
+static void vTaskMsgPro(ULONG thread_input);
+static void vTaskStart(ULONG thread_input);
 
-//static TaskHandle_t xHandleTaskLedPro = NULL;
+//TX_THREAD remote_task;
+//UCHAR remote_task_stack[STACK_SIZE];
 
-static TaskHandle_t xHandleTaskMsgPro = NULL;
-static TaskHandle_t xHandleTaskStart = NULL;
-//static TimerHandle_t xTimers[2] = {NULL};
-
-//static TimerHandle_t           Timer1Timer_Handler;/* 定时�?????1�?????71句柄 */
-//static TimerHandle_t           Timer2Timer_Handler;/* 定时�?????1�?????72句柄 */
 
 
 uint8_t dc_power_on_first;
@@ -55,17 +54,7 @@ uint8_t dc_power_on_first;
 *	Return Ref:
 *
 **********************************************************************************************************/
-void freertos_handler(void)
-{
-	/* 创建任务 */
-	AppTaskCreate();
 
-	/* 创建任务通信机制 */
-	//AppObjCreate();
-	
-    /* 启动调度，开始执行任�?????1�?????7 */
-    vTaskStartScheduler();
-}
 
 /**********************************************************************************************************
 *	Function Name: vTaskMsgPro
@@ -74,9 +63,9 @@ void freertos_handler(void)
 *	Return Ref:NO
 *   
 **********************************************************************************************************/
-static void vTaskMsgPro(void *pvParameters)
+static void vTaskMsgPro(ULONG thread_input)
 {
-
+    (void)thread_input;  /* 消除未使用的参数警告 */
     while(1)
     {
 		
@@ -85,11 +74,11 @@ static void vTaskMsgPro(void *pvParameters)
 	      gpro_t.power_on = power_off;//WT.EDIT 2025.05.10
               
           led_on_fun();
-          osDelay(400);
+          tx_thread_sleep(400);
 			   led_off_fun();
-			   osDelay(400);
+			   tx_thread_sleep(400);
 			   led_on_fun();
-			   osDelay(400);
+			   tx_thread_sleep(400);
 			   led_on_fun();
               
                
@@ -135,7 +124,7 @@ static void vTaskMsgPro(void *pvParameters)
 	
 
 
-    vTaskDelay(10);
+    tx_thread_sleep(10);
              
     }
       
@@ -148,9 +137,9 @@ static void vTaskMsgPro(void *pvParameters)
 *	Return Ref:
 *  
 **********************************************************************************************************/
-static void vTaskStart(void *pvParameters)
+static void vTaskStart(ULONG thread_input)
 {
-   
+    (void)thread_input;  /* 消除未使用的参数警告 */
    while(1)
     {
 	
@@ -161,7 +150,7 @@ static void vTaskStart(void *pvParameters)
 	
     }
      
-    vTaskDelay(20);
+    tx_thread_sleep(20);
   }
 }
 /**********************************************************************************************************
@@ -172,23 +161,28 @@ static void vTaskStart(void *pvParameters)
 * Return Ref: NO
 * 
 **********************************************************************************************************/
-static void AppTaskCreate (void)
-{
+/**
+  * @brief  Define the initial system.
+  * @param  first_unused_memory : Pointer to the first unused memory
+  * @retval None
+  */
 
-  xTaskCreate( vTaskMsgPro,     		/* 任务函数  */
-                 "vTaskMsgPro",   		/* 任务�?????1�?????7    */
-                 128,             		/* 任务栈大小，单位word，也就是4字节 */
-                 NULL,           		/* 任务参数  */
-                 1,               		/* priority is 1*/
-                 &xHandleTaskMsgPro );  /* 任务句柄  */
-	
-	
-	xTaskCreate( vTaskStart,     		/* 任务函数  */
-                 "vTaskStart",   		/* 任务�?????1�?????7    */
-                 128,            		/* 任务栈大小，单位word，也就是4字节 */
-                 NULL,           		/* 任务参数  */
-                 2,              		/* priority is 2*/
-                 &xHandleTaskStart );   /* 任务句柄  */
+void AppTaskCreate (void)
+{
+ tx_thread_create(&thread_msg_pro, "MsgPro",
+                     vTaskMsgPro, 0,
+                     stack_msg_pro, STACK_SIZE,
+                     1, 1, TX_NO_TIME_SLICE, TX_AUTO_START);
+
+    tx_thread_create(&thread_start, "Start",
+                     vTaskStart, 0,
+                     stack_start, STACK_SIZE,
+                     2, 2, TX_NO_TIME_SLICE, TX_AUTO_START);
+
+
+   /* 创建信号量 */
+  // tx_semaphore_create(&remote_semaphore, "RemoteSemaphore", 0);
+  
 }
 
 

@@ -43,9 +43,9 @@ void MX_TIM1_Init(void)
   /* USER CODE BEGIN TIM1_Init 1 */
 
   /* USER CODE END TIM1_Init 1 */
-  TIM_InitStruct.Prescaler = 63;
+  TIM_InitStruct.Prescaler = 0;
   TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;
-  TIM_InitStruct.Autoreload = 39;
+  TIM_InitStruct.Autoreload = 65535;
   TIM_InitStruct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV1;
   TIM_InitStruct.RepetitionCounter = 0;
   LL_TIM_Init(TIM1, &TIM_InitStruct);
@@ -89,7 +89,7 @@ void MX_TIM1_Init(void)
   GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
   GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
   GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
-  GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
+  GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
   GPIO_InitStruct.Alternate = LL_GPIO_AF_1;
   LL_GPIO_Init(ULTR_PWM_GPIO_Port, &GPIO_InitStruct);
 
@@ -115,22 +115,22 @@ void MX_TIM3_Init(void)
   */
   GPIO_InitStruct.Pin = LL_GPIO_PIN_6;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
-  GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;//LOW;
+  GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
   GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
-  GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;//NO;
+  GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
   GPIO_InitStruct.Alternate = LL_GPIO_AF_1;
   LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /* TIM3 interrupt Init */
-  NVIC_SetPriority(TIM3_IRQn, 0); //1//WT.EDIT 2025.12.10
+  NVIC_SetPriority(TIM3_IRQn, 0);
   NVIC_EnableIRQ(TIM3_IRQn);
 
   /* USER CODE BEGIN TIM3_Init 1 */
 
   /* USER CODE END TIM3_Init 1 */
-  TIM_InitStruct.Prescaler = 63 ;
+  TIM_InitStruct.Prescaler = 0;
   TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;
-  TIM_InitStruct.Autoreload = 9999 ;//T= 1MHZ/(1+9999)=1x10^(-4) T =1us
+  TIM_InitStruct.Autoreload = 65535;
   TIM_InitStruct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV1;
   LL_TIM_Init(TIM3, &TIM_InitStruct);
   LL_TIM_DisableARRPreload(TIM3);
@@ -146,7 +146,7 @@ void MX_TIM3_Init(void)
     
    // LL_TIM_EnableIT_UPDATE(TIM3);
 
-    // ʹ��ͨ��������ￄ1�7
+    // ʹ��ͨ��������ￄ1�7
     LL_TIM_CC_EnableChannel(TIM3, LL_TIM_CHANNEL_CH1);
     LL_TIM_EnableCounter(TIM3);
   //  LL_TIM_EnableIT_UPDATE(TIM3);
@@ -169,15 +169,15 @@ void MX_TIM17_Init(void)
   LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_TIM17);
 
   /* TIM17 interrupt Init */
-  NVIC_SetPriority(TIM17_IRQn, 3);
+  NVIC_SetPriority(TIM17_IRQn, 0);
   NVIC_EnableIRQ(TIM17_IRQn);
 
   /* USER CODE BEGIN TIM17_Init 1 */
 
   /* USER CODE END TIM17_Init 1 */
-  TIM_InitStruct.Prescaler = 63;
+  TIM_InitStruct.Prescaler = 0;
   TIM_InitStruct.CounterMode = LL_TIM_COUNTERMODE_UP;
-  TIM_InitStruct.Autoreload = 999;//set tim17 1ms
+  TIM_InitStruct.Autoreload = 65535;
   TIM_InitStruct.ClockDivision = LL_TIM_CLOCKDIVISION_DIV1;
   TIM_InitStruct.RepetitionCounter = 0;
   LL_TIM_Init(TIM17, &TIM_InitStruct);

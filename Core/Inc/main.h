@@ -71,10 +71,8 @@ void Error_Handler(void);
 
 /* Private defines -----------------------------------------------------------*/
 #define FAN_CTL_Pin LL_GPIO_PIN_7
-
-#define FAN_CTL_GPIO_Port 			    GPIOB
-#define ADC_FAN_Pin 					LL_GPIO_PIN_0
-
+#define FAN_CTL_GPIO_Port GPIOB
+#define ADC_FAN_Pin LL_GPIO_PIN_0
 #define ADC_FAN_GPIO_Port GPIOA
 #define PLASMA_Pin LL_GPIO_PIN_4
 #define PLASMA_GPIO_Port GPIOA
