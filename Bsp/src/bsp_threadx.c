@@ -22,7 +22,7 @@
 											函数声明
 ***********************************************************************************************************/
 /* ????????? */
-#define STACK_SIZE_ONE  512
+#define STACK_SIZE_ONE  768
 #define STATC_SIZE_TWO  256
 
 static TX_THREAD thread_msg_pro;
@@ -67,6 +67,7 @@ uint8_t dc_power_on_first;
 static void vTaskMsgPro(ULONG thread_input)
 {
     (void)thread_input;  /* 消除未使用的参数警告 */
+	
     while(1)
     {
 		
@@ -75,12 +76,12 @@ static void vTaskMsgPro(ULONG thread_input)
 	      gpro_t.power_on = power_off;//WT.EDIT 2025.05.10
               
           led_on_fun();
-          tx_thread_sleep(40);
-			   led_off_fun();
-			   tx_thread_sleep(40);
-			   led_on_fun();
-			   tx_thread_sleep(40);
-			   led_on_fun();
+//          tx_thread_sleep(400);
+//			   led_off_fun();
+//			   tx_thread_sleep(400);
+//			   led_on_fun();
+//			   tx_thread_sleep(400);
+//			   led_on_fun();
               
                
       }
@@ -125,7 +126,7 @@ static void vTaskMsgPro(ULONG thread_input)
 	
 
 
-    tx_thread_sleep(20);//2*10
+    tx_thread_sleep(100);//2*10
              
     }
       
@@ -151,7 +152,7 @@ static void vTaskStart(ULONG thread_input)
 	
     }
      
-    tx_thread_sleep(3);//3*10
+    tx_thread_sleep(30);//3*10
   }
 }
 /**********************************************************************************************************
