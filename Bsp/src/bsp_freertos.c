@@ -22,7 +22,8 @@
 											函数声明
 ***********************************************************************************************************/
 /* ????????? */
-#define STACK_SIZE 256//512
+#define STACK_SIZE_ONE  512
+#define STATC_SIZE_TWO  256
 
 static TX_THREAD thread_msg_pro;
 static TX_THREAD thread_start;
@@ -30,8 +31,8 @@ static TX_THREAD thread_start;
 //TX_SEMAPHORE remote_semaphore;
 
 
-static UCHAR stack_msg_pro[STACK_SIZE];
-static UCHAR stack_start[STACK_SIZE];
+static UCHAR stack_msg_pro[STACK_SIZE_ONE];
+static UCHAR stack_start[STATC_SIZE_TWO];
 
 
 
@@ -74,11 +75,11 @@ static void vTaskMsgPro(ULONG thread_input)
 	      gpro_t.power_on = power_off;//WT.EDIT 2025.05.10
               
           led_on_fun();
-          tx_thread_sleep(400);
+          tx_thread_sleep(40);
 			   led_off_fun();
-			   tx_thread_sleep(400);
+			   tx_thread_sleep(40);
 			   led_on_fun();
-			   tx_thread_sleep(400);
+			   tx_thread_sleep(40);
 			   led_on_fun();
               
                
@@ -124,7 +125,7 @@ static void vTaskMsgPro(ULONG thread_input)
 	
 
 
-    tx_thread_sleep(10);
+    tx_thread_sleep(20);//2*10
              
     }
       
@@ -150,7 +151,7 @@ static void vTaskStart(ULONG thread_input)
 	
     }
      
-    tx_thread_sleep(20);
+    tx_thread_sleep(3);//3*10
   }
 }
 /**********************************************************************************************************
@@ -171,12 +172,12 @@ void AppTaskCreate (void)
 {
  tx_thread_create(&thread_msg_pro, "MsgPro",
                      vTaskMsgPro, 0,
-                     stack_msg_pro, STACK_SIZE,
+                     stack_msg_pro, STACK_SIZE_ONE,
                      1, 1, TX_NO_TIME_SLICE, TX_AUTO_START);
 
     tx_thread_create(&thread_start, "Start",
                      vTaskStart, 0,
-                     stack_start, STACK_SIZE,
+                     stack_start, STATC_SIZE_TWO,
                      2, 2, TX_NO_TIME_SLICE, TX_AUTO_START);
 
 
