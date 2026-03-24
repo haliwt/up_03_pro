@@ -96,7 +96,7 @@ int main(void)
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
    //bsp_init();
-   LL_TIM_EnableCounter(TIM17);//HAL_TIM_Base_Start_IT(&htim17);
+  
    LL_USART_EnableIT_RXNE(USART2);
 
 

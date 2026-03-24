@@ -22,7 +22,7 @@
 											函数声明
 ***********************************************************************************************************/
 /* ????????? */
-#define STACK_SIZE 512
+#define STACK_SIZE 256//512
 
 static TX_THREAD thread_msg_pro;
 static TX_THREAD thread_start;
