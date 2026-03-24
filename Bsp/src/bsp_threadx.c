@@ -3,27 +3,12 @@
 #include "stm32g0xx.h"
 
 
-
-
-
-
-/***********************************************************************************************************
-											宏定�?????1�?????7
-***********************************************************************************************************/
-#define POWER_KEY_0	        (1 << 0)
-
-#define TIMER_KEY_1         (1<< 1)
-
-#define TIMER_LONG_KEY_2     (1<<2)
-
-#define POWER_OFF_BIT_3    (1<< 3)
-
 /***********************************************************************************************************
 											函数声明
 ***********************************************************************************************************/
 /* ????????? */
 #define STACK_SIZE_ONE  768
-#define STATC_SIZE_TWO  256
+#define STATC_SIZE_TWO  256//256
 
 static TX_THREAD thread_msg_pro;
 static TX_THREAD thread_start;
@@ -85,17 +70,28 @@ static void vTaskMsgPro(ULONG thread_input)
               
                
       }
+	  
+	 if(gpro_t.rf_complete_receive_flag ==1 && gpro_t.gTimer_rf_receive_counter > 5 ){ // 60ms *10 = 600ms = 0.6s
+
+        gpro_t.rf_receive_data_success=0;
+        gpro_t.rf_complete_receive_flag = 0;
+        gpro_t.rf_rx_data_num=0;
+        gpro_t.gTimer_rf_receive_counter=0;
+         g_remote_data=0;
+         rf_sync_signal_flag = 0;
+       }
+	   else if(gpro_t.power_key_flag == 1 && KEY_POWER_GetValue()  == KEY_UP){
+	  
+			gpro_t.power_key_flag ++;
+		    gpro_t.rfPowerOnOff_soundFLag =1;
+				   
+	  }
+    
 
 
-         if(gpro_t.power_key_flag == 1 &&  KEY_POWER_GetValue()  == KEY_UP){
-
-              gpro_t.power_key_flag ++;
-              gpro_t.rfPowerOnOff_soundFLag =1;
-              
-		       
-         }
+     
             
-        sound_power_on_off_handler();        
+       sound_power_on_off_handler();        
       
 
       if(gpro_t.power_on == power_on){
@@ -114,19 +110,11 @@ static void vTaskMsgPro(ULONG thread_input)
               led_off_fun();
         }
 
-       if(gpro_t.rf_complete_receive_flag ==1 && gpro_t.gTimer_rf_receive_counter > 5 ){ // 60ms *10 = 600ms = 0.6s
-
-        gpro_t.rf_receive_data_success=0;
-        gpro_t.rf_complete_receive_flag = 0;
-        gpro_t.rf_rx_data_num=0;
-        gpro_t.gTimer_rf_receive_counter=0;
-         g_remote_data=0;
-         rf_sync_signal_flag = 0;
-        }
+      
 	
 
 
-    tx_thread_sleep(100);//2*10
+    tx_thread_sleep(200);//2*10
              
     }
       
@@ -152,7 +140,7 @@ static void vTaskStart(ULONG thread_input)
 	
     }
      
-    tx_thread_sleep(30);//3*10
+    tx_thread_sleep(40);//3*10
   }
 }
 /**********************************************************************************************************
