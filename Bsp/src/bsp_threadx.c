@@ -8,12 +8,12 @@
 ***********************************************************************************************************/
 /* ????????? */
 #define STACK_SIZE_ONE  2048//3072//2048//1024//896//768
-#define STATC_SIZE_TWO  1024//512//256
+#define STATC_SIZE_TWO  512//512//256
 
 static TX_THREAD thread_msg;
 static TX_THREAD thread_start;
 /* 定义信号量 */
-//TX_SEMAPHORE remote_semaphore;
+TX_SEMAPHORE key_semaphore;
 
 
 static UCHAR stack_msg_pro[STACK_SIZE_ONE];
@@ -27,7 +27,7 @@ static void vTaskStart(ULONG thread_input);
 //TX_THREAD remote_task;
 //UCHAR remote_task_stack[STACK_SIZE];
 
-uint8_t counter;
+uint8_t counter,counter_one;
 
 uint8_t dc_power_on_first;
 
@@ -74,7 +74,10 @@ static void vTaskMsgPro(ULONG thread_input)
          g_remote_data=0;
          rf_sync_signal_flag = 0;
        }
-	   else if(KEY_POWER_GetValue()  == KEY_UP && gpro_t.power_key_flag==1){
+	   // 等待按键事件
+       else if(tx_semaphore_get(&key_semaphore, TX_NO_WAIT) == TX_SUCCESS)
+       {
+       if(KEY_POWER_GetValue()  == KEY_UP && gpro_t.power_key_flag==1){
 			gpro_t.power_key_flag ++;
             gpro_t.rfPowerOnOff_soundFLag =0;
 	        if(gpro_t.power_on == power_off){
@@ -92,7 +95,7 @@ static void vTaskMsgPro(ULONG thread_input)
 			    led_off_fun();
 			   voice_power_off_sound();
 			   fan_stop_fun();
-			    
+				}   
 			   
 
 			}
@@ -121,7 +124,7 @@ static void vTaskMsgPro(ULONG thread_input)
 	 sound_power_on_off_handler();		  
 
 
-     tx_thread_sleep(20);//2*10
+     tx_thread_sleep(100);//2*10
              
     }
       
@@ -131,7 +134,7 @@ static void vTaskMsgPro(ULONG thread_input)
 *	Funtion Name:
 *	Funtion:
 *	Input Ref: pvParameters 
-*	Return Ref:
+*	Return Ref: 优先级数字越小,优先级越高
 *  
 **********************************************************************************************************/
 static void vTaskStart(ULONG thread_input)
@@ -140,12 +143,12 @@ static void vTaskStart(ULONG thread_input)
    while(1)
     {
 	
-		//bsp_KeyScan();
+	counter_one++;
     if(KEY_POWER_GetValue()  == KEY_DOWN){
 
         gpro_t.power_key_flag = 1;
 		/* 检测到按键按下，通知处理任务 */
-        //tx_semaphore_put(&key_semaphore);
+        tx_semaphore_put(&key_semaphore);
 	
     }
      
@@ -175,8 +178,8 @@ void AppTaskCreate (void)
                      0,                           /* 传递给任务的参数 */
                      stack_msg_pro,                /* 堆栈基地址 */
                      STACK_SIZE_ONE,               /* 堆栈空间大小 */ 
-                     1,								/* 任务优先级*/
-                     1,								/* 任务抢占阀值 */
+                     2,								/* 任务优先级*/
+                     2,								/* 任务抢占阀值 */
                      TX_NO_TIME_SLICE,               /* 不开启时间片 */
                      TX_AUTO_START);                /* 创建后立即启动 */
  #if 1
@@ -187,14 +190,14 @@ void AppTaskCreate (void)
                      0,                       /* 传递给任务的参数 */
                      stack_start_pro,         /* 堆栈基地址 */
                      STATC_SIZE_TWO,			/* 堆栈空间大小 */  
-                     2, 						/* 任务优先级*/
-                     2, 						/* 任务抢占阀值 */
+                     1, 						/* 任务优先级*/
+                     1, 						/* 任务抢占阀值 */
                      TX_NO_TIME_SLICE, 			/* 不开启时间片 */
                      TX_AUTO_START);             /* 创建后立即启动 */
   #endif 
 
    /* 创建信号量 */
-  // tx_semaphore_create(&remote_semaphore, "RemoteSemaphore", 0);
+   tx_semaphore_create(&key_semaphore, "KeySemaphore", 0);
   
 }
 
