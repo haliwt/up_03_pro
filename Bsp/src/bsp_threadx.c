@@ -75,7 +75,7 @@ static void vTaskMsgPro(ULONG thread_input)
          rf_sync_signal_flag = 0;
        }
 	   // 等待按键事件
-       else if(tx_semaphore_get(&key_semaphore, TX_NO_WAIT) == TX_SUCCESS)
+       if(tx_semaphore_get(&key_semaphore, TX_NO_WAIT) == TX_SUCCESS)
        {
        if(KEY_POWER_GetValue()  == KEY_UP && gpro_t.power_key_flag==1){
 			gpro_t.power_key_flag ++;
