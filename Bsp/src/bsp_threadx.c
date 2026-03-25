@@ -8,26 +8,26 @@
 ***********************************************************************************************************/
 /* ????????? */
 #define STACK_SIZE_ONE  2048//3072//2048//1024//896//768
-//#define STATC_SIZE_TWO  512//256
+#define STATC_SIZE_TWO  1024//512//256
 
-static TX_THREAD thread_msg_pro;
-//static TX_THREAD thread_start;
+static TX_THREAD thread_msg;
+static TX_THREAD thread_start;
 /* 定义信号量 */
 //TX_SEMAPHORE remote_semaphore;
 
 
 static UCHAR stack_msg_pro[STACK_SIZE_ONE];
-//static UCHAR stack_start[STATC_SIZE_TWO];
+static UCHAR stack_start_pro[STATC_SIZE_TWO];
 
 
 
 static void vTaskMsgPro(ULONG thread_input);
-//static void vTaskStart(ULONG thread_input);
+static void vTaskStart(ULONG thread_input);
 
 //TX_THREAD remote_task;
 //UCHAR remote_task_stack[STACK_SIZE];
 
-
+uint8_t counter;
 
 uint8_t dc_power_on_first;
 
@@ -64,7 +64,7 @@ static void vTaskMsgPro(ULONG thread_input)
 
      }
 
-	  gpro_t.power_key_flag ++;
+	  counter ++;
 	 if(gpro_t.rf_complete_receive_flag ==1 && gpro_t.gTimer_rf_receive_counter > 3 ){//5 // 60ms *10 = 600ms = 0.6s
 
         gpro_t.rf_receive_data_success=0;
@@ -74,14 +74,9 @@ static void vTaskMsgPro(ULONG thread_input)
          g_remote_data=0;
          rf_sync_signal_flag = 0;
        }
-	   else if(KEY_POWER_GetValue()  == KEY_DOWN){
+	   else if(KEY_POWER_GetValue()  == KEY_UP && gpro_t.power_key_flag==1){
 			gpro_t.power_key_flag ++;
-
-	        tx_thread_sleep(100);
-			
-	      if(KEY_POWER_GetValue()  == KEY_DOWN){
-			
-		    gpro_t.rfPowerOnOff_soundFLag =0;
+            gpro_t.rfPowerOnOff_soundFLag =0;
 	        if(gpro_t.power_on == power_off){
                    gpro_t.power_on = power_on;
 				   led_on_fun();
@@ -101,7 +96,7 @@ static void vTaskMsgPro(ULONG thread_input)
 			   
 
 			}
-	      }	   
+	       
 	  }
       else if(gpro_t.power_on == power_on){
 
@@ -139,7 +134,6 @@ static void vTaskMsgPro(ULONG thread_input)
 *	Return Ref:
 *  
 **********************************************************************************************************/
-#if 0
 static void vTaskStart(ULONG thread_input)
 {
     (void)thread_input;  /* 消除未使用的参数警告 */
@@ -158,7 +152,7 @@ static void vTaskStart(ULONG thread_input)
     tx_thread_sleep(20);//3*10
   }
 }
-#endif 
+
 /**********************************************************************************************************
 * 
 * Function Name: 
@@ -175,24 +169,28 @@ static void vTaskStart(ULONG thread_input)
 
 void AppTaskCreate (void)
 {
- tx_thread_create(&thread_msg_pro, "MsgPro",
-                     vTaskMsgPro, 0,
-                     stack_msg_pro, 
-                     STACK_SIZE_ONE,
-                     0,
-                     0,
-                     TX_NO_TIME_SLICE, 
-                     TX_AUTO_START);
- #if 0
+ tx_thread_create(&thread_msg,                    /* 任务控制块地址 */ 
+ 	                 "MsgPro",                    /* 任务名 */
+                     vTaskMsgPro,                 /* 启动任务函数地址 */
+                     0,                           /* 传递给任务的参数 */
+                     stack_msg_pro,                /* 堆栈基地址 */
+                     STACK_SIZE_ONE,               /* 堆栈空间大小 */ 
+                     1,								/* 任务优先级*/
+                     1,								/* 任务抢占阀值 */
+                     TX_NO_TIME_SLICE,               /* 不开启时间片 */
+                     TX_AUTO_START);                /* 创建后立即启动 */
+ #if 1
 
-    tx_thread_create(&thread_start, "Start",
-                     vTaskStart, 0,
-                     stack_start, 
-                     STATC_SIZE_TWO,
-                     2, 
-                     2, 
-                     TX_NO_TIME_SLICE, 
-                     TX_AUTO_START);
+    tx_thread_create(&thread_start,           /* 任务控制块地址 */    
+    				 "Start",                 /* 任务名 */
+                     vTaskStart,               /* 启动任务函数地址 */
+                     0,                       /* 传递给任务的参数 */
+                     stack_start_pro,         /* 堆栈基地址 */
+                     STATC_SIZE_TWO,			/* 堆栈空间大小 */  
+                     2, 						/* 任务优先级*/
+                     2, 						/* 任务抢占阀值 */
+                     TX_NO_TIME_SLICE, 			/* 不开启时间片 */
+                     TX_AUTO_START);             /* 创建后立即启动 */
   #endif 
 
    /* 创建信号量 */
