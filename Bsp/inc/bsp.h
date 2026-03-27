@@ -26,7 +26,7 @@
 #include "bsp_decoder.h"
 #include "bsp_usart.h"
 #include "interrupt_manager.h"
-#include "bsp_threadx.h"
+#include "bsp_freertos.h"
 
 
 

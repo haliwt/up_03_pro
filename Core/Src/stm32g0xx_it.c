@@ -182,8 +182,8 @@ void TIM17_IRQHandler(void)
 	  	tim17_10ms = 0;
        gpro_t.gTimer_rf_receive_counter++;
 	  }
-      if(timer17_counter > 99){
-		 timer17_counter=0;
+      if(timer17_counter > 999){
+			 timer17_counter=0;
          tim17_isr_callback();
 
       }

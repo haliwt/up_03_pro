@@ -93,8 +93,10 @@ void sound_power_on_off_handler(void)
 
   if(gpro_t.rfPowerOnOff_soundFLag==2 || gpro_t.rfPowerOnOff_soundFLag==0) return ;
    
-  
-   if(gpro_t.rfPowerOnOff_soundFLag==1 && gpro_t.power_on == power_off){
+   switch(gpro_t.power_on){
+
+   case power_off:
+   if(gpro_t.rfPowerOnOff_soundFLag==1){
 
 
         if(gpro_t.dc_power_on_first==1 || gpro_t.dc_power_on_first ==0){ //WT.EDIT 2025.11.10
@@ -133,14 +135,17 @@ void sound_power_on_off_handler(void)
 	
     }
    }
-   else if(gpro_t.rfPowerOnOff_soundFLag==1 && gpro_t.power_on == power_on){
+   break;
+
+   case power_on:
+   	
+    if(gpro_t.rfPowerOnOff_soundFLag==1 ){
 
       	gpro_t.rfPowerOnOff_soundFLag++;
         gpro_t.power_on = power_off;
 	
         led_off_fun();
         voice_power_off_sound();
-	
 		#if DEBUG
         	printf("power_off !!!\r\n");
 		#endif 
@@ -157,6 +162,10 @@ void sound_power_on_off_handler(void)
 
 		 }
          
-   }
+   
+   break;
+  }	   
+
+ }
 
 
