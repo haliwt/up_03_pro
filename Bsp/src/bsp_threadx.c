@@ -104,7 +104,7 @@ static void vTaskMsgPro(ULONG thread_input)
               led_off_fun();
         }
 
-       if(gpro_t.rf_complete_receive_flag ==1 && gpro_t.gTimer_rf_receive_counter > 5 ){ // 60ms *10 = 600ms = 0.6s
+       if(gpro_t.rf_complete_receive_flag ==1 && gpro_t.gTimer_rf_receive_counter > 2 ){ // 60ms *10 = 600ms = 0.6s
 
         gpro_t.rf_receive_data_success=0;
         gpro_t.rf_complete_receive_flag = 0;
