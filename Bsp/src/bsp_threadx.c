@@ -22,7 +22,8 @@
 											函数声明
 ***********************************************************************************************************/
 /* ????????? */
-#define STACK_SIZE 256//512
+#define STACK_SIZE_ONE 2048//512
+#define STACK_SIZE_TWO 1024
 
 static TX_THREAD thread_msg_pro;
 static TX_THREAD thread_start;
@@ -30,8 +31,8 @@ static TX_THREAD thread_start;
 //TX_SEMAPHORE remote_semaphore;
 TX_SEMAPHORE key_semaphore;
 
-static UCHAR stack_msg_pro[STACK_SIZE];
-static UCHAR stack_start[STACK_SIZE];
+static UCHAR stack_msg_pro[STACK_SIZE_ONE];
+static UCHAR stack_start[STACK_SIZE_TWO];
 
 
 
@@ -176,7 +177,7 @@ void AppTaskCreate (void)
                      vTaskMsgPro,
                      0,
                      stack_msg_pro,
-                     STACK_SIZE,
+                     STACK_SIZE_ONE,
                      1,
                      1, 
                      TX_NO_TIME_SLICE, 
@@ -186,7 +187,7 @@ void AppTaskCreate (void)
                      vTaskStart, 
                      0,
                      stack_start, 
-                     STACK_SIZE,
+                     STACK_SIZE_TWO,
                      2,
                      2,
                      TX_NO_TIME_SLICE, 
