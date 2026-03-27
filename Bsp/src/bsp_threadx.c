@@ -55,70 +55,79 @@ uint8_t counter,counter_one;
 **********************************************************************************************************/
 static void vTaskMsgPro(ULONG thread_input)
 {
-    (void)thread_input;  /* 消除未使用的参数警告 */
-    while(1)
-    {
-		
-      if(gpro_t.dc_power_on_first==0){
-         gpro_t.dc_power_on_first++;
-	      gpro_t.power_on = power_off;//WT.EDIT 2025.05.10
-              
-          led_on_fun();
-          tx_thread_sleep(400);
-			   led_off_fun();
-			   tx_thread_sleep(400);
-			   led_on_fun();
-			   tx_thread_sleep(400);
-			   led_on_fun();
-              
-               
-      }
+	(void)thread_input;  /* 消除未使用的参数警告 */
+	while(1)
+	{
 
-      counter++;
-	     
-         if(gpro_t.power_key_flag == 1 &&  KEY_POWER_GetValue()  == KEY_UP){
+		if(gpro_t.dc_power_on_first==0){
+			gpro_t.dc_power_on_first++;
+			gpro_t.power_on = power_off;//WT.EDIT 2025.05.10
 
-              gpro_t.power_key_flag ++;
-              gpro_t.rfPowerOnOff_soundFLag =1;
-              
-		       
-         }
-    	
-            
-        sound_power_on_off_handler();        
-      
-
-      if(gpro_t.power_on == power_on){
-
-        if(gpro_t.fan_warning_flag ==0){
-		      led_on_fun(); //WT.EDIT 2025.05.14
-        }
-
-         main_board_ctl_handler(gpro_t.works_2_hours_timeout_flag);
-         device_works_time_counter_handler();
-
-      	}
-        else if(gpro_t.power_on == power_off){
-          
-              power_off_handler();
-              led_off_fun();
-        }
-
-       if(gpro_t.rf_complete_receive_flag ==1 && gpro_t.gTimer_rf_receive_counter > 2 ){ // 60ms *10 = 600ms = 0.6s
-
-        gpro_t.rf_receive_data_success=0;
-        gpro_t.rf_complete_receive_flag = 0;
-        gpro_t.rf_rx_data_num=0;
-        gpro_t.gTimer_rf_receive_counter=0;
-         g_remote_data=0;
-         rf_sync_signal_flag = 0;
-        }
-	
+			led_on_fun();
+			tx_thread_sleep(400);
+			led_off_fun();
+			tx_thread_sleep(400);
+			led_on_fun();
+			tx_thread_sleep(400);
+			led_on_fun();
 
 
-    tx_thread_sleep(100);
-             
-    }
+		}
+
+		counter++;
+
+		if(gpro_t.power_key_flag == 1 &&  KEY_POWER_GetValue()  == KEY_UP){
+
+
+			gpro_t.power_key_flag ++;
+			gpro_t.rfPowerOnOff_soundFLag =0;
+			if(gpro_t.power_on == power_off){
+				gpro_t.power_on = power_on;
+				led_on_fun();
+				voice_power_on_sound();
+				fan_output_fun();
+			}
+			else if(gpro_t.power_on == power_on){
+				gpro_t.power_on = power_off;
+
+				led_off_fun();
+				voice_power_off_sound();
+				fan_stop_fun();
+			}	 
+		}
+        else if(gpro_t.power_on == power_on){
+
+			if(gpro_t.fan_warning_flag ==0){
+			led_on_fun(); //WT.EDIT 2025.05.14
+			}
+
+			main_board_ctl_handler(gpro_t.works_2_hours_timeout_flag);
+			device_works_time_counter_handler();
+
+		}
+		else if(gpro_t.power_on == power_off){
+
+			power_off_handler();
+			led_off_fun();
+		}
+
+		sound_power_on_off_handler();    
+
+		if(gpro_t.rf_complete_receive_flag ==1 && gpro_t.gTimer_rf_receive_counter > 2 ){ // 60ms *10 = 600ms = 0.6s
+
+			gpro_t.rf_receive_data_success=0;
+			gpro_t.rf_complete_receive_flag = 0;
+			gpro_t.rf_rx_data_num=0;
+			gpro_t.gTimer_rf_receive_counter=0;
+			g_remote_data=0;
+			rf_sync_signal_flag = 0;
+		}
+
+
+
+		tx_thread_sleep(100);
+
+	}
       
  }
 /**********************************************************************************************************
